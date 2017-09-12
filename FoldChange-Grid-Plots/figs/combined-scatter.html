@@ -1,0 +1,663 @@
+
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.6.min.js" type="text/javascript"></script>
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.6.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/ui/1.10.4/jquery-ui.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.20/require.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js" type="text/javascript"></script>
+<script type="text/javascript">function HoloViewsWidget(){
+}
+
+HoloViewsWidget.comms = {};
+HoloViewsWidget.comm_state = {};
+
+HoloViewsWidget.prototype.init_slider = function(init_val){
+	if(this.load_json) {
+		this.from_json()
+	} else {
+		this.update_cache();
+	}
+}
+
+HoloViewsWidget.prototype.populate_cache = function(idx){
+    this.cache[idx].html(this.frames[idx]);
+    if (this.embed) {
+        delete this.frames[idx];
+    }
+}
+
+HoloViewsWidget.prototype.process_error = function(msg){
+
+}
+
+HoloViewsWidget.prototype.from_json = function() {
+	var data_url = this.json_path + this.id + '.json';
+	$.getJSON(data_url, $.proxy(function(json_data) {
+		this.frames = json_data;
+		this.update_cache();
+		this.update(0);
+	}, this));
+}
+
+HoloViewsWidget.prototype.dynamic_update = function(current){
+	if (current === undefined) {
+		return
+	}
+	if(this.dynamic) {
+		current = JSON.stringify(current);
+	}
+	function callback(initialized, msg){
+		/* This callback receives data from Python as a string
+		   in order to parse it correctly quotes are sliced off*/
+		if (msg.content.ename != undefined) {
+			this.process_error(msg);
+		}
+		if (msg.msg_type != "execute_result") {
+			console.log("Warning: HoloViews callback returned unexpected data for key: (", current, ") with the following content:", msg.content)
+			this.time = undefined;
+			this.wait = false;
+			return
+		}
+		this.timed = (Date.now() - this.time) * 1.1;
+		if (msg.msg_type == "execute_result") {
+			if (msg.content.data['text/plain'].includes('Complete')) {
+				this.wait = false;
+				if (this.queue.length > 0) {
+					this.time = Date.now();
+					this.dynamic_update(this.queue[this.queue.length-1]);
+					this.queue = [];
+				}
+				return
+			}
+		}
+	}
+	this.current = current;
+	if ((window.Jupyter !== undefined) && (Jupyter.notebook.kernel != null)) {
+		var kernel = Jupyter.notebook.kernel;
+		callbacks = {iopub: {output: $.proxy(callback, this, this.initialized)}};
+		var cmd = "holoviews.plotting.widgets.NdWidget.widgets['" + this.id + "'].update(" + current + ")";
+		kernel.execute("import holoviews;" + cmd, callbacks, {silent : false});
+	}
+}
+
+HoloViewsWidget.prototype.update_cache = function(force){
+    var frame_len = Object.keys(this.frames).length;
+    for (var i=0; i<frame_len; i++) {
+        if(!this.load_json || this.dynamic)  {
+            frame = Object.keys(this.frames)[i];
+        } else {
+            frame = i;
+        }
+        if(!(frame in this.cache) || force) {
+			if ((frame in this.cache) && force) { this.cache[frame].remove() }
+			this.cache[frame] = $('<div />').appendTo("#"+"_anim_img"+this.id).hide();
+			var cache_id = "_anim_img"+this.id+"_"+frame;
+			this.cache[frame].attr("id", cache_id);
+			this.populate_cache(frame);
+        }
+    }
+}
+
+HoloViewsWidget.prototype.update = function(current){
+    if(current in this.cache) {
+        $.each(this.cache, function(index, value) {
+            value.hide();
+        });
+        this.cache[current].show();
+		this.wait = false;
+    }
+}
+
+HoloViewsWidget.prototype.init_comms = function() {
+	if ((window.Jupyter !== undefined) && (Jupyter.notebook.kernel !== undefined)) {
+		var widget = this;
+		comm_manager = Jupyter.notebook.kernel.comm_manager;
+        comm_manager.register_target(this.id, function (comm) {
+			comm.on_msg(function (msg) { widget.process_msg(msg) });
+		});
+	}
+}
+
+HoloViewsWidget.prototype.process_msg = function(msg) {
+}
+
+function SelectionWidget(frames, id, slider_ids, keyMap, dim_vals, notFound, load_json, mode, cached, json_path, dynamic){
+    this.frames = frames;
+    this.id = id;
+    this.slider_ids = slider_ids;
+    this.keyMap = keyMap
+    this.current_frame = 0;
+    this.current_vals = dim_vals;
+    this.load_json = load_json;
+    this.mode = mode;
+    this.notFound = notFound;
+    this.cached = cached;
+    this.dynamic = dynamic;
+    this.cache = {};
+	this.json_path = json_path;
+    this.init_slider(this.current_vals[0]);
+	this.queue = [];
+	this.wait = false;
+	if (!this.cached || this.dynamic) {
+		this.init_comms()
+	}
+}
+
+SelectionWidget.prototype = new HoloViewsWidget;
+
+
+SelectionWidget.prototype.get_key = function(current_vals) {
+	var key = "(";
+    for (var i=0; i<this.slider_ids.length; i++)
+    {
+        val = this.current_vals[i];
+        if (!(typeof val === 'string')) {
+            if (val % 1 === 0) { val = val.toFixed(1); }
+            else { val = val.toFixed(10); val = val.slice(0, val.length-1);}
+        }
+        key += "'" + val + "'";
+        if(i != this.slider_ids.length-1) { key += ', ';}
+        else if(this.slider_ids.length == 1) { key += ',';}
+    }
+    key += ")";
+	return this.keyMap[key];
+}
+
+SelectionWidget.prototype.set_frame = function(dim_val, dim_idx){
+	this.current_vals[dim_idx] = dim_val;
+    var current = this.get_key(this.current_vals);
+    if(current === undefined && !this.dynamic) {
+        return
+    }
+	if (this.dynamic || !this.cached) {
+		if (this.time === undefined) {
+			// Do nothing the first time
+		} else if ((this.timed === undefined) || ((this.time + this.timed) > Date.now())) {
+			var key = this.current_vals;
+			if (!this.dynamic) {
+				key = this.get_key(key);
+			}
+			this.queue.push(key);
+			return
+		}
+	}
+	this.queue = [];
+	this.time = Date.now();
+	this.current_frame = current;
+    if(this.dynamic) {
+        this.dynamic_update(this.current_vals)
+    } else if(this.cached) {
+        this.update(current)
+    } else {
+        this.dynamic_update(current)
+    }
+}
+
+
+/* Define the ScrubberWidget class */
+function ScrubberWidget(frames, num_frames, id, interval, load_json, mode, cached, json_path, dynamic){
+    this.slider_id = "_anim_slider" + id;
+    this.loop_select_id = "_anim_loop_select" + id;
+    this.id = id;
+    this.interval = interval;
+    this.current_frame = 0;
+    this.direction = 0;
+    this.dynamic = dynamic;
+    this.timer = null;
+    this.load_json = load_json;
+    this.mode = mode;
+    this.cached = cached;
+    this.frames = frames;
+    this.cache = {};
+    this.length = num_frames;
+	this.json_path = json_path;
+    document.getElementById(this.slider_id).max = this.length - 1;
+    this.init_slider(0);
+	this.wait = false;
+	this.queue = [];
+	if (!this.cached || this.dynamic) {
+		this.init_comms()
+	}
+}
+
+ScrubberWidget.prototype = new HoloViewsWidget;
+
+ScrubberWidget.prototype.set_frame = function(frame){
+	this.current_frame = frame;
+	widget = document.getElementById(this.slider_id);
+    if (widget === null) {
+        this.pause_animation();
+        return
+    }
+    widget.value = this.current_frame;
+    if(this.cached) {
+        this.update(frame)
+    } else {
+        this.dynamic_update(frame)
+    }
+}
+
+
+ScrubberWidget.prototype.process_error = function(msg){
+	if (msg.content.ename === 'StopIteration') {
+		this.pause_animation();
+		this.stopped = true;
+		var keys = Object.keys(this.frames)
+		this.length = keys.length;
+		document.getElementById(this.slider_id).max = this.length-1;
+		document.getElementById(this.slider_id).value = this.length-1;
+		this.current_frame = this.length-1;
+	}
+}
+
+
+ScrubberWidget.prototype.get_loop_state = function(){
+    var button_group = document[this.loop_select_id].state;
+    for (var i = 0; i < button_group.length; i++) {
+        var button = button_group[i];
+        if (button.checked) {
+            return button.value;
+        }
+    }
+    return undefined;
+}
+
+
+ScrubberWidget.prototype.next_frame = function() {
+	if (this.dynamic || !this.cached) {
+		if (this.wait) {
+			return
+		}
+		this.wait = true;
+	}
+	if (this.dynamic && this.current_frame + 1 >= this.length) {
+		this.length += 1;
+        document.getElementById(this.slider_id).max = this.length-1;
+	}
+    this.set_frame(Math.min(this.length - 1, this.current_frame + 1));
+}
+
+ScrubberWidget.prototype.previous_frame = function() {
+    this.set_frame(Math.max(0, this.current_frame - 1));
+}
+
+ScrubberWidget.prototype.first_frame = function() {
+    this.set_frame(0);
+}
+
+ScrubberWidget.prototype.last_frame = function() {
+    this.set_frame(this.length - 1);
+}
+
+ScrubberWidget.prototype.slower = function() {
+    this.interval /= 0.7;
+    if(this.direction > 0){this.play_animation();}
+    else if(this.direction < 0){this.reverse_animation();}
+}
+
+ScrubberWidget.prototype.faster = function() {
+    this.interval *= 0.7;
+    if(this.direction > 0){this.play_animation();}
+    else if(this.direction < 0){this.reverse_animation();}
+}
+
+ScrubberWidget.prototype.anim_step_forward = function() {
+    if(this.current_frame < this.length || (this.dynamic && !this.stopped)){
+        this.next_frame();
+    }else{
+        var loop_state = this.get_loop_state();
+        if(loop_state == "loop"){
+            this.first_frame();
+        }else if(loop_state == "reflect"){
+            this.last_frame();
+            this.reverse_animation();
+        }else{
+            this.pause_animation();
+            this.last_frame();
+        }
+    }
+}
+
+ScrubberWidget.prototype.anim_step_reverse = function() {
+    this.current_frame -= 1;
+    if(this.current_frame >= 0){
+        this.set_frame(this.current_frame);
+    } else {
+        var loop_state = this.get_loop_state();
+        if(loop_state == "loop"){
+            this.last_frame();
+        }else if(loop_state == "reflect"){
+            this.first_frame();
+            this.play_animation();
+        }else{
+            this.pause_animation();
+            this.first_frame();
+        }
+    }
+}
+
+ScrubberWidget.prototype.pause_animation = function() {
+    this.direction = 0;
+    if (this.timer){
+        clearInterval(this.timer);
+        this.timer = null;
+    }
+}
+
+ScrubberWidget.prototype.play_animation = function() {
+    this.pause_animation();
+    this.direction = 1;
+    var t = this;
+    if (!this.timer) this.timer = setInterval(function(){t.anim_step_forward();}, this.interval);
+}
+
+ScrubberWidget.prototype.reverse_animation = function() {
+    this.pause_animation();
+    this.direction = -1;
+    var t = this;
+    if (!this.timer) this.timer = setInterval(function(){t.anim_step_reverse();}, this.interval);
+}
+
+function extend(destination, source) {
+    for (var k in source) {
+        if (source.hasOwnProperty(k)) {
+            destination[k] = source[k];
+        }
+    }
+    return destination;
+}
+
+function update_widget(widget, values) {
+	if (widget.hasClass("ui-slider")) {
+		widget.slider('option',
+					  {'min': 0, 'max': values.length-1,
+					   'dim_vals': values, 'value': 0,
+					   'dim_labels': values})
+		widget.slider('option', 'slide').call(widget, event, {'value': 0})
+	} else {
+		widget.empty();
+		for (var i=0; i<values.length; i++){
+			widget.append($("<option>", {
+				value: i,
+				text: values[i]
+			}))};
+		widget.data('values', values);
+		widget.data('value', 0);
+		widget.trigger("change");
+	};
+}
+
+// Define Bokeh specific subclasses
+function BokehSelectionWidget() {
+	SelectionWidget.apply(this, arguments);
+}
+
+function BokehScrubberWidget() {
+	ScrubberWidget.apply(this, arguments);
+}
+
+// Let them inherit from the baseclasses
+BokehSelectionWidget.prototype = Object.create(SelectionWidget.prototype);
+BokehScrubberWidget.prototype = Object.create(ScrubberWidget.prototype);
+
+// Define methods to override on widgets
+var BokehMethods = {
+	update_cache : function(){
+		$.each(this.frames, $.proxy(function(index, frame) {
+			this.frames[index] = JSON.parse(frame);
+		}, this));
+	},
+	update : function(current){
+		if (current === undefined) {
+			var data = undefined;
+		} else {
+			var data = this.frames[current];
+		}
+		if (data !== undefined) {
+			var doc = Bokeh.index[data.root].model.document;
+			doc.apply_json_patch(data.patch);
+		}
+	},
+	init_comms : function() {
+	}
+}
+
+// Extend Bokeh widgets with backend specific methods
+extend(BokehSelectionWidget.prototype, BokehMethods);
+extend(BokehScrubberWidget.prototype, BokehMethods);
+</script>
+
+<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.6.min.css">
+<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.6.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<style>div.hololayout {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+div.holoframe {
+	width: 75%;
+}
+
+div.holowell {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+form.holoform {
+    background-color: #fafafa;
+    border-radius: 5px;
+    overflow: hidden;
+	padding-left: 0.8em;
+    padding-right: 0.8em;
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+}
+
+div.holowidgets {
+    padding-right: 0;
+	width: 25%;
+}
+
+div.holoslider {
+    min-height: 0 !important;
+    height: 0.8em;
+    width: 60%;
+}
+
+div.holoformgroup {
+    padding-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+div.hologroup {
+    padding-left: 0;
+    padding-right: 0.8em;
+    width: 50%;
+}
+
+.holoselect {
+    width: 92%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.holotext {
+    width: 100%;
+    padding-left:  0.5em;
+    padding-right: 0;
+}
+
+.holowidgets .ui-resizable-se {
+	visibility: hidden
+}
+
+.holoframe > .ui-resizable-se {
+	visibility: hidden
+}
+
+.holowidgets .ui-resizable-s {
+	visibility: hidden
+}
+
+div.bk-hbox {
+    display: flex;
+    justify-content: center;
+}
+
+div.bk-hbox div.bk-plot {
+    padding: 8px;
+}
+
+div.bk-hbox div.bk-data-table {
+    padding: 20px;
+}
+</style><div style='display: table; margin: 0 auto;'>
+
+    <div class="bk-root">
+        <div class="bk-plotdiv" id="e9898d4e-ac1a-4346-9118-fabb3e25b673"></div>
+    </div>
+<script type="text/javascript">
+  
+  (function(global) {
+    function now() {
+      return new Date();
+    }
+  
+    var force = false;
+  
+    if (typeof (window._bokeh_onload_callbacks) === "undefined" || force === true) {
+      window._bokeh_onload_callbacks = [];
+      window._bokeh_is_loading = undefined;
+    }
+  
+  
+    
+    if (typeof (window._bokeh_timeout) === "undefined" || force === true) {
+      window._bokeh_timeout = Date.now() + 0;
+      window._bokeh_failed_load = false;
+    }
+  
+    var NB_LOAD_WARNING = {'data': {'text/html':
+       "<div style='background-color: #fdd'>\n"+
+       "<p>\n"+
+       "BokehJS does not appear to have successfully loaded. If loading BokehJS from CDN, this \n"+
+       "may be due to a slow or bad network connection. Possible fixes:\n"+
+       "</p>\n"+
+       "<ul>\n"+
+       "<li>re-rerun `output_notebook()` to attempt to load from CDN again, or</li>\n"+
+       "<li>use INLINE resources instead, as so:</li>\n"+
+       "</ul>\n"+
+       "<code>\n"+
+       "from bokeh.resources import INLINE\n"+
+       "output_notebook(resources=INLINE)\n"+
+       "</code>\n"+
+       "</div>"}};
+  
+    function display_loaded() {
+      if (window.Bokeh !== undefined) {
+        var el = document.getElementById("e9898d4e-ac1a-4346-9118-fabb3e25b673");
+        el.textContent = "BokehJS " + Bokeh.version + " successfully loaded.";
+      } else if (Date.now() < window._bokeh_timeout) {
+        setTimeout(display_loaded, 100)
+      }
+    }
+  
+    function run_callbacks() {
+      try {
+        window._bokeh_onload_callbacks.forEach(function(callback) { callback() });
+      }
+      finally {
+        delete window._bokeh_onload_callbacks
+      }
+      console.info("Bokeh: all callbacks have finished");
+    }
+  
+    function load_libs(js_urls, callback) {
+      window._bokeh_onload_callbacks.push(callback);
+      if (window._bokeh_is_loading > 0) {
+        console.log("Bokeh: BokehJS is being loaded, scheduling callback at", now());
+        return null;
+      }
+      if (js_urls == null || js_urls.length === 0) {
+        run_callbacks();
+        return null;
+      }
+      console.log("Bokeh: BokehJS not loaded, scheduling load and callback at", now());
+      window._bokeh_is_loading = js_urls.length;
+      for (var i = 0; i < js_urls.length; i++) {
+        var url = js_urls[i];
+        var s = document.createElement('script');
+        s.src = url;
+        s.async = false;
+        s.onreadystatechange = s.onload = function() {
+          window._bokeh_is_loading--;
+          if (window._bokeh_is_loading === 0) {
+            console.log("Bokeh: all BokehJS libraries loaded");
+            run_callbacks()
+          }
+        };
+        s.onerror = function() {
+          console.warn("failed to load library " + url);
+        };
+        console.log("Bokeh: injecting script tag for BokehJS library: ", url);
+        document.getElementsByTagName("head")[0].appendChild(s);
+      }
+    };var element = document.getElementById("e9898d4e-ac1a-4346-9118-fabb3e25b673");
+    if (element == null) {
+      console.log("Bokeh: ERROR: autoload.js configured with elementid 'e9898d4e-ac1a-4346-9118-fabb3e25b673' but no matching script tag was found. ")
+      return false;
+    }
+  
+    var js_urls = [];
+  
+    var inline_js = [
+      function(Bokeh) {
+        (function() {
+          var fn = function() {
+            var docs_json = {"27f176b3-c5e8-4a04-818d-6424aadfe498":{"roots":{"references":[{"attributes":{},"id":"4c4fa07e-42f9-4bea-aea0-e68ca5e3475b","type":"CategoricalTickFormatter"},{"attributes":{"dimension":1,"grid_line_color":{"value":null},"plot":{"id":"e9c36099-4443-4c5f-bb1f-6126b88c9530","subtype":"Figure","type":"Plot"},"ticker":{"id":"fc6da891-b92d-445b-8afc-3b8c72f73941","type":"BasicTicker"}},"id":"624f886c-6b4d-44ca-b926-bb79181d014d","type":"Grid"},{"attributes":{"items":[],"plot":{"id":"e9c36099-4443-4c5f-bb1f-6126b88c9530","subtype":"Figure","type":"Plot"}},"id":"0e88f443-a3ec-4367-9163-77fe62bca099","type":"Legend"},{"attributes":{"callback":null,"column_names":["number_TCGA_Normals","number_Target_Tissue","Tissue","Scores","number_TCGA_Tumors","Target"],"data":{"Scores":{"__ndarray__":"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","dtype":"float64","shape":[496]},"Target":["GTEx-Adrenal","GTEx-Bladder","GTEx-Brain","GTEx-Breast","GTEx-Cervix","GTEx-Colon-Small_intestine","GTEx-Esophagus","GTEx-Kidney","GTEx-Liver","GTEx-Lung","GTEx-Pancreas","GTEx-Prostate","GTEx-Skin-Head","GTEx-Stomach","GTEx-Thyroid","GTEx-Uterus","Normal-Bladder","Normal-Brain","Normal-Breast","Normal-Cervix","Normal-Colon-Small_intestine","Normal-Esophagus","Normal-Kidney","Normal-Liver","Normal-Lung","Normal-Pancreas","Normal-Prostate","Normal-Skin-Head","Normal-Stomach","Normal-Thyroid","Normal-Uterus","GTEx-Adrenal","GTEx-Bladder","GTEx-Brain","GTEx-Breast","GTEx-Cervix","GTEx-Colon-Small_intestine","GTEx-Esophagus","GTEx-Kidney","GTEx-Liver","GTEx-Lung","GTEx-Pancreas","GTEx-Prostate","GTEx-Skin-Head","GTEx-Stomach","GTEx-Thyroid","GTEx-Uterus","Normal-Adrenal","Normal-Brain","Normal-Breast","Normal-Cervix","Normal-Colon-Small_intestine","Normal-Esophagus","Normal-Kidney","Normal-Liver","Normal-Lung","Normal-Pancreas","Normal-Prostate","Normal-Skin-Head","Normal-Stomach","Normal-Thyroid","Normal-Uterus","GTEx-Adrenal","GTEx-Bladder","GTEx-Brain","GTEx-Breast","GTEx-Cervix","GTEx-Colon-Small_intestine","GTEx-Esophagus","GTEx-Kidney","GTEx-Liver","GTEx-Lung","GTEx-Pancreas","GTEx-Prostate","GTEx-Skin-Head","GTEx-Stomach","GTEx-Thyroid","GTEx-Uterus","Normal-Adrenal","Normal-Bladder","Normal-Breast","Normal-Cervix","Normal-Colon-Small_intestine","Normal-Esophagus","Normal-Kidney","Normal-Liver","Normal-Lung","Normal-Pancreas","Normal-Prostate","Normal-Skin-Head","Normal-Stomach","Normal-Thyroid","Normal-Uterus","GTEx-Adrenal","GTEx-Bladder","GTEx-Brain","GTEx-Breast","GTEx-Cervix","GTEx-Colon-Small_intestine","GTEx-Esophagus","GTEx-Kidney","GTEx-Liver","GTEx-Lung","GTEx-Pancreas","GTEx-Prostate","GTEx-Skin-Head","GTEx-Stomach","GTEx-Thyroid","GTEx-Uterus","Normal-Adrenal","Normal-Bladder","Normal-Brain","Normal-Cervix","Normal-Colon-Small_intestine","Normal-Esophagus","Normal-Kidney","Normal-Liver","Normal-Lung","Normal-Pancreas","Normal-Prostate","Normal-Skin-Head","Normal-Stomach","Normal-Thyroid","Normal-Uterus","GTEx-Adrenal","GTEx-Bladder","GTEx-Brain","GTEx-Breast","GTEx-Cervix","GTEx-Colon-Small_intestine","GTEx-Esophagus","GTEx-Kidney","GTEx-Liver","GTEx-Lung","GTEx-Pancreas","GTEx-Prostate","GTEx-Skin-Head","GTEx-Stomach","GTEx-Thyroid","GTEx-Uterus","Normal-Adrenal","Normal-Bladder","Normal-Brain","Normal-Breast","Normal-Colon-Small_intestine","Normal-Esophagus","Normal-Kidney","Normal-Liver","Normal-Lung","Normal-Pancreas","Normal-Prostate","Normal-Skin-Head","Normal-Stomach","Normal-Thyroid","Normal-Uterus","GTEx-Adrenal","GTEx-Bladder","GTEx-Brain","GTEx-Breast","GTEx-Cervix","GTEx-Colon-Small_intestine","GTEx-Esophagus","GTEx-Kidney","GTEx-Liver","GTEx-Lung","GTEx-Pancreas","GTEx-Prostate","GTEx-Skin-Head","GTEx-Stomach","GTEx-Thyroid","GTEx-Uterus","Normal-Adrenal","Normal-Bladder","Normal-Brain","Normal-Breast","Normal-Cervix","Normal-Esophagus","Normal-Kidney","Normal-Liver","Normal-Lung","Normal-Pancreas","Normal-Prostate","Normal-Skin-Head","Normal-Stomach","Normal-Thyroid","Normal-Uterus","GTEx-Adrenal","GTEx-Bladder","GTEx-Brain","GTEx-Breast","GTEx-Cervix","GTEx-Colon-Small_intestine","GTEx-Esophagus","GTEx-Kidney","GTEx-Liver","GTEx-Lung","GTEx-Pancreas","GTEx-Prostate","GTEx-Skin-Head","GTEx-Stomach","GTEx-Thyroid","GTEx-Uterus","Normal-Adrenal","Normal-Bladder","Normal-Brain","Normal-Breast","Normal-Cervix","Normal-Colon-Small_intestine","Normal-Kidney","Normal-Liver","Normal-Lung","Normal-Pancreas","Normal-Prostate","Normal-Skin-Head","Normal-Stomach","Normal-Thyroid","Normal-Uterus","GTEx-Adrenal","GTEx-Bladder","GTEx-Brain","GTEx-Breast","GTEx-Cervix","GTEx-Colon-Small_intestine","GTEx-Esophagus","GTEx-Kidney","GTEx-Liver","GTEx-Lung","GTEx-Pancreas","GTEx-Prostate","GTEx-Skin-Head","GTEx-Stomach","GTEx-Thyroid","GTEx-Uterus","Normal-Adrenal","Normal-Bladder","Normal-Brain","Normal-Breast","Normal-Cervix","Normal-Colon-Small_intestine","Normal-Esophagus","Normal-Liver","Normal-Lung","Normal-Pancreas","Normal-Prostate","Normal-Skin-Head","Normal-Stomach","Normal-Thyroid","Normal-Uterus","GTEx-Adrenal","GTEx-Bladder","GTEx-Brain","GTEx-Breast","GTEx-Cervix","GTEx-Colon-Small_intestine","GTEx-Esophagus","GTEx-Kidney","GTEx-Liver","GTEx-Lung","GTEx-Pancreas","GTEx-Prostate","GTEx-Skin-Head","GTEx-Stomach","GTEx-Thyroid","GTEx-Uterus","Normal-Adrenal","Normal-Bladder","Normal-Brain","Normal-Breast","Normal-Cervix","Normal-Colon-Small_intestine","Normal-Esophagus","Normal-Kidney","Normal-Lung","Normal-Pancreas","Normal-Prostate","Normal-Skin-Head","Normal-Stomach","Normal-Thyroid","Normal-Uterus","GTEx-Adrenal","GTEx-Bladder","GTEx-Brain","GTEx-Breast","GTEx-Cervix","GTEx-Colon-Small_intestine","GTEx-Esophagus","GTEx-Kidney","GTEx-Liver","GTEx-Lung","GTEx-Pancreas","GTEx-Prostate","GTEx-Skin-Head","GTEx-Stomach","GTEx-Thyroid","GTEx-Uterus","Normal-Adrenal","Normal-Bladder","Normal-Brain","Normal-Breast","Normal-Cervix","Normal-Colon-Small_intestine","Normal-Esophagus","Normal-Kidney","Normal-Liver","Normal-Pancreas","Normal-Prostate","Normal-Skin-Head","Normal-Stomach","Normal-Thyroid","Normal-Uterus","GTEx-Adrenal","GTEx-Bladder","GTEx-Brain","GTEx-Breast","GTEx-Cervix","GTEx-Colon-Small_intestine","GTEx-Esophagus","GTEx-Kidney","GTEx-Liver","GTEx-Lung","GTEx-Pancreas","GTEx-Prostate","GTEx-Skin-Head","GTEx-Stomach","GTEx-Thyroid","GTEx-Uterus","Normal-Adrenal","Normal-Bladder","Normal-Brain","Normal-Breast","Normal-Cervix","Normal-Colon-Small_intestine","Normal-Esophagus","Normal-Kidney","Normal-Liver","Normal-Lung","Normal-Prostate","Normal-Skin-Head","Normal-Stomach","Normal-Thyroid","Normal-Uterus","GTEx-Adrenal","GTEx-Bladder","GTEx-Brain","GTEx-Breast","GTEx-Cervix","GTEx-Colon-Small_intestine","GTEx-Esophagus","GTEx-Kidney","GTEx-Liver","GTEx-Lung","GTEx-Pancreas","GTEx-Prostate","GTEx-Skin-Head","GTEx-Stomach","GTEx-Thyroid","GTEx-Uterus","Normal-Adrenal","Normal-Bladder","Normal-Brain","Normal-Breast","Normal-Cervix","Normal-Colon-Small_intestine","Normal-Esophagus","Normal-Kidney","Normal-Liver","Normal-Lung","Normal-Pancreas","Normal-Skin-Head","Normal-Stomach","Normal-Thyroid","Normal-Uterus","GTEx-Adrenal","GTEx-Bladder","GTEx-Brain","GTEx-Breast","GTEx-Cervix","GTEx-Colon-Small_intestine","GTEx-Esophagus","GTEx-Kidney","GTEx-Liver","GTEx-Lung","GTEx-Pancreas","GTEx-Prostate","GTEx-Skin-Head","GTEx-Stomach","GTEx-Thyroid","GTEx-Uterus","Normal-Adrenal","Normal-Bladder","Normal-Brain","Normal-Breast","Normal-Cervix","Normal-Colon-Small_intestine","Normal-Esophagus","Normal-Kidney","Normal-Liver","Normal-Lung","Normal-Pancreas","Normal-Prostate","Normal-Stomach","Normal-Thyroid","Normal-Uterus","GTEx-Adrenal","GTEx-Bladder","GTEx-Brain","GTEx-Breast","GTEx-Cervix","GTEx-Colon-Small_intestine","GTEx-Esophagus","GTEx-Kidney","GTEx-Liver","GTEx-Lung","GTEx-Pancreas","GTEx-Prostate","GTEx-Skin-Head","GTEx-Stomach","GTEx-Thyroid","GTEx-Uterus","Normal-Adrenal","Normal-Bladder","Normal-Brain","Normal-Breast","Normal-Cervix","Normal-Colon-Small_intestine","Normal-Esophagus","Normal-Kidney","Normal-Liver","Normal-Lung","Normal-Pancreas","Normal-Prostate","Normal-Skin-Head","Normal-Thyroid","Normal-Uterus","GTEx-Adrenal","GTEx-Bladder","GTEx-Brain","GTEx-Breast","GTEx-Cervix","GTEx-Colon-Small_intestine","GTEx-Esophagus","GTEx-Kidney","GTEx-Liver","GTEx-Lung","GTEx-Pancreas","GTEx-Prostate","GTEx-Skin-Head","GTEx-Stomach","GTEx-Thyroid","GTEx-Uterus","Normal-Adrenal","Normal-Bladder","Normal-Brain","Normal-Breast","Normal-Cervix","Normal-Colon-Small_intestine","Normal-Esophagus","Normal-Kidney","Normal-Liver","Normal-Lung","Normal-Pancreas","Normal-Prostate","Normal-Skin-Head","Normal-Stomach","Normal-Uterus","GTEx-Adrenal","GTEx-Bladder","GTEx-Brain","GTEx-Breast","GTEx-Cervix","GTEx-Colon-Small_intestine","GTEx-Esophagus","GTEx-Kidney","GTEx-Liver","GTEx-Lung","GTEx-Pancreas","GTEx-Prostate","GTEx-Skin-Head","GTEx-Stomach","GTEx-Thyroid","GTEx-Uterus","Normal-Adrenal","Normal-Bladder","Normal-Brain","Normal-Breast","Normal-Cervix","Normal-Colon-Small_intestine","Normal-Esophagus","Normal-Kidney","Normal-Liver","Normal-Lung","Normal-Pancreas","Normal-Prostate","Normal-Skin-Head","Normal-Stomach","Normal-Thyroid"],"Tissue":["Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Bladder","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Brain","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Cervix","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Colon-Small_intestine","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Esophagus","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Pancreas","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Skin-Head","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus"],"number_TCGA_Normals":[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,129,129,129,129,129,129,129,129,129,129,129,129,129,129,129,129,129,129,129,129,129,129,129,129,129,129,129,129,129,129,129,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,109,109,109,109,109,109,109,109,109,109,109,109,109,109,109,109,109,109,109,109,109,109,109,109,109,109,109,109,109,109,109,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36,59,59,59,59,59,59,59,59,59,59,59,59,59,59,59,59,59,59,59,59,59,59,59,59,59,59,59,59,59,59,59,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23],"number_TCGA_Tumors":[254,254,254,254,254,254,254,254,254,254,254,254,254,254,254,254,254,254,254,254,254,254,254,254,254,254,254,254,254,254,254,407,407,407,407,407,407,407,407,407,407,407,407,407,407,407,407,407,407,407,407,407,407,407,407,407,407,407,407,407,407,407,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,1090,303,303,303,303,303,303,303,303,303,303,303,303,303,303,303,303,303,303,303,303,303,303,303,303,303,303,303,303,303,303,303,379,379,379,379,379,379,379,379,379,379,379,379,379,379,379,379,379,379,379,379,379,379,379,379,379,379,379,379,379,379,379,181,181,181,181,181,181,181,181,181,181,181,181,181,181,181,181,181,181,181,181,181,181,181,181,181,181,181,181,181,181,181,882,882,882,882,882,882,882,882,882,882,882,882,882,882,882,882,882,882,882,882,882,882,882,882,882,882,882,882,882,882,882,369,369,369,369,369,369,369,369,369,369,369,369,369,369,369,369,369,369,369,369,369,369,369,369,369,369,369,369,369,369,369,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,1011,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,494,494,494,494,494,494,494,494,494,494,494,494,494,494,494,494,494,494,494,494,494,494,494,494,494,494,494,494,494,494,494,602,602,602,602,602,602,602,602,602,602,602,602,602,602,602,602,602,602,602,602,602,602,602,602,602,602,602,602,602,602,602,413,413,413,413,413,413,413,413,413,413,413,413,413,413,413,413,413,413,413,413,413,413,413,413,413,413,413,413,413,413,413,504,504,504,504,504,504,504,504,504,504,504,504,504,504,504,504,504,504,504,504,504,504,504,504,504,504,504,504,504,504,504,237,237,237,237,237,237,237,237,237,237,237,237,237,237,237,237,237,237,237,237,237,237,237,237,237,237,237,237,237,237,237],"number_Target_Tissue":[125,9,1142,178,10,395,650,27,110,287,165,100,556,173,278,78,19,5,112,3,51,13,129,50,109,4,51,45,36,59,23,125,9,1142,178,10,395,650,27,110,287,165,100,556,173,278,78,3,5,112,3,51,13,129,50,109,4,51,45,36,59,23,125,9,1142,178,10,395,650,27,110,287,165,100,556,173,278,78,3,19,112,3,51,13,129,50,109,4,51,45,36,59,23,125,9,1142,178,10,395,650,27,110,287,165,100,556,173,278,78,3,19,5,3,51,13,129,50,109,4,51,45,36,59,23,125,9,1142,178,10,395,650,27,110,287,165,100,556,173,278,78,3,19,5,112,51,13,129,50,109,4,51,45,36,59,23,125,9,1142,178,10,395,650,27,110,287,165,100,556,173,278,78,3,19,5,112,3,13,129,50,109,4,51,45,36,59,23,125,9,1142,178,10,395,650,27,110,287,165,100,556,173,278,78,3,19,5,112,3,51,129,50,109,4,51,45,36,59,23,125,9,1142,178,10,395,650,27,110,287,165,100,556,173,278,78,3,19,5,112,3,51,13,50,109,4,51,45,36,59,23,125,9,1142,178,10,395,650,27,110,287,165,100,556,173,278,78,3,19,5,112,3,51,13,129,109,4,51,45,36,59,23,125,9,1142,178,10,395,650,27,110,287,165,100,556,173,278,78,3,19,5,112,3,51,13,129,50,4,51,45,36,59,23,125,9,1142,178,10,395,650,27,110,287,165,100,556,173,278,78,3,19,5,112,3,51,13,129,50,109,51,45,36,59,23,125,9,1142,178,10,395,650,27,110,287,165,100,556,173,278,78,3,19,5,112,3,51,13,129,50,109,4,45,36,59,23,125,9,1142,178,10,395,650,27,110,287,165,100,556,173,278,78,3,19,5,112,3,51,13,129,50,109,4,51,36,59,23,125,9,1142,178,10,395,650,27,110,287,165,100,556,173,278,78,3,19,5,112,3,51,13,129,50,109,4,51,45,59,23,125,9,1142,178,10,395,650,27,110,287,165,100,556,173,278,78,3,19,5,112,3,51,13,129,50,109,4,51,45,36,23,125,9,1142,178,10,395,650,27,110,287,165,100,556,173,278,78,3,19,5,112,3,51,13,129,50,109,4,51,45,36,59]}},"id":"f4d62069-3f70-42b1-b964-98e6abb701f4","type":"ColumnDataSource"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_scroll":"auto","active_tap":"auto","tools":[{"id":"5de7c13c-34ab-4fe8-818a-1be9af0c301b","type":"HoverTool"},{"id":"8d3d0923-3017-4bd3-8221-f6154897260a","type":"SaveTool"},{"id":"cb6108f9-634e-43bf-978e-6c905d81f6f8","type":"PanTool"},{"id":"d12f7291-cf37-420f-9056-6633d3fe7fb8","type":"WheelZoomTool"},{"id":"f8526aa5-40da-439d-81e2-f4cbf50eb830","type":"BoxZoomTool"},{"id":"21893500-9b7e-4fdd-aad8-abe541bfe2e1","type":"ResetTool"}]},"id":"8c119cf6-8e0e-4164-bbdb-f8e05137de83","type":"Toolbar"},{"attributes":{"axis_label":"Scores","formatter":{"id":"37d61129-cccc-4b73-b0b4-f98a8b674005","type":"BasicTickFormatter"},"plot":{"id":"e9c36099-4443-4c5f-bb1f-6126b88c9530","subtype":"Figure","type":"Plot"},"ticker":{"id":"fc6da891-b92d-445b-8afc-3b8c72f73941","type":"BasicTicker"}},"id":"70ad8320-8967-43b7-8dd0-a72dc87d51de","type":"LinearAxis"},{"attributes":{"factors":["GTEx-Adrenal","GTEx-Bladder","GTEx-Brain","GTEx-Breast","GTEx-Cervix","GTEx-Colon-Small_intestine","GTEx-Esophagus","GTEx-Kidney","GTEx-Liver","GTEx-Lung","GTEx-Pancreas","GTEx-Prostate","GTEx-Skin-Head","GTEx-Stomach","GTEx-Thyroid","GTEx-Uterus","Normal-Adrenal","Normal-Bladder","Normal-Brain","Normal-Breast","Normal-Cervix","Normal-Colon-Small_intestine","Normal-Esophagus","Normal-Kidney","Normal-Liver","Normal-Lung","Normal-Pancreas","Normal-Prostate","Normal-Skin-Head","Normal-Stomach","Normal-Thyroid","Normal-Uterus"],"palette":["#1f77b4","#1f77b4","#aec7e8","#aec7e8","#ff7f0e","#ffbb78","#ffbb78","#2ca02c","#98df8a","#98df8a","#d62728","#ff9896","#ff9896","#9467bd","#c5b0d5","#c5b0d5","#8c564b","#8c564b","#c49c94","#e377c2","#e377c2","#f7b6d2","#7f7f7f","#7f7f7f","#c7c7c7","#bcbd22","#bcbd22","#dbdb8d","#17becf","#17becf","#9edae5","#9edae5"]},"id":"08b7a72f-7838-48e6-8fed-aa68f5c932fc","type":"CategoricalColorMapper"},{"attributes":{"grid_line_color":{"value":null},"plot":{"id":"e9c36099-4443-4c5f-bb1f-6126b88c9530","subtype":"Figure","type":"Plot"},"ticker":{"id":"52edd770-5824-4c52-9d68-7c4988c046c8","type":"CategoricalTicker"}},"id":"52480af2-ac85-425a-8ad9-ac23937c5ada","type":"Grid"},{"attributes":{"fill_alpha":{"value":0.1},"fill_color":{"field":"Target","transform":{"id":"08b7a72f-7838-48e6-8fed-aa68f5c932fc","type":"CategoricalColorMapper"}},"line_alpha":{"value":0.1},"line_color":{"field":"Target","transform":{"id":"08b7a72f-7838-48e6-8fed-aa68f5c932fc","type":"CategoricalColorMapper"}},"size":{"units":"screen","value":7},"x":{"field":"Tissue"},"y":{"field":"Scores"}},"id":"39962b20-8b38-4a2e-8577-e6ac3634d894","type":"Circle"},{"attributes":{"callback":null},"id":"fc24703c-88c5-4692-9286-a2797674f178","type":"Range1d"},{"attributes":{"fill_color":{"field":"Target","transform":{"id":"08b7a72f-7838-48e6-8fed-aa68f5c932fc","type":"CategoricalColorMapper"}},"line_color":{"field":"Target","transform":{"id":"08b7a72f-7838-48e6-8fed-aa68f5c932fc","type":"CategoricalColorMapper"}},"size":{"units":"screen","value":7},"x":{"field":"Tissue"},"y":{"field":"Scores"}},"id":"19f55a4f-5c2f-46d0-bcb4-3476640dd20a","type":"Circle"},{"attributes":{},"id":"fc6da891-b92d-445b-8afc-3b8c72f73941","type":"BasicTicker"},{"attributes":{},"id":"52edd770-5824-4c52-9d68-7c4988c046c8","type":"CategoricalTicker"},{"attributes":{},"id":"b0cb1149-32b2-468b-bd03-40583214e552","type":"ToolEvents"},{"attributes":{"plot":{"id":"e9c36099-4443-4c5f-bb1f-6126b88c9530","subtype":"Figure","type":"Plot"}},"id":"21893500-9b7e-4fdd-aad8-abe541bfe2e1","type":"ResetTool"},{"attributes":{"fill_alpha":{"value":0.2},"fill_color":{"field":"Target","transform":{"id":"08b7a72f-7838-48e6-8fed-aa68f5c932fc","type":"CategoricalColorMapper"}},"line_alpha":{"value":0.2},"line_color":{"field":"Target","transform":{"id":"08b7a72f-7838-48e6-8fed-aa68f5c932fc","type":"CategoricalColorMapper"}},"size":{"units":"screen","value":7},"x":{"field":"Tissue"},"y":{"field":"Scores"}},"id":"9b2549b0-1aba-4d06-8ef1-a57617518c1e","type":"Circle"},{"attributes":{"background_fill_color":{"value":"white"},"below":[{"id":"fde9dbee-b457-4073-9304-2b3e65abec18","type":"CategoricalAxis"}],"left":[{"id":"70ad8320-8967-43b7-8dd0-a72dc87d51de","type":"LinearAxis"}],"min_border_bottom":10,"min_border_left":10,"min_border_right":10,"min_border_top":10,"plot_height":500,"plot_width":850,"renderers":[{"id":"fde9dbee-b457-4073-9304-2b3e65abec18","type":"CategoricalAxis"},{"id":"52480af2-ac85-425a-8ad9-ac23937c5ada","type":"Grid"},{"id":"70ad8320-8967-43b7-8dd0-a72dc87d51de","type":"LinearAxis"},{"id":"624f886c-6b4d-44ca-b926-bb79181d014d","type":"Grid"},{"id":"b0162c4f-9875-438a-b3bf-32f45846dbe0","type":"BoxAnnotation"},{"id":"0e88f443-a3ec-4367-9163-77fe62bca099","type":"Legend"},{"id":"7268d821-27d4-41c5-8840-d02cc34fb95e","type":"GlyphRenderer"}],"title":{"id":"81290be4-3411-42cd-b372-4b9f8d72eddb","type":"Title"},"tool_events":{"id":"b0cb1149-32b2-468b-bd03-40583214e552","type":"ToolEvents"},"toolbar":{"id":"8c119cf6-8e0e-4164-bbdb-f8e05137de83","type":"Toolbar"},"x_range":{"id":"152279aa-792d-4b24-8eb5-39ef7c2573a7","type":"FactorRange"},"x_scale":{"id":"cbb85d30-2b5e-4744-93c2-530e472bd990","type":"CategoricalScale"},"y_range":{"id":"fc24703c-88c5-4692-9286-a2797674f178","type":"Range1d"},"y_scale":{"id":"7b231425-8050-4e9a-aaa8-9a79e75822c2","type":"LinearScale"}},"id":"e9c36099-4443-4c5f-bb1f-6126b88c9530","subtype":"Figure","type":"Plot"},{"attributes":{},"id":"7b231425-8050-4e9a-aaa8-9a79e75822c2","type":"LinearScale"},{"attributes":{"overlay":{"id":"b0162c4f-9875-438a-b3bf-32f45846dbe0","type":"BoxAnnotation"},"plot":{"id":"e9c36099-4443-4c5f-bb1f-6126b88c9530","subtype":"Figure","type":"Plot"}},"id":"f8526aa5-40da-439d-81e2-f4cbf50eb830","type":"BoxZoomTool"},{"attributes":{"data_source":{"id":"f4d62069-3f70-42b1-b964-98e6abb701f4","type":"ColumnDataSource"},"glyph":{"id":"19f55a4f-5c2f-46d0-bcb4-3476640dd20a","type":"Circle"},"hover_glyph":null,"muted_glyph":{"id":"9b2549b0-1aba-4d06-8ef1-a57617518c1e","type":"Circle"},"nonselection_glyph":{"id":"39962b20-8b38-4a2e-8577-e6ac3634d894","type":"Circle"},"selection_glyph":null},"id":"7268d821-27d4-41c5-8840-d02cc34fb95e","type":"GlyphRenderer"},{"attributes":{},"id":"cbb85d30-2b5e-4744-93c2-530e472bd990","type":"CategoricalScale"},{"attributes":{"plot":{"id":"e9c36099-4443-4c5f-bb1f-6126b88c9530","subtype":"Figure","type":"Plot"}},"id":"cb6108f9-634e-43bf-978e-6c905d81f6f8","type":"PanTool"},{"attributes":{"axis_label":"Tissue","formatter":{"id":"4c4fa07e-42f9-4bea-aea0-e68ca5e3475b","type":"CategoricalTickFormatter"},"major_label_orientation":0.7853981633974483,"plot":{"id":"e9c36099-4443-4c5f-bb1f-6126b88c9530","subtype":"Figure","type":"Plot"},"ticker":{"id":"52edd770-5824-4c52-9d68-7c4988c046c8","type":"CategoricalTicker"}},"id":"fde9dbee-b457-4073-9304-2b3e65abec18","type":"CategoricalAxis"},{"attributes":{"plot":{"id":"e9c36099-4443-4c5f-bb1f-6126b88c9530","subtype":"Figure","type":"Plot"}},"id":"8d3d0923-3017-4bd3-8221-f6154897260a","type":"SaveTool"},{"attributes":{},"id":"37d61129-cccc-4b73-b0b4-f98a8b674005","type":"BasicTickFormatter"},{"attributes":{"plot":{"id":"e9c36099-4443-4c5f-bb1f-6126b88c9530","subtype":"Figure","type":"Plot"}},"id":"d12f7291-cf37-420f-9056-6633d3fe7fb8","type":"WheelZoomTool"},{"attributes":{"plot":null,"text":"PearsonR Scores of Gene Expression Fold Change Between Tumor/Normal and Tumor/Normal+GTEx","text_color":{"value":"black"},"text_font_size":{"value":"12pt"}},"id":"81290be4-3411-42cd-b372-4b9f8d72eddb","type":"Title"},{"attributes":{"bottom_units":"screen","fill_alpha":{"value":0.5},"fill_color":{"value":"lightgrey"},"left_units":"screen","level":"overlay","line_alpha":{"value":1.0},"line_color":{"value":"black"},"line_dash":[4,4],"line_width":{"value":2},"plot":null,"render_mode":"css","right_units":"screen","top_units":"screen"},"id":"b0162c4f-9875-438a-b3bf-32f45846dbe0","type":"BoxAnnotation"},{"attributes":{"callback":null,"plot":{"id":"e9c36099-4443-4c5f-bb1f-6126b88c9530","subtype":"Figure","type":"Plot"},"renderers":[{"id":"7268d821-27d4-41c5-8840-d02cc34fb95e","type":"GlyphRenderer"}],"tooltips":[["Tissue","@{Tissue}"],["Scores","@{Scores}"],["Target","@{Target}"],["# TCGA Tumors","@{number_TCGA_Tumors}"],["# TCGA Normals","@{number_TCGA_Normals}"],["# Target Tissue","@{number_Target_Tissue}"]]},"id":"5de7c13c-34ab-4fe8-818a-1be9af0c301b","type":"HoverTool"},{"attributes":{"callback":null,"factors":["Adrenal","Bladder","Brain","Breast","Cervix","Colon-Small_intestine","Esophagus","Kidney","Liver","Lung","Pancreas","Prostate","Skin-Head","Stomach","Thyroid","Uterus"]},"id":"152279aa-792d-4b24-8eb5-39ef7c2573a7","type":"FactorRange"}],"root_ids":["e9c36099-4443-4c5f-bb1f-6126b88c9530"]},"title":"Bokeh Application","version":"0.12.6"}};
+            var render_items = [{"docid":"27f176b3-c5e8-4a04-818d-6424aadfe498","elementid":"e9898d4e-ac1a-4346-9118-fabb3e25b673","modelid":"e9c36099-4443-4c5f-bb1f-6126b88c9530"}];
+            
+            Bokeh.embed.embed_items(docs_json, render_items);
+          };
+          if (document.readyState != "loading") fn();
+          else document.addEventListener("DOMContentLoaded", fn);
+        })();
+      },
+      function(Bokeh) {
+      }
+    ];
+  
+    function run_inline_js() {
+      
+      if ((window.Bokeh !== undefined) || (force === true)) {
+        for (var i = 0; i < inline_js.length; i++) {
+          inline_js[i](window.Bokeh);
+        }if (force === true) {
+          display_loaded();
+        }} else if (Date.now() < window._bokeh_timeout) {
+        setTimeout(run_inline_js, 100);
+      } else if (!window._bokeh_failed_load) {
+        console.log("Bokeh: BokehJS failed to load within specified timeout.");
+        window._bokeh_failed_load = true;
+      } else if (force !== true) {
+        var cell = $(document.getElementById("e9898d4e-ac1a-4346-9118-fabb3e25b673")).parents('.cell').data().cell;
+        cell.output_area.append_execute_result(NB_LOAD_WARNING)
+      }
+  
+    }
+  
+    if (window._bokeh_is_loading === 0) {
+      console.log("Bokeh: BokehJS loaded, going straight to plotting");
+      run_inline_js();
+    } else {
+      load_libs(js_urls, function() {
+        console.log("Bokeh: BokehJS plotting callback run at", now());
+        run_inline_js();
+      });
+    }
+  }(this));
+</script></div>
