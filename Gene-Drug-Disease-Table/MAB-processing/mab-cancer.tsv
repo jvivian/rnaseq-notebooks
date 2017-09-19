@@ -1,0 +1,157 @@
+	Name	Trade name	Type	Source	Target	Use
+5	Abituzumab[3]		mab	humanized	CD51	cancer
+9	Adecatumumab[6]		mab	human	EpCAM	prostate and breast cancer
+13	Afutuzumab[9]		mab	humanized	CD20	lymphoma
+14	Alacizumab pegol[10]		F(ab')2	humanized	VEGFR2	cancer
+19	Amatuximab[14]		mab	chimeric	mesothelin	cancer
+21	Anetumab ravtansine[3]		mab	human	MSLN	cancer
+24	Apolizumab[17]		mab	humanized	HLA-DR ?	hematological cancers
+26	Ascrinvacumab[18]		mab	human	activin receptor-like kinase 1	cancer
+28	Atezolizumab[20]		mab	humanized	CD274	cancer
+32	Avelumab[8]		mab	human	CD274	?
+35	Bavituximab[2]		mab	chimeric	phosphatidylserine	cancer, viral infections
+42	Bevacizumab[12]	Avastin	mab	humanized	VEGF-A	metastatic cancer, retinopathy of prematurity
+54	Brentuximab vedotin[33]		mab	chimeric	CD30 (TNFRSF8)	hematologic cancers
+58	Brontictuzumab[23]		mab	humanized	Notch 1	cancer
+62	Cantuzumab mertansine		mab	humanized	mucin CanAg	colorectal cancer etc.
+63	Cantuzumab ravtansine[30]		mab	humanized	MUC1	cancers
+68	Catumaxomab[22]	Removab	3funct	rat/mouse hybrid	EpCAM, CD3	ovarian cancer, malignant ascites, gastric cancer
+69	cBR96-doxorubicin immunoconjugate		mab	humanized	Lewis-Y antigen	cancer
+73	Cetuximab	Erbitux	mab	chimeric	EGFR	metastatic colorectal cancer and head and neck cancer
+74	Citatuzumab bogatox[9]		Fab	humanized	EpCAM	ovarian cancer and other solid tumors
+75	Cixutumumab		mab	human	IGF-1 receptor (CD221)	solid tumors
+78	Clivatuzumab tetraxetan[40]	hPAM4-Cide	mab	humanized	MUC1	pancreatic cancer
+79	Codrituzumab[3]		mab	humanized	glypican 3	cancer
+80	Coltuximab ravtansine[3]		mab	chimeric	CD19	cancer
+81	Conatumumab[9]		mab	human	TRAIL-R2	cancer
+86	Dacetuzumab[10]		mab	humanized	CD40	hematologic cancers
+88	Dalotuzumab[42]		mab	humanized	IGF-1 receptor (CD221)	cancer etc.
+90	Daratumumab[43]		mab	human	CD38 (cyclic ADP ribose hydrolase)	cancer
+92	Demcizumab[44]		mab	humanized	DLL4	cancer
+93	Denintuzumab mafodotin[23]		mab	humanized	CD19	cancer
+94	Denosumab[45]	Prolia	mab	human	RANKL	osteoporosis, bone metastases etc.
+95	Depatuxizumab mafodotin[32]		mab	chimeric/humanized	EGFR	cancer
+96	Derlotuximab biotin[46]		mab	chimeric	histone complex	recurrent glioblastoma multiforme
+98	Dinutuximab[47]		mab	chimeric	GD2 ganglioside	neuroblastoma
+102	Drozitumab[50]		mab	human	DR5	cancer etc.
+103	Duligotumab[51]		mab	human	ERBB3 (HER3)	testicular cancer
+105	Durvalumab[53]		mab	human	CD274	cancer
+106	Dusigitumab[54]		mab	human	ILGF2	cancer
+107	Ecromeximab[17]		mab	chimeric	GD3 ganglioside	malignant melanoma
+114	Elgemtumab[20]		mab	human	ERBB3 (HER3)	cancer
+115	Elotuzumab		mab	humanized	SLAMF7	multiple myeloma
+117	Emactuzumab[23]		mab	humanized	CSF1R	cancer
+118	Emibetuzumab[57]		mab	humanized	HHGFR	cancer
+120	Enavatuzumab[58]		mab	humanized	TWEAK receptor	cancer etc.
+121	Enfortumab vedotin[59]		mab	human	AGS-22M6	cancer expressing Nectin-4
+123	Enoblituzumab[61]		mab	humanized	CD276	cancer
+126	Ensituximab[63]		mab	chimeric	5AC	cancer
+128	Epratuzumab		mab	humanized	CD22	cancer, SLE
+131	Ertumaxomab[22]	Rexomun	3funct	rat/mouse hybrid	HER2/neu, CD3	breast cancer etc.
+132	Etaracizumab	Abegrin	mab	humanized	integrin αvβ3	melanoma, prostate cancer, ovarian cancer etc.
+139	Farletuzumab		mab	humanized	folate receptor 1	ovarian cancer
+141	FBTA05[71][72]	Lymphomun	3funct	rat/mouse hybrid	CD20	chronic lymphocytic leukaemia
+145	Ficlatuzumab[76]		mab	humanized	HGF	cancer etc.
+146	Figitumumab		mab	human	IGF-1 receptor (CD221)	adrenocortical carcinoma, non-small cell lung carcinoma etc.
+148	Flanvotumab[77]		mab	human	TYRP1(glycoprotein 75)	melanoma
+153	Fresolimumab[80]		mab	human	TGF-β	idiopathic pulmonary fibrosis, focal segmental glomerulosclerosis, cancer
+155	Futuximab[51]		mab	chimeric	EGFR	cancer
+157	Galiximab		mab	chimeric	CD80	B-cell lymphoma
+158	Ganitumab[82]		mab	human	IGF-1 receptor (CD221)	cancer
+161	Gemtuzumab ozogamicin	Mylotarg	mab	humanized	CD33	acute myelogenous leukemia
+163	Girentuximab[43]	Rencarex	mab	chimeric	carbonic anhydrase 9 (CA-IX)	clear cell renal cell carcinoma[84]
+164	Glembatumumab vedotin[85][86]		mab	human	GPNMB	melanoma, breast cancer
+170	Icrucumab[88]		mab	human	VEGFR-1	cancer etc.
+173	IMAB362		mab	human	CLDN18.2	gastrointestinal adenocarcinomas and pancreatic tumor
+174	Imalumab[23]		mab	human	MIF	cancer
+176	Imgatuzumab[51]		mab	humanized	EGFR	cancer
+178	Indatuximab ravtansine[30]		mab	chimeric	SDC1	cancer
+179	Indusatumab vedotin[20]		mab	human	GUCY2C	cancer
+180	Inebilizumab[8]		mab	humanized	CD19	cancer, systemic sclerosis, multiple sclerosis
+182	Intetumumab[89][90][91]		mab	human	CD51	solid tumors (prostate cancer, melanoma)
+185	Ipilimumab[45]	Yervoy	mab	human	CD152	melanoma
+186	Iratumumab[45]		mab	human	CD30 (TNFRSF8)	Hodgkin's lymphoma
+187	Isatuximab[92]		mab	chimeric	CD38	cancer
+191	Labetuzumab[55]	CEA-Cide	mab	humanized	CEA	colorectal cancer
+201	Lexatumumab[2]		mab	human	TRAIL-R2	cancer
+203	Lifastuzumab vedotin[95]		mab	humanized	phosphate-sodium co-transporter	cancer
+206	Lintuzumab		mab	humanized	CD33	cancer
+207	Lirilumab[51]		mab	human	KIR2D	solid and hematological cancers
+210	Lorvotuzumab mertansine		mab	humanized	CD56	cancer
+211	Lucatumumab[10]		mab	human	CD40	multiple myeloma, non-Hodgkin's lymphoma, Hodgkin's lymphoma
+213	Lumiliximab[6]		mab	chimeric	CD23 (IgE receptor)	chronic lymphocytic leukemia
+214	Lumretuzumab[23]		mab	humanized	ERBB3 (HER3)	cancer
+215	MABp1	Xilonix	mab	human	IL1A	colorectal cancer
+216	Mapatumumab[22]		mab	human	TRAIL-R1	cancer
+217	Margetuximab[98]		mab	humanized	ch4D5	cancer
+220	Matuzumab[19]		mab	humanized	EGFR	colorectal, lung and stomach cancer
+223	Milatuzumab[10]		mab	humanized	CD74	multiple myeloma and other hematological malignancies
+225	Mirvetuximab soravtansine[100]		mab	chimeric	folate receptor alpha	cancer
+227	Mogamulizumab[101]		mab	humanized	CCR4	cancer
+237	Narnatumab[104]		mab	human	RON	cancer
+242	Necitumumab[105]		mab	human	EGFR	non-small cell lung carcinoma
+245	Nesvacumab[107]		mab	human	angiopoietin 2	cancer
+246	Nimotuzumab[45][108]	Theracim, Theraloc	mab	humanized	EGFR	squamous cell carcinoma, head and neck cancer, nasopharyngeal cancer, glioma
+247	Nivolumab[109]	Opdivo	mab	human	PD-1	cancer
+250	Obinutuzumab	Gazyva	mab	humanized	CD20	Chronic lymphatic leukemia
+251	Ocaratuzumab[111]		mab	humanized	CD20	cancer
+254	Ofatumumab[22]	Arzerra	mab	human	CD20	chronic lymphocytic leukemia etc.
+255	Olaratumab		mab	human	PDGF-R α	cancer
+258	Onartuzumab[112]		mab	humanized	human scatter factor receptor kinase	cancer
+259	Ontuxizumab[113]		mab	chimeric/humanized	TEM1	cancer
+261	Oportuzumab monatox[105]		scFv	humanized	EpCAM	cancer
+265	Otlertuzumab[115]		mab	humanized	CD37	cancer
+271	Pamrevlumab[8]		mab	human	CTGF	idiopathic pulmonary fibrosis (IPF), pancreatic cancer
+272	Panitumumab[68]	Vectibix	mab	human	EGFR	colorectal cancer
+273	Pankomab		mab	humanized	tumor specific glycosylation of MUC1	ovarian cancer
+275	Parsatuzumab[51]		mab	human	EGFL7	cancer
+277	Pasotuxizumab[23]		mab	chimeric/humanized	folate hydrolase	cancer
+279	Patritumab[37]		mab	human	ERBB3 (HER3)	cancer
+280	Pembrolizumab[119]		mab	humanized	PDCD1	melanoma and other cancers
+283	Pertuzumab	Omnitarg	mab	humanized	HER2/neu	cancer
+285	Pidilizumab[120]		mab	humanized	PD-1	cancer and infectious diseases
+286	Pinatuzumab vedotin[26]		mab	humanized	CD22	cancer
+291	Polatuzumab vedotin[26][122]		mab	humanized	CD79B	cancer
+296	Pritumumab		mab	human	vimentin	brain cancer
+300	Radretumab[21]		mab	human	fibronectin extra domain-B	cancer
+303	Ramucirumab	Cyramza	mab	human	VEGFR2	solid tumors
+309	Rilotumumab[126]		mab	human	HGF	solid tumors
+312	Rituximab	MabThera, Rituxan	mab	chimeric	CD20	lymphomas, leukemias, some autoimmune disorders
+314	Robatumumab		mab	human	IGF-1 receptor (CD221)	cancer
+321	Sacituzumab govitecan[130]		mab	humanized	tumor-associated calcium signal transducer 2	cancer
+322	Samalizumab[131]		mab	humanized	CD200	cancer
+327	Seribantumab[26]		mab	human	ERBB3 (HER3)	cancer
+330	Sibrotuzumab		mab	humanized	FAP	cancer
+331	SGN-CD19A		mab	humanized	CD19	acute lymphoblastic leukemia and B-cell non-Hodgkin lymphoma
+332	SGN-CD33A		mab	humanized	CD33	Acute myeloid leukemia
+334	Siltuximab		mab	chimeric	IL-6	cancer
+338	Sofituzumab vedotin[136]		mab	humanized	CA-125	ovarian cancer
+346	Tabalumab[138]		mab	human	BAFF	B-cell cancers
+347	Tacatuzumab tetraxetan	AFP-Cide	mab	humanized	alpha-fetoprotein	cancer
+353	Tarextumab[139]		mab	human	Notch receptor	cancer
+359	Teprotumumab[140]		mab	human	IGF-1 receptor (CD221)	hematologic tumors
+361	Tetulomab		mab	humanized	CD37	cancer[141]
+364	Ticilimumab (= tremelimumab)		mab	human	CTLA-4	cancer
+366	Tigatuzumab[10]		mab	humanized	TRAIL-R2	cancer
+369	TNX-650		?	humanized	IL-13	Hodgkin's lymphoma
+374	Tovetumab[143]		mab	human	CD140a	cancer
+376	Trastuzumab	Herceptin	mab	humanized	HER2/neu	breast cancer
+377	Trastuzumab emtansine	Kadcyla	mab	humanized	HER2/neu	breast cancer
+378	TRBS07[145]	Ektomab	3funct	?	GD2 ganglioside	melanoma
+380	Tremelimumab		mab	human	CTLA-4	cancer
+382	Tucotuzumab celmoleukin[45][108]		mab	humanized	EpCAM	cancer
+384	Ublituximab[21]		mab	chimeric	MS4A1	cancer
+385	Ulocuplumab[147]		mab	human	CXCR4 (CD184)	hematologic malignancies
+386	Urelumab[148]		mab	human	4-1BB (CD137)	cancer etc.
+389	Utomilumab[32]		mab	human	4-1BB (CD137)	cancer
+391	Vandortuzumab vedotin[20]		mab	humanized	STEAP1	cancer
+392	Vantictumab[149]		mab	human	Frizzled receptor	cancer
+393	Vanucizumab[23]		mab	humanized	angiopoietin 2	cancer
+395	Varlilumab[150]		mab	human	CD27	solid tumors and hematologic malignancies
+398	Veltuzumab[10]		mab	humanized	CD20	non-Hodgkin's lymphoma
+400	Vesencumab[21]		mab	human	NRP1	solid malignancies
+403	Volociximab[22]		mab	chimeric	integrin α5β1	solid tumors
+404	Vorsetuzumab mafodotin[151]		mab	humanized	CD70	cancer
+405	Votumumab	HumaSPECT	mab	human	tumor antigen CTAA16.88	colorectal tumors
+407	Zalutumumab[22]	HuMax-EGFr	mab	human	EGFR	squamous cell carcinoma of the head and neck
+409	Zatuximab[51]		mab	chimeric	HER1	cancer
