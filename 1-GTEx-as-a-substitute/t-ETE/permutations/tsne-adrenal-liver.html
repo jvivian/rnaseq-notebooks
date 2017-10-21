@@ -1,0 +1,663 @@
+
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.6.min.js" type="text/javascript"></script>
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.6.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/ui/1.10.4/jquery-ui.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.20/require.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js" type="text/javascript"></script>
+<script type="text/javascript">function HoloViewsWidget(){
+}
+
+HoloViewsWidget.comms = {};
+HoloViewsWidget.comm_state = {};
+
+HoloViewsWidget.prototype.init_slider = function(init_val){
+	if(this.load_json) {
+		this.from_json()
+	} else {
+		this.update_cache();
+	}
+}
+
+HoloViewsWidget.prototype.populate_cache = function(idx){
+    this.cache[idx].html(this.frames[idx]);
+    if (this.embed) {
+        delete this.frames[idx];
+    }
+}
+
+HoloViewsWidget.prototype.process_error = function(msg){
+
+}
+
+HoloViewsWidget.prototype.from_json = function() {
+	var data_url = this.json_path + this.id + '.json';
+	$.getJSON(data_url, $.proxy(function(json_data) {
+		this.frames = json_data;
+		this.update_cache();
+		this.update(0);
+	}, this));
+}
+
+HoloViewsWidget.prototype.dynamic_update = function(current){
+	if (current === undefined) {
+		return
+	}
+	if(this.dynamic) {
+		current = JSON.stringify(current);
+	}
+	function callback(initialized, msg){
+		/* This callback receives data from Python as a string
+		   in order to parse it correctly quotes are sliced off*/
+		if (msg.content.ename != undefined) {
+			this.process_error(msg);
+		}
+		if (msg.msg_type != "execute_result") {
+			console.log("Warning: HoloViews callback returned unexpected data for key: (", current, ") with the following content:", msg.content)
+			this.time = undefined;
+			this.wait = false;
+			return
+		}
+		this.timed = (Date.now() - this.time) * 1.1;
+		if (msg.msg_type == "execute_result") {
+			if (msg.content.data['text/plain'].includes('Complete')) {
+				this.wait = false;
+				if (this.queue.length > 0) {
+					this.time = Date.now();
+					this.dynamic_update(this.queue[this.queue.length-1]);
+					this.queue = [];
+				}
+				return
+			}
+		}
+	}
+	this.current = current;
+	if ((window.Jupyter !== undefined) && (Jupyter.notebook.kernel != null)) {
+		var kernel = Jupyter.notebook.kernel;
+		callbacks = {iopub: {output: $.proxy(callback, this, this.initialized)}};
+		var cmd = "holoviews.plotting.widgets.NdWidget.widgets['" + this.id + "'].update(" + current + ")";
+		kernel.execute("import holoviews;" + cmd, callbacks, {silent : false});
+	}
+}
+
+HoloViewsWidget.prototype.update_cache = function(force){
+    var frame_len = Object.keys(this.frames).length;
+    for (var i=0; i<frame_len; i++) {
+        if(!this.load_json || this.dynamic)  {
+            frame = Object.keys(this.frames)[i];
+        } else {
+            frame = i;
+        }
+        if(!(frame in this.cache) || force) {
+			if ((frame in this.cache) && force) { this.cache[frame].remove() }
+			this.cache[frame] = $('<div />').appendTo("#"+"_anim_img"+this.id).hide();
+			var cache_id = "_anim_img"+this.id+"_"+frame;
+			this.cache[frame].attr("id", cache_id);
+			this.populate_cache(frame);
+        }
+    }
+}
+
+HoloViewsWidget.prototype.update = function(current){
+    if(current in this.cache) {
+        $.each(this.cache, function(index, value) {
+            value.hide();
+        });
+        this.cache[current].show();
+		this.wait = false;
+    }
+}
+
+HoloViewsWidget.prototype.init_comms = function() {
+	if ((window.Jupyter !== undefined) && (Jupyter.notebook.kernel !== undefined)) {
+		var widget = this;
+		comm_manager = Jupyter.notebook.kernel.comm_manager;
+        comm_manager.register_target(this.id, function (comm) {
+			comm.on_msg(function (msg) { widget.process_msg(msg) });
+		});
+	}
+}
+
+HoloViewsWidget.prototype.process_msg = function(msg) {
+}
+
+function SelectionWidget(frames, id, slider_ids, keyMap, dim_vals, notFound, load_json, mode, cached, json_path, dynamic){
+    this.frames = frames;
+    this.id = id;
+    this.slider_ids = slider_ids;
+    this.keyMap = keyMap
+    this.current_frame = 0;
+    this.current_vals = dim_vals;
+    this.load_json = load_json;
+    this.mode = mode;
+    this.notFound = notFound;
+    this.cached = cached;
+    this.dynamic = dynamic;
+    this.cache = {};
+	this.json_path = json_path;
+    this.init_slider(this.current_vals[0]);
+	this.queue = [];
+	this.wait = false;
+	if (!this.cached || this.dynamic) {
+		this.init_comms()
+	}
+}
+
+SelectionWidget.prototype = new HoloViewsWidget;
+
+
+SelectionWidget.prototype.get_key = function(current_vals) {
+	var key = "(";
+    for (var i=0; i<this.slider_ids.length; i++)
+    {
+        val = this.current_vals[i];
+        if (!(typeof val === 'string')) {
+            if (val % 1 === 0) { val = val.toFixed(1); }
+            else { val = val.toFixed(10); val = val.slice(0, val.length-1);}
+        }
+        key += "'" + val + "'";
+        if(i != this.slider_ids.length-1) { key += ', ';}
+        else if(this.slider_ids.length == 1) { key += ',';}
+    }
+    key += ")";
+	return this.keyMap[key];
+}
+
+SelectionWidget.prototype.set_frame = function(dim_val, dim_idx){
+	this.current_vals[dim_idx] = dim_val;
+    var current = this.get_key(this.current_vals);
+    if(current === undefined && !this.dynamic) {
+        return
+    }
+	if (this.dynamic || !this.cached) {
+		if (this.time === undefined) {
+			// Do nothing the first time
+		} else if ((this.timed === undefined) || ((this.time + this.timed) > Date.now())) {
+			var key = this.current_vals;
+			if (!this.dynamic) {
+				key = this.get_key(key);
+			}
+			this.queue.push(key);
+			return
+		}
+	}
+	this.queue = [];
+	this.time = Date.now();
+	this.current_frame = current;
+    if(this.dynamic) {
+        this.dynamic_update(this.current_vals)
+    } else if(this.cached) {
+        this.update(current)
+    } else {
+        this.dynamic_update(current)
+    }
+}
+
+
+/* Define the ScrubberWidget class */
+function ScrubberWidget(frames, num_frames, id, interval, load_json, mode, cached, json_path, dynamic){
+    this.slider_id = "_anim_slider" + id;
+    this.loop_select_id = "_anim_loop_select" + id;
+    this.id = id;
+    this.interval = interval;
+    this.current_frame = 0;
+    this.direction = 0;
+    this.dynamic = dynamic;
+    this.timer = null;
+    this.load_json = load_json;
+    this.mode = mode;
+    this.cached = cached;
+    this.frames = frames;
+    this.cache = {};
+    this.length = num_frames;
+	this.json_path = json_path;
+    document.getElementById(this.slider_id).max = this.length - 1;
+    this.init_slider(0);
+	this.wait = false;
+	this.queue = [];
+	if (!this.cached || this.dynamic) {
+		this.init_comms()
+	}
+}
+
+ScrubberWidget.prototype = new HoloViewsWidget;
+
+ScrubberWidget.prototype.set_frame = function(frame){
+	this.current_frame = frame;
+	widget = document.getElementById(this.slider_id);
+    if (widget === null) {
+        this.pause_animation();
+        return
+    }
+    widget.value = this.current_frame;
+    if(this.cached) {
+        this.update(frame)
+    } else {
+        this.dynamic_update(frame)
+    }
+}
+
+
+ScrubberWidget.prototype.process_error = function(msg){
+	if (msg.content.ename === 'StopIteration') {
+		this.pause_animation();
+		this.stopped = true;
+		var keys = Object.keys(this.frames)
+		this.length = keys.length;
+		document.getElementById(this.slider_id).max = this.length-1;
+		document.getElementById(this.slider_id).value = this.length-1;
+		this.current_frame = this.length-1;
+	}
+}
+
+
+ScrubberWidget.prototype.get_loop_state = function(){
+    var button_group = document[this.loop_select_id].state;
+    for (var i = 0; i < button_group.length; i++) {
+        var button = button_group[i];
+        if (button.checked) {
+            return button.value;
+        }
+    }
+    return undefined;
+}
+
+
+ScrubberWidget.prototype.next_frame = function() {
+	if (this.dynamic || !this.cached) {
+		if (this.wait) {
+			return
+		}
+		this.wait = true;
+	}
+	if (this.dynamic && this.current_frame + 1 >= this.length) {
+		this.length += 1;
+        document.getElementById(this.slider_id).max = this.length-1;
+	}
+    this.set_frame(Math.min(this.length - 1, this.current_frame + 1));
+}
+
+ScrubberWidget.prototype.previous_frame = function() {
+    this.set_frame(Math.max(0, this.current_frame - 1));
+}
+
+ScrubberWidget.prototype.first_frame = function() {
+    this.set_frame(0);
+}
+
+ScrubberWidget.prototype.last_frame = function() {
+    this.set_frame(this.length - 1);
+}
+
+ScrubberWidget.prototype.slower = function() {
+    this.interval /= 0.7;
+    if(this.direction > 0){this.play_animation();}
+    else if(this.direction < 0){this.reverse_animation();}
+}
+
+ScrubberWidget.prototype.faster = function() {
+    this.interval *= 0.7;
+    if(this.direction > 0){this.play_animation();}
+    else if(this.direction < 0){this.reverse_animation();}
+}
+
+ScrubberWidget.prototype.anim_step_forward = function() {
+    if(this.current_frame < this.length || (this.dynamic && !this.stopped)){
+        this.next_frame();
+    }else{
+        var loop_state = this.get_loop_state();
+        if(loop_state == "loop"){
+            this.first_frame();
+        }else if(loop_state == "reflect"){
+            this.last_frame();
+            this.reverse_animation();
+        }else{
+            this.pause_animation();
+            this.last_frame();
+        }
+    }
+}
+
+ScrubberWidget.prototype.anim_step_reverse = function() {
+    this.current_frame -= 1;
+    if(this.current_frame >= 0){
+        this.set_frame(this.current_frame);
+    } else {
+        var loop_state = this.get_loop_state();
+        if(loop_state == "loop"){
+            this.last_frame();
+        }else if(loop_state == "reflect"){
+            this.first_frame();
+            this.play_animation();
+        }else{
+            this.pause_animation();
+            this.first_frame();
+        }
+    }
+}
+
+ScrubberWidget.prototype.pause_animation = function() {
+    this.direction = 0;
+    if (this.timer){
+        clearInterval(this.timer);
+        this.timer = null;
+    }
+}
+
+ScrubberWidget.prototype.play_animation = function() {
+    this.pause_animation();
+    this.direction = 1;
+    var t = this;
+    if (!this.timer) this.timer = setInterval(function(){t.anim_step_forward();}, this.interval);
+}
+
+ScrubberWidget.prototype.reverse_animation = function() {
+    this.pause_animation();
+    this.direction = -1;
+    var t = this;
+    if (!this.timer) this.timer = setInterval(function(){t.anim_step_reverse();}, this.interval);
+}
+
+function extend(destination, source) {
+    for (var k in source) {
+        if (source.hasOwnProperty(k)) {
+            destination[k] = source[k];
+        }
+    }
+    return destination;
+}
+
+function update_widget(widget, values) {
+	if (widget.hasClass("ui-slider")) {
+		widget.slider('option',
+					  {'min': 0, 'max': values.length-1,
+					   'dim_vals': values, 'value': 0,
+					   'dim_labels': values})
+		widget.slider('option', 'slide').call(widget, event, {'value': 0})
+	} else {
+		widget.empty();
+		for (var i=0; i<values.length; i++){
+			widget.append($("<option>", {
+				value: i,
+				text: values[i]
+			}))};
+		widget.data('values', values);
+		widget.data('value', 0);
+		widget.trigger("change");
+	};
+}
+
+// Define Bokeh specific subclasses
+function BokehSelectionWidget() {
+	SelectionWidget.apply(this, arguments);
+}
+
+function BokehScrubberWidget() {
+	ScrubberWidget.apply(this, arguments);
+}
+
+// Let them inherit from the baseclasses
+BokehSelectionWidget.prototype = Object.create(SelectionWidget.prototype);
+BokehScrubberWidget.prototype = Object.create(ScrubberWidget.prototype);
+
+// Define methods to override on widgets
+var BokehMethods = {
+	update_cache : function(){
+		$.each(this.frames, $.proxy(function(index, frame) {
+			this.frames[index] = JSON.parse(frame);
+		}, this));
+	},
+	update : function(current){
+		if (current === undefined) {
+			var data = undefined;
+		} else {
+			var data = this.frames[current];
+		}
+		if (data !== undefined) {
+			var doc = Bokeh.index[data.root].model.document;
+			doc.apply_json_patch(data.patch);
+		}
+	},
+	init_comms : function() {
+	}
+}
+
+// Extend Bokeh widgets with backend specific methods
+extend(BokehSelectionWidget.prototype, BokehMethods);
+extend(BokehScrubberWidget.prototype, BokehMethods);
+</script>
+
+<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.6.min.css">
+<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.6.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<style>div.hololayout {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+div.holoframe {
+	width: 75%;
+}
+
+div.holowell {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+form.holoform {
+    background-color: #fafafa;
+    border-radius: 5px;
+    overflow: hidden;
+	padding-left: 0.8em;
+    padding-right: 0.8em;
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+}
+
+div.holowidgets {
+    padding-right: 0;
+	width: 25%;
+}
+
+div.holoslider {
+    min-height: 0 !important;
+    height: 0.8em;
+    width: 60%;
+}
+
+div.holoformgroup {
+    padding-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+div.hologroup {
+    padding-left: 0;
+    padding-right: 0.8em;
+    width: 50%;
+}
+
+.holoselect {
+    width: 92%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.holotext {
+    width: 100%;
+    padding-left:  0.5em;
+    padding-right: 0;
+}
+
+.holowidgets .ui-resizable-se {
+	visibility: hidden
+}
+
+.holoframe > .ui-resizable-se {
+	visibility: hidden
+}
+
+.holowidgets .ui-resizable-s {
+	visibility: hidden
+}
+
+div.bk-hbox {
+    display: flex;
+    justify-content: center;
+}
+
+div.bk-hbox div.bk-plot {
+    padding: 8px;
+}
+
+div.bk-hbox div.bk-data-table {
+    padding: 20px;
+}
+</style><div style='display: table; margin: 0 auto;'>
+
+    <div class="bk-root">
+        <div class="bk-plotdiv" id="64a90705-56f1-41f7-a87b-534fe313dc2d"></div>
+    </div>
+<script type="text/javascript">
+  
+  (function(global) {
+    function now() {
+      return new Date();
+    }
+  
+    var force = false;
+  
+    if (typeof (window._bokeh_onload_callbacks) === "undefined" || force === true) {
+      window._bokeh_onload_callbacks = [];
+      window._bokeh_is_loading = undefined;
+    }
+  
+  
+    
+    if (typeof (window._bokeh_timeout) === "undefined" || force === true) {
+      window._bokeh_timeout = Date.now() + 0;
+      window._bokeh_failed_load = false;
+    }
+  
+    var NB_LOAD_WARNING = {'data': {'text/html':
+       "<div style='background-color: #fdd'>\n"+
+       "<p>\n"+
+       "BokehJS does not appear to have successfully loaded. If loading BokehJS from CDN, this \n"+
+       "may be due to a slow or bad network connection. Possible fixes:\n"+
+       "</p>\n"+
+       "<ul>\n"+
+       "<li>re-rerun `output_notebook()` to attempt to load from CDN again, or</li>\n"+
+       "<li>use INLINE resources instead, as so:</li>\n"+
+       "</ul>\n"+
+       "<code>\n"+
+       "from bokeh.resources import INLINE\n"+
+       "output_notebook(resources=INLINE)\n"+
+       "</code>\n"+
+       "</div>"}};
+  
+    function display_loaded() {
+      if (window.Bokeh !== undefined) {
+        var el = document.getElementById("64a90705-56f1-41f7-a87b-534fe313dc2d");
+        el.textContent = "BokehJS " + Bokeh.version + " successfully loaded.";
+      } else if (Date.now() < window._bokeh_timeout) {
+        setTimeout(display_loaded, 100)
+      }
+    }
+  
+    function run_callbacks() {
+      try {
+        window._bokeh_onload_callbacks.forEach(function(callback) { callback() });
+      }
+      finally {
+        delete window._bokeh_onload_callbacks
+      }
+      console.info("Bokeh: all callbacks have finished");
+    }
+  
+    function load_libs(js_urls, callback) {
+      window._bokeh_onload_callbacks.push(callback);
+      if (window._bokeh_is_loading > 0) {
+        console.log("Bokeh: BokehJS is being loaded, scheduling callback at", now());
+        return null;
+      }
+      if (js_urls == null || js_urls.length === 0) {
+        run_callbacks();
+        return null;
+      }
+      console.log("Bokeh: BokehJS not loaded, scheduling load and callback at", now());
+      window._bokeh_is_loading = js_urls.length;
+      for (var i = 0; i < js_urls.length; i++) {
+        var url = js_urls[i];
+        var s = document.createElement('script');
+        s.src = url;
+        s.async = false;
+        s.onreadystatechange = s.onload = function() {
+          window._bokeh_is_loading--;
+          if (window._bokeh_is_loading === 0) {
+            console.log("Bokeh: all BokehJS libraries loaded");
+            run_callbacks()
+          }
+        };
+        s.onerror = function() {
+          console.warn("failed to load library " + url);
+        };
+        console.log("Bokeh: injecting script tag for BokehJS library: ", url);
+        document.getElementsByTagName("head")[0].appendChild(s);
+      }
+    };var element = document.getElementById("64a90705-56f1-41f7-a87b-534fe313dc2d");
+    if (element == null) {
+      console.log("Bokeh: ERROR: autoload.js configured with elementid '64a90705-56f1-41f7-a87b-534fe313dc2d' but no matching script tag was found. ")
+      return false;
+    }
+  
+    var js_urls = [];
+  
+    var inline_js = [
+      function(Bokeh) {
+        (function() {
+          var fn = function() {
+            var docs_json = {"2986b754-9df7-46ba-9687-2d6c2773a7cb":{"roots":{"references":[{"attributes":{"overlay":{"id":"766ebb1c-b329-4587-a252-35bc95487640","type":"BoxAnnotation"},"plot":{"id":"b9251492-3fa8-468c-9b54-004cac23acb1","subtype":"Figure","type":"Plot"}},"id":"e8d4d256-6d07-4fa3-8023-c4d962a41cf4","type":"BoxZoomTool"},{"attributes":{"background_fill_color":{"value":"white"},"below":[{"id":"5e316ad9-0254-473f-b763-4a080498c5bf","type":"LinearAxis"}],"left":[{"id":"6ec3d322-c3de-499f-adb4-6b152ec8e4a0","type":"LinearAxis"}],"min_border_bottom":10,"min_border_left":10,"min_border_right":10,"min_border_top":10,"plot_height":450,"plot_width":900,"renderers":[{"id":"5e316ad9-0254-473f-b763-4a080498c5bf","type":"LinearAxis"},{"id":"cb1a4d12-6bda-4aca-b73b-085b19327d22","type":"Grid"},{"id":"6ec3d322-c3de-499f-adb4-6b152ec8e4a0","type":"LinearAxis"},{"id":"e5644571-2847-4a6f-8df8-2b8e07d9ad5b","type":"Grid"},{"id":"766ebb1c-b329-4587-a252-35bc95487640","type":"BoxAnnotation"},{"id":"01959e3b-96c1-4ace-af31-f352f4b30f0f","type":"Legend"},{"id":"054b4986-abf0-43f0-8c51-34f3cef93280","type":"GlyphRenderer"}],"title":{"id":"30f9ae1b-4a56-41f2-9207-f0729534248c","type":"Title"},"tool_events":{"id":"434fe5d9-eb0f-49e2-a5be-acddca99c435","type":"ToolEvents"},"toolbar":{"id":"c57b6e6d-bc2c-4404-9186-af824f1a0b93","type":"Toolbar"},"x_range":{"id":"d7c29db7-2bb1-4a98-ba8d-6b7e619a28db","type":"Range1d"},"x_scale":{"id":"e3d1c435-2462-405d-a0c6-3709b9a78ae7","type":"LinearScale"},"y_range":{"id":"9ebd350c-45bf-4a2a-a646-f06faf1a49d3","type":"Range1d"},"y_scale":{"id":"52e73d23-6ed1-4445-955f-d2d6b7ed99a6","type":"LinearScale"}},"id":"b9251492-3fa8-468c-9b54-004cac23acb1","subtype":"Figure","type":"Plot"},{"attributes":{"fill_alpha":{"value":0.5},"fill_color":{"field":"tissue","transform":{"id":"1c997b90-84bc-4761-a1d5-ddadc8fcb553","type":"CategoricalColorMapper"}},"line_alpha":{"value":0.5},"line_color":{"field":"tissue","transform":{"id":"1c997b90-84bc-4761-a1d5-ddadc8fcb553","type":"CategoricalColorMapper"}},"size":{"units":"screen","value":5},"x":{"field":"x"},"y":{"field":"y"}},"id":"832dfadf-3678-4fde-95a1-16eb18735abd","type":"Circle"},{"attributes":{"plot":{"id":"b9251492-3fa8-468c-9b54-004cac23acb1","subtype":"Figure","type":"Plot"}},"id":"e2816919-274a-4e44-95b2-e43c81237ac1","type":"ResetTool"},{"attributes":{"fill_alpha":{"value":0.5},"fill_color":{"field":"tissue","transform":{"id":"1c997b90-84bc-4761-a1d5-ddadc8fcb553","type":"CategoricalColorMapper"}},"line_alpha":{"value":0.5},"line_color":{"field":"tissue","transform":{"id":"1c997b90-84bc-4761-a1d5-ddadc8fcb553","type":"CategoricalColorMapper"}},"size":{"units":"screen","value":5},"x":{"field":"x"},"y":{"field":"y"}},"id":"8e8802e1-f9ab-4f0c-a2a6-acc46c3f5c71","type":"Circle"},{"attributes":{"data_source":{"id":"b5c358b2-0ef6-4de5-9d29-4cbdd4e0c865","type":"ColumnDataSource"},"glyph":{"id":"8e8802e1-f9ab-4f0c-a2a6-acc46c3f5c71","type":"Circle"},"hover_glyph":null,"muted_glyph":{"id":"c75ac5a5-1111-4461-b1e1-0dee6586cf24","type":"Circle"},"nonselection_glyph":{"id":"832dfadf-3678-4fde-95a1-16eb18735abd","type":"Circle"},"selection_glyph":null},"id":"054b4986-abf0-43f0-8c51-34f3cef93280","type":"GlyphRenderer"},{"attributes":{},"id":"2ad93e64-5f24-4e2f-be31-6d187993d694","type":"BasicTicker"},{"attributes":{"fill_alpha":{"value":0.2},"fill_color":{"field":"tissue","transform":{"id":"1c997b90-84bc-4761-a1d5-ddadc8fcb553","type":"CategoricalColorMapper"}},"line_alpha":{"value":0.2},"line_color":{"field":"tissue","transform":{"id":"1c997b90-84bc-4761-a1d5-ddadc8fcb553","type":"CategoricalColorMapper"}},"size":{"units":"screen","value":5},"x":{"field":"x"},"y":{"field":"y"}},"id":"c75ac5a5-1111-4461-b1e1-0dee6586cf24","type":"Circle"},{"attributes":{"callback":null,"column_names":["y","x","tissue"],"data":{"tissue":["adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","adrenal","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver","liver"],"x":{"__ndarray__":"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","dtype":"float32","shape":[918]},"y":{"__ndarray__":"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","dtype":"float32","shape":[918]}}},"id":"b5c358b2-0ef6-4de5-9d29-4cbdd4e0c865","type":"ColumnDataSource"},{"attributes":{},"id":"df443dbb-221b-48a0-aaf4-6f7de1e44e20","type":"BasicTickFormatter"},{"attributes":{"dimension":1,"grid_line_color":{"value":null},"plot":{"id":"b9251492-3fa8-468c-9b54-004cac23acb1","subtype":"Figure","type":"Plot"},"ticker":{"id":"b8df15cb-0c3d-411e-9c3e-57812007748c","type":"BasicTicker"}},"id":"e5644571-2847-4a6f-8df8-2b8e07d9ad5b","type":"Grid"},{"attributes":{"callback":null,"plot":{"id":"b9251492-3fa8-468c-9b54-004cac23acb1","subtype":"Figure","type":"Plot"},"renderers":[{"id":"054b4986-abf0-43f0-8c51-34f3cef93280","type":"GlyphRenderer"}],"tooltips":[["x","@{x}"],["y","@{y}"],["tissue","@{tissue}"]]},"id":"36cb3a13-9ba2-4b37-a8f7-933ebf534e30","type":"HoverTool"},{"attributes":{"grid_line_color":{"value":null},"plot":{"id":"b9251492-3fa8-468c-9b54-004cac23acb1","subtype":"Figure","type":"Plot"},"ticker":{"id":"2ad93e64-5f24-4e2f-be31-6d187993d694","type":"BasicTicker"}},"id":"cb1a4d12-6bda-4aca-b73b-085b19327d22","type":"Grid"},{"attributes":{},"id":"52e73d23-6ed1-4445-955f-d2d6b7ed99a6","type":"LinearScale"},{"attributes":{"axis_label":"y","formatter":{"id":"b403349a-65bc-496a-9388-edef213eea61","type":"BasicTickFormatter"},"plot":{"id":"b9251492-3fa8-468c-9b54-004cac23acb1","subtype":"Figure","type":"Plot"},"ticker":{"id":"b8df15cb-0c3d-411e-9c3e-57812007748c","type":"BasicTicker"}},"id":"6ec3d322-c3de-499f-adb4-6b152ec8e4a0","type":"LinearAxis"},{"attributes":{"items":[{"id":"c4e62ae3-b8ca-4b6f-8f31-f8ceea30cb24","type":"LegendItem"}],"plot":{"id":"b9251492-3fa8-468c-9b54-004cac23acb1","subtype":"Figure","type":"Plot"}},"id":"01959e3b-96c1-4ace-af31-f352f4b30f0f","type":"Legend"},{"attributes":{"plot":null,"text":"Adrenal and Liver","text_color":{"value":"black"},"text_font_size":{"value":"12pt"}},"id":"30f9ae1b-4a56-41f2-9207-f0729534248c","type":"Title"},{"attributes":{"plot":{"id":"b9251492-3fa8-468c-9b54-004cac23acb1","subtype":"Figure","type":"Plot"}},"id":"81cebaf0-42b1-4194-984f-0b71d5f04ee0","type":"PanTool"},{"attributes":{},"id":"e3d1c435-2462-405d-a0c6-3709b9a78ae7","type":"LinearScale"},{"attributes":{},"id":"b403349a-65bc-496a-9388-edef213eea61","type":"BasicTickFormatter"},{"attributes":{"callback":null,"end":28.742891311645508,"start":-25.895954132080078},"id":"d7c29db7-2bb1-4a98-ba8d-6b7e619a28db","type":"Range1d"},{"attributes":{"plot":{"id":"b9251492-3fa8-468c-9b54-004cac23acb1","subtype":"Figure","type":"Plot"}},"id":"1084ade1-e64a-4020-93da-d3d1d23e6b44","type":"SaveTool"},{"attributes":{"label":{"field":"tissue"},"renderers":[{"id":"054b4986-abf0-43f0-8c51-34f3cef93280","type":"GlyphRenderer"}]},"id":"c4e62ae3-b8ca-4b6f-8f31-f8ceea30cb24","type":"LegendItem"},{"attributes":{},"id":"b8df15cb-0c3d-411e-9c3e-57812007748c","type":"BasicTicker"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_scroll":"auto","active_tap":"auto","tools":[{"id":"36cb3a13-9ba2-4b37-a8f7-933ebf534e30","type":"HoverTool"},{"id":"1084ade1-e64a-4020-93da-d3d1d23e6b44","type":"SaveTool"},{"id":"81cebaf0-42b1-4194-984f-0b71d5f04ee0","type":"PanTool"},{"id":"bb9542d6-7d0b-4953-acfb-80a038358065","type":"WheelZoomTool"},{"id":"e8d4d256-6d07-4fa3-8023-c4d962a41cf4","type":"BoxZoomTool"},{"id":"e2816919-274a-4e44-95b2-e43c81237ac1","type":"ResetTool"}]},"id":"c57b6e6d-bc2c-4404-9186-af824f1a0b93","type":"Toolbar"},{"attributes":{"plot":{"id":"b9251492-3fa8-468c-9b54-004cac23acb1","subtype":"Figure","type":"Plot"}},"id":"bb9542d6-7d0b-4953-acfb-80a038358065","type":"WheelZoomTool"},{"attributes":{"factors":["adrenal","liver"],"palette":["#e41a1c","#999999"]},"id":"1c997b90-84bc-4761-a1d5-ddadc8fcb553","type":"CategoricalColorMapper"},{"attributes":{"axis_label":"x","formatter":{"id":"df443dbb-221b-48a0-aaf4-6f7de1e44e20","type":"BasicTickFormatter"},"plot":{"id":"b9251492-3fa8-468c-9b54-004cac23acb1","subtype":"Figure","type":"Plot"},"ticker":{"id":"2ad93e64-5f24-4e2f-be31-6d187993d694","type":"BasicTicker"}},"id":"5e316ad9-0254-473f-b763-4a080498c5bf","type":"LinearAxis"},{"attributes":{"bottom_units":"screen","fill_alpha":{"value":0.5},"fill_color":{"value":"lightgrey"},"left_units":"screen","level":"overlay","line_alpha":{"value":1.0},"line_color":{"value":"black"},"line_dash":[4,4],"line_width":{"value":2},"plot":null,"render_mode":"css","right_units":"screen","top_units":"screen"},"id":"766ebb1c-b329-4587-a252-35bc95487640","type":"BoxAnnotation"},{"attributes":{},"id":"434fe5d9-eb0f-49e2-a5be-acddca99c435","type":"ToolEvents"},{"attributes":{"callback":null,"end":50.26214599609375,"start":-56.4473762512207},"id":"9ebd350c-45bf-4a2a-a646-f06faf1a49d3","type":"Range1d"}],"root_ids":["b9251492-3fa8-468c-9b54-004cac23acb1"]},"title":"Bokeh Application","version":"0.12.6"}};
+            var render_items = [{"docid":"2986b754-9df7-46ba-9687-2d6c2773a7cb","elementid":"64a90705-56f1-41f7-a87b-534fe313dc2d","modelid":"b9251492-3fa8-468c-9b54-004cac23acb1"}];
+            
+            Bokeh.embed.embed_items(docs_json, render_items);
+          };
+          if (document.readyState != "loading") fn();
+          else document.addEventListener("DOMContentLoaded", fn);
+        })();
+      },
+      function(Bokeh) {
+      }
+    ];
+  
+    function run_inline_js() {
+      
+      if ((window.Bokeh !== undefined) || (force === true)) {
+        for (var i = 0; i < inline_js.length; i++) {
+          inline_js[i](window.Bokeh);
+        }if (force === true) {
+          display_loaded();
+        }} else if (Date.now() < window._bokeh_timeout) {
+        setTimeout(run_inline_js, 100);
+      } else if (!window._bokeh_failed_load) {
+        console.log("Bokeh: BokehJS failed to load within specified timeout.");
+        window._bokeh_failed_load = true;
+      } else if (force !== true) {
+        var cell = $(document.getElementById("64a90705-56f1-41f7-a87b-534fe313dc2d")).parents('.cell').data().cell;
+        cell.output_area.append_execute_result(NB_LOAD_WARNING)
+      }
+  
+    }
+  
+    if (window._bokeh_is_loading === 0) {
+      console.log("Bokeh: BokehJS loaded, going straight to plotting");
+      run_inline_js();
+    } else {
+      load_libs(js_urls, function() {
+        console.log("Bokeh: BokehJS plotting callback run at", now());
+        run_inline_js();
+      });
+    }
+  }(this));
+</script></div>
