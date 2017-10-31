@@ -1,0 +1,7 @@
+Method for processing raw Xena RSEM gene expression table
+
+- Reverse Xena normalization to get exp counts
+- Subsetting protein-coding genes
+- DESeq2 Normalization
+
+Save results to Synapse
