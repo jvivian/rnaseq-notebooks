@@ -1,0 +1,652 @@
+
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.6.min.js" type="text/javascript"></script>
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.6.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/ui/1.10.4/jquery-ui.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.20/require.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js" type="text/javascript"></script>
+<script type="text/javascript">function HoloViewsWidget(){
+}
+
+HoloViewsWidget.comms = {};
+HoloViewsWidget.comm_state = {};
+
+HoloViewsWidget.prototype.init_slider = function(init_val){
+	if(this.load_json) {
+		this.from_json()
+	} else {
+		this.update_cache();
+	}
+}
+
+HoloViewsWidget.prototype.populate_cache = function(idx){
+    this.cache[idx].html(this.frames[idx]);
+    if (this.embed) {
+        delete this.frames[idx];
+    }
+}
+
+HoloViewsWidget.prototype.process_error = function(msg){
+
+}
+
+HoloViewsWidget.prototype.from_json = function() {
+	var data_url = this.json_path + this.id + '.json';
+	$.getJSON(data_url, $.proxy(function(json_data) {
+		this.frames = json_data;
+		this.update_cache();
+		this.update(0);
+	}, this));
+}
+
+HoloViewsWidget.prototype.dynamic_update = function(current){
+	if (current === undefined) {
+		return
+	}
+	if(this.dynamic) {
+		current = JSON.stringify(current);
+	}
+	function callback(initialized, msg){
+		/* This callback receives data from Python as a string
+		   in order to parse it correctly quotes are sliced off*/
+		if (msg.content.ename != undefined) {
+			this.process_error(msg);
+		}
+		if (msg.msg_type != "execute_result") {
+			console.log("Warning: HoloViews callback returned unexpected data for key: (", current, ") with the following content:", msg.content)
+			this.time = undefined;
+			this.wait = false;
+			return
+		}
+		this.timed = (Date.now() - this.time) * 1.1;
+		if (msg.msg_type == "execute_result") {
+			if (msg.content.data['text/plain'].includes('Complete')) {
+				this.wait = false;
+				if (this.queue.length > 0) {
+					this.time = Date.now();
+					this.dynamic_update(this.queue[this.queue.length-1]);
+					this.queue = [];
+				}
+				return
+			}
+		}
+	}
+	this.current = current;
+	if ((window.Jupyter !== undefined) && (Jupyter.notebook.kernel != null)) {
+		var kernel = Jupyter.notebook.kernel;
+		callbacks = {iopub: {output: $.proxy(callback, this, this.initialized)}};
+		var cmd = "holoviews.plotting.widgets.NdWidget.widgets['" + this.id + "'].update(" + current + ")";
+		kernel.execute("import holoviews;" + cmd, callbacks, {silent : false});
+	}
+}
+
+HoloViewsWidget.prototype.update_cache = function(force){
+    var frame_len = Object.keys(this.frames).length;
+    for (var i=0; i<frame_len; i++) {
+        if(!this.load_json || this.dynamic)  {
+            frame = Object.keys(this.frames)[i];
+        } else {
+            frame = i;
+        }
+        if(!(frame in this.cache) || force) {
+			if ((frame in this.cache) && force) { this.cache[frame].remove() }
+			this.cache[frame] = $('<div />').appendTo("#"+"_anim_img"+this.id).hide();
+			var cache_id = "_anim_img"+this.id+"_"+frame;
+			this.cache[frame].attr("id", cache_id);
+			this.populate_cache(frame);
+        }
+    }
+}
+
+HoloViewsWidget.prototype.update = function(current){
+    if(current in this.cache) {
+        $.each(this.cache, function(index, value) {
+            value.hide();
+        });
+        this.cache[current].show();
+		this.wait = false;
+    }
+}
+
+HoloViewsWidget.prototype.init_comms = function() {
+	if ((window.Jupyter !== undefined) && (Jupyter.notebook.kernel !== undefined)) {
+		var widget = this;
+		comm_manager = Jupyter.notebook.kernel.comm_manager;
+        comm_manager.register_target(this.id, function (comm) {
+			comm.on_msg(function (msg) { widget.process_msg(msg) });
+		});
+	}
+}
+
+HoloViewsWidget.prototype.process_msg = function(msg) {
+}
+
+function SelectionWidget(frames, id, slider_ids, keyMap, dim_vals, notFound, load_json, mode, cached, json_path, dynamic){
+    this.frames = frames;
+    this.id = id;
+    this.slider_ids = slider_ids;
+    this.keyMap = keyMap
+    this.current_frame = 0;
+    this.current_vals = dim_vals;
+    this.load_json = load_json;
+    this.mode = mode;
+    this.notFound = notFound;
+    this.cached = cached;
+    this.dynamic = dynamic;
+    this.cache = {};
+	this.json_path = json_path;
+    this.init_slider(this.current_vals[0]);
+	this.queue = [];
+	this.wait = false;
+	if (!this.cached || this.dynamic) {
+		this.init_comms()
+	}
+}
+
+SelectionWidget.prototype = new HoloViewsWidget;
+
+
+SelectionWidget.prototype.get_key = function(current_vals) {
+	var key = "(";
+    for (var i=0; i<this.slider_ids.length; i++)
+    {
+        val = this.current_vals[i];
+        if (!(typeof val === 'string')) {
+            if (val % 1 === 0) { val = val.toFixed(1); }
+            else { val = val.toFixed(10); val = val.slice(0, val.length-1);}
+        }
+        key += "'" + val + "'";
+        if(i != this.slider_ids.length-1) { key += ', ';}
+        else if(this.slider_ids.length == 1) { key += ',';}
+    }
+    key += ")";
+	return this.keyMap[key];
+}
+
+SelectionWidget.prototype.set_frame = function(dim_val, dim_idx){
+	this.current_vals[dim_idx] = dim_val;
+    var current = this.get_key(this.current_vals);
+    if(current === undefined && !this.dynamic) {
+        return
+    }
+	if (this.dynamic || !this.cached) {
+		if (this.time === undefined) {
+			// Do nothing the first time
+		} else if ((this.timed === undefined) || ((this.time + this.timed) > Date.now())) {
+			var key = this.current_vals;
+			if (!this.dynamic) {
+				key = this.get_key(key);
+			}
+			this.queue.push(key);
+			return
+		}
+	}
+	this.queue = [];
+	this.time = Date.now();
+	this.current_frame = current;
+    if(this.dynamic) {
+        this.dynamic_update(this.current_vals)
+    } else if(this.cached) {
+        this.update(current)
+    } else {
+        this.dynamic_update(current)
+    }
+}
+
+
+/* Define the ScrubberWidget class */
+function ScrubberWidget(frames, num_frames, id, interval, load_json, mode, cached, json_path, dynamic){
+    this.slider_id = "_anim_slider" + id;
+    this.loop_select_id = "_anim_loop_select" + id;
+    this.id = id;
+    this.interval = interval;
+    this.current_frame = 0;
+    this.direction = 0;
+    this.dynamic = dynamic;
+    this.timer = null;
+    this.load_json = load_json;
+    this.mode = mode;
+    this.cached = cached;
+    this.frames = frames;
+    this.cache = {};
+    this.length = num_frames;
+	this.json_path = json_path;
+    document.getElementById(this.slider_id).max = this.length - 1;
+    this.init_slider(0);
+	this.wait = false;
+	this.queue = [];
+	if (!this.cached || this.dynamic) {
+		this.init_comms()
+	}
+}
+
+ScrubberWidget.prototype = new HoloViewsWidget;
+
+ScrubberWidget.prototype.set_frame = function(frame){
+	this.current_frame = frame;
+	widget = document.getElementById(this.slider_id);
+    if (widget === null) {
+        this.pause_animation();
+        return
+    }
+    widget.value = this.current_frame;
+    if(this.cached) {
+        this.update(frame)
+    } else {
+        this.dynamic_update(frame)
+    }
+}
+
+
+ScrubberWidget.prototype.process_error = function(msg){
+	if (msg.content.ename === 'StopIteration') {
+		this.pause_animation();
+		this.stopped = true;
+		var keys = Object.keys(this.frames)
+		this.length = keys.length;
+		document.getElementById(this.slider_id).max = this.length-1;
+		document.getElementById(this.slider_id).value = this.length-1;
+		this.current_frame = this.length-1;
+	}
+}
+
+
+ScrubberWidget.prototype.get_loop_state = function(){
+    var button_group = document[this.loop_select_id].state;
+    for (var i = 0; i < button_group.length; i++) {
+        var button = button_group[i];
+        if (button.checked) {
+            return button.value;
+        }
+    }
+    return undefined;
+}
+
+
+ScrubberWidget.prototype.next_frame = function() {
+	this.set_frame(Math.min(this.length - 1, this.current_frame + 1));
+}
+
+ScrubberWidget.prototype.previous_frame = function() {
+    this.set_frame(Math.max(0, this.current_frame - 1));
+}
+
+ScrubberWidget.prototype.first_frame = function() {
+    this.set_frame(0);
+}
+
+ScrubberWidget.prototype.last_frame = function() {
+    this.set_frame(this.length - 1);
+}
+
+ScrubberWidget.prototype.slower = function() {
+    this.interval /= 0.7;
+    if(this.direction > 0){this.play_animation();}
+    else if(this.direction < 0){this.reverse_animation();}
+}
+
+ScrubberWidget.prototype.faster = function() {
+    this.interval *= 0.7;
+    if(this.direction > 0){this.play_animation();}
+    else if(this.direction < 0){this.reverse_animation();}
+}
+
+ScrubberWidget.prototype.anim_step_forward = function() {
+    if(this.current_frame < this.length - 1){
+        this.next_frame();
+    }else{
+        var loop_state = this.get_loop_state();
+        if(loop_state == "loop"){
+            this.first_frame();
+        }else if(loop_state == "reflect"){
+            this.last_frame();
+            this.reverse_animation();
+        }else{
+            this.pause_animation();
+            this.last_frame();
+        }
+    }
+}
+
+ScrubberWidget.prototype.anim_step_reverse = function() {
+    if(this.current_frame > 0){
+        this.previous_frame();
+    } else {
+        var loop_state = this.get_loop_state();
+        if(loop_state == "loop"){
+            this.last_frame();
+        }else if(loop_state == "reflect"){
+            this.first_frame();
+            this.play_animation();
+        }else{
+            this.pause_animation();
+            this.first_frame();
+        }
+    }
+}
+
+ScrubberWidget.prototype.pause_animation = function() {
+    this.direction = 0;
+    if (this.timer){
+        clearInterval(this.timer);
+        this.timer = null;
+    }
+}
+
+ScrubberWidget.prototype.play_animation = function() {
+    this.pause_animation();
+    this.direction = 1;
+    var t = this;
+    if (!this.timer) this.timer = setInterval(function(){t.anim_step_forward();}, this.interval);
+}
+
+ScrubberWidget.prototype.reverse_animation = function() {
+    this.pause_animation();
+    this.direction = -1;
+    var t = this;
+    if (!this.timer) this.timer = setInterval(function(){t.anim_step_reverse();}, this.interval);
+}
+
+function extend(destination, source) {
+    for (var k in source) {
+        if (source.hasOwnProperty(k)) {
+            destination[k] = source[k];
+        }
+    }
+    return destination;
+}
+
+function update_widget(widget, values) {
+	if (widget.hasClass("ui-slider")) {
+		widget.slider('option',
+					  {'min': 0, 'max': values.length-1,
+					   'dim_vals': values, 'value': 0,
+					   'dim_labels': values})
+		widget.slider('option', 'slide').call(widget, event, {'value': 0})
+	} else {
+		widget.empty();
+		for (var i=0; i<values.length; i++){
+			widget.append($("<option>", {
+				value: i,
+				text: values[i]
+			}))};
+		widget.data('values', values);
+		widget.data('value', 0);
+		widget.trigger("change");
+	};
+}
+
+// Define Bokeh specific subclasses
+function BokehSelectionWidget() {
+	SelectionWidget.apply(this, arguments);
+}
+
+function BokehScrubberWidget() {
+	ScrubberWidget.apply(this, arguments);
+}
+
+// Let them inherit from the baseclasses
+BokehSelectionWidget.prototype = Object.create(SelectionWidget.prototype);
+BokehScrubberWidget.prototype = Object.create(ScrubberWidget.prototype);
+
+// Define methods to override on widgets
+var BokehMethods = {
+	update_cache : function(){
+		$.each(this.frames, $.proxy(function(index, frame) {
+			this.frames[index] = JSON.parse(frame);
+		}, this));
+	},
+	update : function(current){
+		if (current === undefined) {
+			var data = undefined;
+		} else {
+			var data = this.frames[current];
+		}
+		if (data !== undefined) {
+			var doc = Bokeh.index[data.root].model.document;
+			doc.apply_json_patch(data.patch);
+		}
+	},
+	init_comms : function() {
+	}
+}
+
+// Extend Bokeh widgets with backend specific methods
+extend(BokehSelectionWidget.prototype, BokehMethods);
+extend(BokehScrubberWidget.prototype, BokehMethods);
+</script>
+
+<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.6.min.css">
+<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.6.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<style>div.hololayout {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+div.holoframe {
+	width: 75%;
+}
+
+div.holowell {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+form.holoform {
+    background-color: #fafafa;
+    border-radius: 5px;
+    overflow: hidden;
+	padding-left: 0.8em;
+    padding-right: 0.8em;
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+}
+
+div.holowidgets {
+    padding-right: 0;
+	width: 25%;
+}
+
+div.holoslider {
+    min-height: 0 !important;
+    height: 0.8em;
+    width: 60%;
+}
+
+div.holoformgroup {
+    padding-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+div.hologroup {
+    padding-left: 0;
+    padding-right: 0.8em;
+    width: 50%;
+}
+
+.holoselect {
+    width: 92%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.holotext {
+    width: 100%;
+    padding-left:  0.5em;
+    padding-right: 0;
+}
+
+.holowidgets .ui-resizable-se {
+	visibility: hidden
+}
+
+.holoframe > .ui-resizable-se {
+	visibility: hidden
+}
+
+.holowidgets .ui-resizable-s {
+	visibility: hidden
+}
+
+div.bk-hbox {
+    display: flex;
+    justify-content: center;
+}
+
+div.bk-hbox div.bk-plot {
+    padding: 8px;
+}
+
+div.bk-hbox div.bk-data-table {
+    padding: 20px;
+}
+</style><div style='display: table; margin: 0 auto;'>
+
+    <div class="bk-root">
+        <div class="bk-plotdiv" id="8a51b68a-0045-4bd3-b971-ae6c88ec9ac0"></div>
+    </div>
+<script type="text/javascript">
+  
+  (function(global) {
+    function now() {
+      return new Date();
+    }
+  
+    var force = false;
+  
+    if (typeof (window._bokeh_onload_callbacks) === "undefined" || force === true) {
+      window._bokeh_onload_callbacks = [];
+      window._bokeh_is_loading = undefined;
+    }
+  
+  
+    
+    if (typeof (window._bokeh_timeout) === "undefined" || force === true) {
+      window._bokeh_timeout = Date.now() + 0;
+      window._bokeh_failed_load = false;
+    }
+  
+    var NB_LOAD_WARNING = {'data': {'text/html':
+       "<div style='background-color: #fdd'>\n"+
+       "<p>\n"+
+       "BokehJS does not appear to have successfully loaded. If loading BokehJS from CDN, this \n"+
+       "may be due to a slow or bad network connection. Possible fixes:\n"+
+       "</p>\n"+
+       "<ul>\n"+
+       "<li>re-rerun `output_notebook()` to attempt to load from CDN again, or</li>\n"+
+       "<li>use INLINE resources instead, as so:</li>\n"+
+       "</ul>\n"+
+       "<code>\n"+
+       "from bokeh.resources import INLINE\n"+
+       "output_notebook(resources=INLINE)\n"+
+       "</code>\n"+
+       "</div>"}};
+  
+    function display_loaded() {
+      if (window.Bokeh !== undefined) {
+        var el = document.getElementById("8a51b68a-0045-4bd3-b971-ae6c88ec9ac0");
+        el.textContent = "BokehJS " + Bokeh.version + " successfully loaded.";
+      } else if (Date.now() < window._bokeh_timeout) {
+        setTimeout(display_loaded, 100)
+      }
+    }
+  
+    function run_callbacks() {
+      try {
+        window._bokeh_onload_callbacks.forEach(function(callback) { callback() });
+      }
+      finally {
+        delete window._bokeh_onload_callbacks
+      }
+      console.info("Bokeh: all callbacks have finished");
+    }
+  
+    function load_libs(js_urls, callback) {
+      window._bokeh_onload_callbacks.push(callback);
+      if (window._bokeh_is_loading > 0) {
+        console.log("Bokeh: BokehJS is being loaded, scheduling callback at", now());
+        return null;
+      }
+      if (js_urls == null || js_urls.length === 0) {
+        run_callbacks();
+        return null;
+      }
+      console.log("Bokeh: BokehJS not loaded, scheduling load and callback at", now());
+      window._bokeh_is_loading = js_urls.length;
+      for (var i = 0; i < js_urls.length; i++) {
+        var url = js_urls[i];
+        var s = document.createElement('script');
+        s.src = url;
+        s.async = false;
+        s.onreadystatechange = s.onload = function() {
+          window._bokeh_is_loading--;
+          if (window._bokeh_is_loading === 0) {
+            console.log("Bokeh: all BokehJS libraries loaded");
+            run_callbacks()
+          }
+        };
+        s.onerror = function() {
+          console.warn("failed to load library " + url);
+        };
+        console.log("Bokeh: injecting script tag for BokehJS library: ", url);
+        document.getElementsByTagName("head")[0].appendChild(s);
+      }
+    };var element = document.getElementById("8a51b68a-0045-4bd3-b971-ae6c88ec9ac0");
+    if (element == null) {
+      console.log("Bokeh: ERROR: autoload.js configured with elementid '8a51b68a-0045-4bd3-b971-ae6c88ec9ac0' but no matching script tag was found. ")
+      return false;
+    }
+  
+    var js_urls = [];
+  
+    var inline_js = [
+      function(Bokeh) {
+        (function() {
+          var fn = function() {
+            var docs_json = {"2d0f8c6f-06e3-450b-9ec0-4fb5553185ef":{"roots":{"references":[{"attributes":{"callback":null,"plot":{"id":"a1e8f0d7-9905-43c5-8ae5-2afe5270ff3f","subtype":"Figure","type":"Plot"},"renderers":[{"id":"665394b8-c559-439d-aa9d-3fe361bb3c7f","type":"GlyphRenderer"}],"tooltips":[["x","@{x}"],["y","@{y}"],["type","@{type}"],["tissue","@{tissue}"],["tumor","@{tumor}"],["dataset","@{dataset}"],["sex","@{sex}"],["id","@{id}"]]},"id":"254b0d06-1bb8-48d2-b5da-cb1a02bbcf02","type":"HoverTool"},{"attributes":{"background_fill_color":{"value":"white"},"below":[{"id":"2cca6dac-c8f5-4eb5-a14d-dcc0e5b3c3f6","type":"LinearAxis"}],"left":[{"id":"d773e8bc-6c86-4cb6-9292-d1f657466fdc","type":"LinearAxis"},{"id":"7125efec-5c1e-4867-a62b-de69937cde1c","type":"Legend"}],"min_border_bottom":10,"min_border_left":10,"min_border_right":10,"min_border_top":10,"plot_height":500,"plot_width":800,"renderers":[{"id":"2cca6dac-c8f5-4eb5-a14d-dcc0e5b3c3f6","type":"LinearAxis"},{"id":"414c422f-a290-4633-bccb-00057641267a","type":"Grid"},{"id":"d773e8bc-6c86-4cb6-9292-d1f657466fdc","type":"LinearAxis"},{"id":"66bde70a-6fce-42c3-80f2-d8ed9eba18b8","type":"Grid"},{"id":"eb1d5f02-f73e-4a2e-ad5e-f993a7a313fa","type":"BoxAnnotation"},{"id":"7125efec-5c1e-4867-a62b-de69937cde1c","type":"Legend"},{"id":"6db70153-632c-4238-b3f8-b12bdfcc2136","type":"GlyphRenderer"},{"id":"7125efec-5c1e-4867-a62b-de69937cde1c","type":"Legend"}],"title":{"id":"f1769583-574b-4aaa-9a70-5007ca818603","type":"Title"},"tool_events":{"id":"c6697bb3-e19a-436d-b1e0-d90d0d012d91","type":"ToolEvents"},"toolbar":{"id":"49901990-25ac-46d3-b0c1-7c5a6552b90e","type":"Toolbar"},"x_range":{"id":"40e62afb-20bc-444f-b26a-1509df435a79","type":"Range1d"},"x_scale":{"id":"51bd80bc-c13b-4131-9c27-0eb76fbd10df","type":"LinearScale"},"y_range":{"id":"83f18d65-4740-46b2-a02b-e5ffe744b11a","type":"Range1d"},"y_scale":{"id":"89daf13f-995a-4692-9691-1a2485f4512a","type":"LinearScale"}},"id":"307f6d6f-9040-4692-891f-abd2ddd8799f","subtype":"Figure","type":"Plot"},{"attributes":{},"id":"51bd80bc-c13b-4131-9c27-0eb76fbd10df","type":"LinearScale"},{"attributes":{"bottom_units":"screen","fill_alpha":{"value":0.5},"fill_color":{"value":"lightgrey"},"left_units":"screen","level":"overlay","line_alpha":{"value":1.0},"line_color":{"value":"black"},"line_dash":[4,4],"line_width":{"value":2},"plot":null,"render_mode":"css","right_units":"screen","top_units":"screen"},"id":"eb1d5f02-f73e-4a2e-ad5e-f993a7a313fa","type":"BoxAnnotation"},{"attributes":{"plot":{"id":"a1e8f0d7-9905-43c5-8ae5-2afe5270ff3f","subtype":"Figure","type":"Plot"}},"id":"fb34eeb3-cf34-4bc3-99ee-ca6d986a029c","type":"WheelZoomTool"},{"attributes":{"fill_color":{"field":"type","transform":{"id":"4a3f50e5-1cd3-4ede-8cac-10c191307938","type":"CategoricalColorMapper"}},"line_color":{"field":"type","transform":{"id":"4a3f50e5-1cd3-4ede-8cac-10c191307938","type":"CategoricalColorMapper"}},"size":{"units":"screen","value":2.449489742783178},"x":{"field":"x"},"y":{"field":"y"}},"id":"fac42025-6061-49ba-a6e5-2841faf60f27","type":"Circle"},{"attributes":{"grid_line_color":{"value":null},"plot":{"id":"a1e8f0d7-9905-43c5-8ae5-2afe5270ff3f","subtype":"Figure","type":"Plot"},"ticker":{"id":"f2f47604-cc37-4109-8e37-9b3f79ac252b","type":"BasicTicker"}},"id":"273d9d12-712f-4f4b-ade0-66482a7c8244","type":"Grid"},{"attributes":{"factors":["Adrenal_Gland","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma"],"palette":["#e41a1c","#ff7f00","#999999"]},"id":"ed36bbfc-4c91-4341-beef-41eecd118b26","type":"CategoricalColorMapper"},{"attributes":{"axis_label":"x","formatter":{"id":"5b15862b-0803-49d6-a3b9-55675dd7b4c2","type":"BasicTickFormatter"},"plot":{"id":"307f6d6f-9040-4692-891f-abd2ddd8799f","subtype":"Figure","type":"Plot"},"ticker":{"id":"a89f3e95-9f97-4204-9544-268ccb1ddcc8","type":"BasicTicker"}},"id":"2cca6dac-c8f5-4eb5-a14d-dcc0e5b3c3f6","type":"LinearAxis"},{"attributes":{},"id":"c6697bb3-e19a-436d-b1e0-d90d0d012d91","type":"ToolEvents"},{"attributes":{},"id":"89daf13f-995a-4692-9691-1a2485f4512a","type":"LinearScale"},{"attributes":{"plot":null,"text":"Adrenal-pc","text_color":{"value":"black"},"text_font_size":{"value":"12pt"}},"id":"f1769583-574b-4aaa-9a70-5007ca818603","type":"Title"},{"attributes":{"callback":null,"end":36.85972423535962,"start":-74.49020640396212},"id":"b0c583d0-cb9c-4466-b1b9-85c83084b81c","type":"Range1d"},{"attributes":{"bottom_units":"screen","fill_alpha":{"value":0.5},"fill_color":{"value":"lightgrey"},"left_units":"screen","level":"overlay","line_alpha":{"value":1.0},"line_color":{"value":"black"},"line_dash":[4,4],"line_width":{"value":2},"plot":null,"render_mode":"css","right_units":"screen","top_units":"screen"},"id":"7fc0477f-b085-4db6-babf-c45ef5e60b34","type":"BoxAnnotation"},{"attributes":{},"id":"2aa02abb-6d0a-4f18-8a2e-5c2fbb04aa37","type":"ToolEvents"},{"attributes":{},"id":"f2f47604-cc37-4109-8e37-9b3f79ac252b","type":"BasicTicker"},{"attributes":{"plot":{"id":"307f6d6f-9040-4692-891f-abd2ddd8799f","subtype":"Figure","type":"Plot"}},"id":"3b5850f7-3ce9-4024-87f4-2d026eb7ace0","type":"WheelZoomTool"},{"attributes":{"callback":null,"plot":{"id":"307f6d6f-9040-4692-891f-abd2ddd8799f","subtype":"Figure","type":"Plot"},"renderers":[{"id":"6db70153-632c-4238-b3f8-b12bdfcc2136","type":"GlyphRenderer"}],"tooltips":[["x","@{x}"],["y","@{y}"],["type","@{type}"],["tissue","@{tissue}"],["tumor","@{tumor}"],["dataset","@{dataset}"],["sex","@{sex}"],["id","@{id}"]]},"id":"4f0f9fe5-d5c4-4b20-b615-d4e289dc6aa9","type":"HoverTool"},{"attributes":{},"id":"8c4ac330-c9ab-438f-adef-1b446fe190b7","type":"LinearScale"},{"attributes":{"axis_label":"y","formatter":{"id":"e3bcae07-9972-47a8-93f1-0acb6a16c43d","type":"BasicTickFormatter"},"plot":{"id":"a1e8f0d7-9905-43c5-8ae5-2afe5270ff3f","subtype":"Figure","type":"Plot"},"ticker":{"id":"6396ae13-2705-4e7e-8150-412ee5bce160","type":"BasicTicker"}},"id":"81ddb5b0-e9e6-4973-91db-cdb940f74ee2","type":"LinearAxis"},{"attributes":{"overlay":{"id":"eb1d5f02-f73e-4a2e-ad5e-f993a7a313fa","type":"BoxAnnotation"},"plot":{"id":"307f6d6f-9040-4692-891f-abd2ddd8799f","subtype":"Figure","type":"Plot"}},"id":"a43a00c0-eae1-42dc-8eea-6c9bbaf8c34a","type":"BoxZoomTool"},{"attributes":{"child":{"id":"a1e8f0d7-9905-43c5-8ae5-2afe5270ff3f","subtype":"Figure","type":"Plot"},"title":"Adrenal-ucsf"},"id":"53b0490f-097b-4dc1-be2c-f4e3cd527946","type":"Panel"},{"attributes":{"dimension":1,"grid_line_color":{"value":null},"plot":{"id":"a1e8f0d7-9905-43c5-8ae5-2afe5270ff3f","subtype":"Figure","type":"Plot"},"ticker":{"id":"6396ae13-2705-4e7e-8150-412ee5bce160","type":"BasicTicker"}},"id":"30c58266-b9dd-4770-a3b8-1b7e6a4427b5","type":"Grid"},{"attributes":{},"id":"e3bcae07-9972-47a8-93f1-0acb6a16c43d","type":"BasicTickFormatter"},{"attributes":{"callback":null,"end":39.14331502810946,"start":-29.90638112499918},"id":"40e62afb-20bc-444f-b26a-1509df435a79","type":"Range1d"},{"attributes":{"fill_color":{"field":"type","transform":{"id":"ed36bbfc-4c91-4341-beef-41eecd118b26","type":"CategoricalColorMapper"}},"line_color":{"field":"type","transform":{"id":"ed36bbfc-4c91-4341-beef-41eecd118b26","type":"CategoricalColorMapper"}},"size":{"units":"screen","value":2.449489742783178},"x":{"field":"x"},"y":{"field":"y"}},"id":"97d83f59-ae25-482e-a07b-0ae55fb25f2a","type":"Circle"},{"attributes":{"plot":{"id":"307f6d6f-9040-4692-891f-abd2ddd8799f","subtype":"Figure","type":"Plot"}},"id":"19d3c339-76bc-448d-83f7-a89deda7c7dd","type":"ResetTool"},{"attributes":{"data_source":{"id":"43fb88af-495f-4ced-badc-d57ef6cd9014","type":"ColumnDataSource"},"glyph":{"id":"97d83f59-ae25-482e-a07b-0ae55fb25f2a","type":"Circle"},"hover_glyph":null,"muted_glyph":{"id":"cf3f296e-c1d5-48a6-a188-cd913df29c63","type":"Circle"},"nonselection_glyph":{"id":"cec8df32-b7a1-48d1-a203-d460e40b4cec","type":"Circle"},"selection_glyph":null},"id":"6db70153-632c-4238-b3f8-b12bdfcc2136","type":"GlyphRenderer"},{"attributes":{},"id":"c7e5ee18-cc73-41ab-b156-13cedb4b6651","type":"BasicTicker"},{"attributes":{"plot":{"id":"a1e8f0d7-9905-43c5-8ae5-2afe5270ff3f","subtype":"Figure","type":"Plot"}},"id":"7dcadbc6-6f18-4dd5-aeb7-7efb7ad2ec04","type":"ResetTool"},{"attributes":{"dimension":1,"grid_line_color":{"value":null},"plot":{"id":"307f6d6f-9040-4692-891f-abd2ddd8799f","subtype":"Figure","type":"Plot"},"ticker":{"id":"c7e5ee18-cc73-41ab-b156-13cedb4b6651","type":"BasicTicker"}},"id":"66bde70a-6fce-42c3-80f2-d8ed9eba18b8","type":"Grid"},{"attributes":{"callback":null,"end":33.32880739918153,"start":-16.166127774369926},"id":"c5026805-ecdb-4e19-945f-2d356784a28e","type":"Range1d"},{"attributes":{"factors":["Adrenal_Gland","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma"],"palette":["#e41a1c","#ff7f00","#999999"]},"id":"4a3f50e5-1cd3-4ede-8cac-10c191307938","type":"CategoricalColorMapper"},{"attributes":{"plot":{"id":"307f6d6f-9040-4692-891f-abd2ddd8799f","subtype":"Figure","type":"Plot"}},"id":"fa1782f3-caa7-4e5f-8399-b6e61ede3937","type":"PanTool"},{"attributes":{},"id":"abcc958c-0244-4b16-9024-8c88c4a8341e","type":"LinearScale"},{"attributes":{"plot":{"id":"a1e8f0d7-9905-43c5-8ae5-2afe5270ff3f","subtype":"Figure","type":"Plot"}},"id":"520d40c2-b556-486c-9512-f73063d98e07","type":"SaveTool"},{"attributes":{"plot":{"id":"307f6d6f-9040-4692-891f-abd2ddd8799f","subtype":"Figure","type":"Plot"}},"id":"13bfa6b9-93ab-417b-a43f-e1f96afb3f1a","type":"SaveTool"},{"attributes":{"label":{"field":"type"},"renderers":[{"id":"6db70153-632c-4238-b3f8-b12bdfcc2136","type":"GlyphRenderer"}]},"id":"53c6903c-1226-44bb-8282-de5cc9c3b83a","type":"LegendItem"},{"attributes":{"axis_label":"x","formatter":{"id":"63434bd7-f9e7-45e8-a3db-6df56704203a","type":"BasicTickFormatter"},"plot":{"id":"a1e8f0d7-9905-43c5-8ae5-2afe5270ff3f","subtype":"Figure","type":"Plot"},"ticker":{"id":"f2f47604-cc37-4109-8e37-9b3f79ac252b","type":"BasicTicker"}},"id":"e53fb4dd-a141-4755-9973-ee2f79383874","type":"LinearAxis"},{"attributes":{"callback":null,"column_names":["dataset","tumor","tissue","y","x","sex","type","id"],"data":{"dataset":["tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex"],"id":["TCGA-QR-A70D-01","TCGA-SP-A6QH-01","TCGA-OR-A5LE-01","TCGA-W2-A7HB-01","TCGA-QR-A70X-01","TCGA-XG-A823-01","TCGA-WB-A81E-01","TCGA-OR-A5KY-01","TCGA-WB-A80Q-01","TCGA-WB-A814-01","TCGA-WB-A819-01","TCGA-S7-A7X0-01","TCGA-OR-A5JJ-01","TCGA-WB-A818-01","TCGA-OR-A5L4-01","TCGA-SR-A6MQ-01","TCGA-QR-A6H4-01","TCGA-QT-A5XO-01","TCGA-OR-A5LJ-01","TCGA-PK-A5H8-01","TCGA-QR-A707-01","TCGA-OR-A5J6-01","TCGA-OR-A5L8-01","TCGA-QR-A70J-01","TCGA-QT-A5XN-01","TCGA-RW-A67V-01","TCGA-QR-A6GZ-05","TCGA-WB-A80O-01","TCGA-OR-A5JO-01","TCGA-W2-A7HC-01","TCGA-WB-A816-01","TCGA-SP-A6QF-01","TCGA-P7-A5NY-01","TCGA-OR-A5JX-01","TCGA-S7-A7X2-01","TCGA-RW-A684-01","TCGA-WB-A81N-01","TCGA-WB-A80P-01","TCGA-WB-A81A-01","TCGA-OR-A5LT-01","TCGA-OR-A5JV-01","TCGA-PK-A5H9-01","TCGA-QR-A7IN-01","TCGA-SA-A6C2-01","TCGA-SR-A6MZ-01","TCGA-RM-A68T-01","TCGA-OR-A5JB-01","TCGA-OR-A5JP-01","TCGA-S7-A7X1-01","TCGA-QR-A70T-01","TCGA-RW-A686-06","TCGA-RW-A68G-01","TCGA-S7-A7WV-01","TCGA-P8-A5KD-11","TCGA-OR-A5KX-01","TCGA-RW-A68D-01","TCGA-OR-A5JF-01","TCGA-QT-A5XM-01","TCGA-PK-A5HA-01","TCGA-QT-A5XL-01","TCGA-WB-A81V-01","TCGA-QR-A70K-01","TCGA-QR-A70I-01","TCGA-RW-A681-01","TCGA-QR-A6GR-01","TCGA-SR-A6N0-01","TCGA-QR-A6H5-01","TCGA-OR-A5K3-01","TCGA-OR-A5JQ-01","TCGA-WB-A81J-01","TCGA-OR-A5JS-01","TCGA-SP-A6QI-01","TCGA-QR-A6GU-01","TCGA-S7-A7WO-01","TCGA-OR-A5L3-01","TCGA-QR-A702-01","TCGA-RW-A67W-01","TCGA-W2-A7H7-01","TCGA-SP-A6QG-01","TCGA-RW-A686-01","TCGA-OR-A5J9-01","TCGA-WB-A81T-01","TCGA-QR-A6GY-01","TCGA-OR-A5K8-01","TCGA-OR-A5LC-01","TCGA-SP-A6QJ-01","TCGA-W2-A7HE-01","TCGA-SP-A6QD-01","TCGA-SP-A6QC-01","TCGA-SP-A6QK-01","TCGA-OR-A5JI-01","TCGA-P8-A5KD-01","TCGA-QR-A70M-01","TCGA-OR-A5J3-01","TCGA-QR-A6H0-01","TCGA-OR-A5L9-01","TCGA-TT-A6YP-01","TCGA-OR-A5JK-01","TCGA-OR-A5J2-01","TCGA-QR-A700-01","TCGA-WB-A81I-01","TCGA-WB-A817-01","TCGA-OR-A5LP-01","TCGA-QR-A70N-01","TCGA-P8-A6RX-01","TCGA-SR-A6MV-01","TCGA-QR-A6H2-01","TCGA-P6-A5OG-01","TCGA-QR-A705-01","TCGA-OR-A5JE-01","TCGA-S7-A7WR-01","TCGA-WB-A80M-01","TCGA-OR-A5LN-01","TCGA-RW-A7CZ-01","TCGA-OR-A5KU-01","TCGA-OU-A5PI-01","TCGA-P8-A5KC-01","TCGA-OR-A5LG-01","TCGA-TT-A6YN-01","TCGA-QR-A70H-01","TCGA-WB-A80L-01","TCGA-P8-A6RY-01","TCGA-SR-A6MT-01","TCGA-SR-A6MU-01","TCGA-OR-A5LM-01","TCGA-OR-A5K0-01","TCGA-WB-A821-01","TCGA-P8-A5KC-11","TCGA-QT-A5XP-01","TCGA-OR-A5J8-01","TCGA-OR-A5JR-01","TCGA-QT-A5XK-01","TCGA-S7-A7WQ-01","TCGA-WB-A820-01","TCGA-S7-A7WL-01","TCGA-W2-A7HH-01","TCGA-QR-A6GX-01","TCGA-QR-A6H6-01","TCGA-OR-A5KO-01","TCGA-OR-A5LD-01","TCGA-SR-A6MX-06","TCGA-QR-A70W-01","TCGA-SQ-A6I4-11","TCGA-QR-A70Q-01","TCGA-WB-A81W-01","TCGA-QR-A708-01","TCGA-OR-A5K6-01","TCGA-OR-A5JW-01","TCGA-SR-A6MR-01","TCGA-S7-A7WX-01","TCGA-RW-A68C-01","TCGA-QR-A6H1-01","TCGA-SR-A6MP-01","TCGA-P7-A5NX-01","TCGA-OR-A5K9-01","TCGA-QR-A70U-01","TCGA-OR-A5J1-01","TCGA-OR-A5KZ-01","TCGA-QR-A70E-01","TCGA-OR-A5LL-01","TCGA-OR-A5JL-01","TCGA-QR-A6GZ-01","TCGA-WB-A81G-01","TCGA-RT-A6YC-01","TCGA-SR-A6MY-01","TCGA-WB-A81P-01","TCGA-WB-A81D-01","TCGA-RW-A68B-01","TCGA-RW-A67Y-01","TCGA-OR-A5K1-01","TCGA-QR-A6GT-01","TCGA-OR-A5JT-01","TCGA-WB-A822-01","TCGA-S7-A7WP-01","TCGA-RW-A68A-01","TCGA-QR-A70P-01","TCGA-OR-A5JY-01","TCGA-OR-A5KV-01","TCGA-QR-A6GW-01","TCGA-OR-A5JD-01","TCGA-QT-A69Q-01","TCGA-W2-A7HF-01","TCGA-RW-A688-01","TCGA-WB-A81R-01","TCGA-S7-A7WW-01","TCGA-PK-A5HB-01","TCGA-WB-A80V-01","TCGA-SR-A6MX-05","TCGA-OR-A5LB-01","TCGA-OR-A5LO-01","TCGA-RT-A6Y9-01","TCGA-OR-A5JC-01","TCGA-W2-A7HD-01","TCGA-OR-A5JM-01","TCGA-TT-A6YJ-01","TCGA-RW-A8AZ-01","TCGA-QR-A703-01","TCGA-PA-A5YG-01","TCGA-S7-A7WU-01","TCGA-OR-A5LS-01","TCGA-OR-A5LH-01","TCGA-QT-A7U0-01","TCGA-WB-A80N-01","TCGA-W2-A7UY-01","TCGA-W2-A7HA-01","TCGA-SQ-A6I6-01","TCGA-QT-A5XJ-01","TCGA-WB-A81K-01","TCGA-OR-A5L5-01","TCGA-OR-A5LK-01","TCGA-SR-A6MS-01","TCGA-OR-A5J5-01","TCGA-QR-A6GS-01","TCGA-PR-A5PH-01","TCGA-W2-A7H5-01","TCGA-QR-A70R-01","TCGA-OR-A5J7-01","TCGA-RW-A680-01","TCGA-WB-A815-01","TCGA-S7-A7WN-01","TCGA-OR-A5L6-01","TCGA-RT-A6YA-01","TCGA-RW-A685-01","TCGA-S7-A7WM-01","TCGA-OR-A5KT-01","TCGA-P7-A5NY-05","TCGA-RW-A7D0-01","TCGA-WB-A81H-01","TCGA-PR-A5PF-01","TCGA-QR-A70V-01","TCGA-P6-A5OF-01","TCGA-RW-A67X-01","TCGA-RX-A8JQ-01","TCGA-OR-A5JA-01","TCGA-OR-A5KW-01","TCGA-WB-A81M-01","TCGA-OR-A5K4-01","TCGA-OR-A5JG-01","TCGA-SR-A6MX-01","TCGA-PR-A5PG-01","TCGA-WB-A80Y-01","TCGA-S7-A7WT-01","TCGA-WB-A81Q-01","TCGA-RM-A68W-01","TCGA-QR-A6ZZ-01","TCGA-OR-A5LA-01","TCGA-QR-A6H3-01","TCGA-WB-A81S-01","TCGA-TT-A6YO-01","TCGA-QR-A706-01","TCGA-RW-A68F-01","TCGA-WB-A81F-01","TCGA-OR-A5JZ-01","TCGA-QR-A6GO-01","TCGA-QR-A70C-01","TCGA-QR-A7IP-01","TCGA-QR-A70A-01","TCGA-SQ-A6I4-01","TCGA-TT-A6YK-01","TCGA-WB-A80K-01","TCGA-RW-A689-01","TCGA-OR-A5K5-01","GTEX-OOBK-3125-SM-3LK5R","GTEX-12WSK-0326-SM-5GCOJ","GTEX-WHPG-1526-SM-4M1ZK","GTEX-11DXY-1626-SM-5H12L","GTEX-Q2AI-0226-SM-48U1D","GTEX-ZYVF-1626-SM-5N9EH","GTEX-13N11-0826-SM-5IJFP","GTEX-11EMC-0526-SM-5EGJN","GTEX-U3ZN-0826-SM-4DXSZ","GTEX-111YS-0126-SM-5987T","GTEX-WY7C-0326-SM-4OND5","GTEX-Q734-0126-SM-48U1E","GTEX-X4EO-1726-SM-4QARN","GTEX-PWCY-0226-SM-48TD8","GTEX-SUCS-0526-SM-4DM56","GTEX-13O61-0126-SM-5KM4P","GTEX-ZYFG-0926-SM-5BC5U","GTEX-RWSA-1726-SM-47JX7","GTEX-12WSJ-0126-SM-5GCOM","GTEX-13PVR-0226-SM-5RQJI","GTEX-ZLV1-0226-SM-4WWC1","GTEX-REY6-1726-SM-48FDL","GTEX-QCQG-0126-SM-48U27","GTEX-QEG5-1826-SM-4R1JP","GTEX-ZA64-0226-SM-5HL9C","GTEX-Y9LG-0126-SM-5Q59W","GTEX-YFCO-0126-SM-4W1YT","GTEX-11P7K-0126-SM-5986E","GTEX-U3ZM-0226-SM-4DXTA","GTEX-V955-0126-SM-4JBH5","GTEX-13111-0326-SM-5DUXF","GTEX-WFG8-0126-SM-4LVMH","GTEX-139YR-0126-SM-5IJEY","GTEX-S32W-0126-SM-4AD61","GTEX-VJYA-0526-SM-4KL1R","GTEX-11TT1-0126-SM-5LUAA","GTEX-13OW7-2726-SM-5L3HN","GTEX-P4QS-1326-SM-3NMCD","GTEX-QLQ7-0126-SM-4R1JW","GTEX-12696-0626-SM-5EGGD","GTEX-XUZC-0226-SM-4BOO7","GTEX-11DXX-0126-SM-5EGH7","GTEX-ZZPU-1226-SM-5N9CK","GTEX-13FTW-0126-SM-5IJED","GTEX-PLZ6-0226-SM-3P61I","GTEX-XMK1-0226-SM-4B65D","GTEX-14A5I-2126-SM-5NQA8","GTEX-ZVP2-0126-SM-5NQ7D","GTEX-11NSD-0226-SM-5A5LR","GTEX-12WSN-0926-SM-5GCN1","GTEX-13W3W-1326-SM-5LU4T","GTEX-QLQW-0226-SM-447BJ","GTEX-Y5V5-1326-SM-4V6G9","GTEX-WQUQ-0126-SM-4OOSS","GTEX-YB5E-0226-SM-5IFHI","GTEX-14753-1726-SM-5NQ9X","GTEX-YF7O-0126-SM-5IFIR","GTEX-U4B1-0126-SM-4DXSN","GTEX-R55C-0226-SM-48FEO","GTEX-S4Q7-0226-SM-4AD5O","GTEX-ZLFU-0826-SM-4WWBP","GTEX-ZDTT-0126-SM-4WKHA","GTEX-VUSG-1526-SM-4KKZH","GTEX-1399R-0326-SM-5KM1X","GTEX-RUSQ-0226-SM-47JWT","GTEX-R55G-0126-SM-48FDS","GTEX-QMRM-0126-SM-4R1K9","GTEX-ZF2S-0126-SM-4WKFO","GTEX-11EQ9-0126-SM-5986I","GTEX-XYKS-0926-SM-4BRVG","GTEX-T6MO-0126-SM-4DM6X","GTEX-145LT-0126-SM-5S2QJ","GTEX-1399U-0226-SM-5P9J2","GTEX-146FR-1526-SM-5SIB8","GTEX-132AR-1726-SM-5EGHQ","GTEX-R53T-0226-SM-48FEH","GTEX-14H4A-0226-SM-5SI6Q","GTEX-QDVN-0426-SM-48TZ6","GTEX-13D11-0426-SM-5LZYA","GTEX-13OVI-1226-SM-5J2ME","GTEX-XV7Q-0226-SM-4BRVL","GTEX-TKQ2-0226-SM-4DM6V","GTEX-13FH7-0226-SM-5IFGG","GTEX-12WSD-2126-SM-5LZWK","GTEX-14BMU-0126-SM-5S2Q9","GTEX-Y3IK-0226-SM-51MRJ","GTEX-NFK9-1726-SM-3TW8P","GTEX-13O21-0126-SM-5IJE8","GTEX-X4LF-0126-SM-4QAS7","GTEX-OHPK-1326-SM-3MJGN","GTEX-O5YT-1326-SM-3MJGR","GTEX-13O1R-2326-SM-5IJF9","GTEX-OIZH-1326-SM-3NB1H","GTEX-Y5V6-1926-SM-5IFIL","GTEX-11GSP-0326-SM-5A5KW","GTEX-ZLWG-0126-SM-4WWC5","GTEX-O5YV-1126-SM-3LK73","GTEX-ZVT2-0826-SM-5GIEO","GTEX-Q2AH-0126-SM-48U2B","GTEX-Y114-0526-SM-4TT8V","GTEX-1211K-0126-SM-59HJE","GTEX-147F4-2526-SM-5NQBB","GTEX-S341-0126-SM-4AD64","GTEX-12WSG-0726-SM-5EGIG","GTEX-11DXZ-0226-SM-5EGGZ","GTEX-131XF-0126-SM-5DUVF","GTEX-OHPL-1326-SM-3MJGG","GTEX-111CU-0126-SM-5GZWZ","GTEX-132QS-0126-SM-5IFH9","GTEX-11XUK-0126-SM-5CVLK","GTEX-XQ3S-1726-SM-4BOOD","GTEX-PLZ5-0326-SM-3P614","GTEX-13PL7-1026-SM-5MR5C","GTEX-14DAQ-1826-SM-5S2VV","GTEX-131XG-1326-SM-5DUX4","GTEX-148VJ-1626-SM-5QGPH","GTEX-OXRK-0126-SM-3NB1E","GTEX-1122O-0326-SM-5H124","GTEX-11I78-1826-SM-5A5M4","GTEX-ZYWO-0126-SM-5GZWQ","GTEX-QXCU-1326-SM-48FE2","GTEX-1399S-0426-SM-5IFG5","GTEX-V1D1-0226-SM-4JBHG","GTEX-WYVS-0226-SM-4ONDK","GTEX-13O3O-1626-SM-5KM1O"],"sex":["female","female","male","male","female","female","female","female","female","female","male","female","male","male","female","female","female","female","female","male","female","female","female","female","female","female","male","female","female","male","female","male","female","male","female","female","female","male","female","male","male","female","female","female","female","male","male","male","male","female","male","male","female","female","female","female","female","male","male","male","male","male","male","male","female","female","female","male","female","male","female","male","male","female","female","female","female","male","female","male","female","male","female","male","female","female","male","male","male","female","male","female","male","female","male","female","female","male","female","male","male","male","female","male","male","female","male","female","female","female","female","male","female","female","female","female","male","male","female","male","female","male","female","female","male","female","female","male","female","male","male","female","male","male","male","female","female","male","female","male","male","male","male","male","male","female","female","male","male","male","male","male","female","female","female","female","male","male","female","female","female","male","male","male","female","female","female","male","female","male","female","female","male","female","female","female","female","female","female","female","male","female","female","female","male","male","female","male","male","female","female","male","female","female","female","male","male","male","female","female","female","male","male","female","female","male","female","male","female","male","female","male","female","male","female","male","female","female","female","male","male","female","female","male","female","female","female","female","female","female","female","male","male","female","female","female","female","male","male","female","female","male","male","female","female","female","male","female","female","female","female","male","male","male","female","male","female","male","male","male","male","female","male","female","male","male","male","female","female","female","female","male","male","female","female","female","male","male","female","male","female","female","female","male","female","male","male","male","male","male","male","male","male","male","male","female","male","male","male","male","male","male","female","female","female","male","male","male","female","male","male","male","female","male","female","male","male","male","male","male","male","male","male","male","male","male","male","female","male","female","male","female","female","male","female","female","female","female","female","male","female","female","female","male","female","female","female","female","male","male","male","female","male","male","male","male","female","female","female","female","male","female","female","male","female","female","male","male","female","male","male","female","male","male","female","female","female","male","female","female","female","female","male","female","male","female","female"],"tissue":["Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal"],"tumor":["yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","no","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","no","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","no","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no"],"type":["Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland"],"x":{"__ndarray__":"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","dtype":"float64","shape":[387]},"y":{"__ndarray__":"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","dtype":"float64","shape":[387]}}},"id":"43474b8f-6c9f-422c-b312-32cf77cc5e42","type":"ColumnDataSource"},{"attributes":{},"id":"5b15862b-0803-49d6-a3b9-55675dd7b4c2","type":"BasicTickFormatter"},{"attributes":{"overlay":{"id":"7fc0477f-b085-4db6-babf-c45ef5e60b34","type":"BoxAnnotation"},"plot":{"id":"a1e8f0d7-9905-43c5-8ae5-2afe5270ff3f","subtype":"Figure","type":"Plot"}},"id":"a2fb6cea-5cf4-4753-8954-14ff6816a179","type":"BoxZoomTool"},{"attributes":{"callback":null,"end":26.987632502247898,"start":-24.449536655059962},"id":"83f18d65-4740-46b2-a02b-e5ffe744b11a","type":"Range1d"},{"attributes":{"fill_alpha":{"value":0.1},"fill_color":{"field":"type","transform":{"id":"4a3f50e5-1cd3-4ede-8cac-10c191307938","type":"CategoricalColorMapper"}},"line_alpha":{"value":0.1},"line_color":{"field":"type","transform":{"id":"4a3f50e5-1cd3-4ede-8cac-10c191307938","type":"CategoricalColorMapper"}},"size":{"units":"screen","value":2.449489742783178},"x":{"field":"x"},"y":{"field":"y"}},"id":"734ecf4b-65ae-4f9b-9e1c-56af59f63d4d","type":"Circle"},{"attributes":{"child":{"id":"307f6d6f-9040-4692-891f-abd2ddd8799f","subtype":"Figure","type":"Plot"},"title":"Adrenal-pc"},"id":"e72dd56f-89f6-4d60-b231-7690fd4b16d2","type":"Panel"},{"attributes":{"fill_alpha":{"value":0.2},"fill_color":{"field":"type","transform":{"id":"ed36bbfc-4c91-4341-beef-41eecd118b26","type":"CategoricalColorMapper"}},"line_alpha":{"value":0.2},"line_color":{"field":"type","transform":{"id":"ed36bbfc-4c91-4341-beef-41eecd118b26","type":"CategoricalColorMapper"}},"size":{"units":"screen","value":2.449489742783178},"x":{"field":"x"},"y":{"field":"y"}},"id":"cf3f296e-c1d5-48a6-a188-cd913df29c63","type":"Circle"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_scroll":"auto","active_tap":"auto","tools":[{"id":"4f0f9fe5-d5c4-4b20-b615-d4e289dc6aa9","type":"HoverTool"},{"id":"13bfa6b9-93ab-417b-a43f-e1f96afb3f1a","type":"SaveTool"},{"id":"fa1782f3-caa7-4e5f-8399-b6e61ede3937","type":"PanTool"},{"id":"3b5850f7-3ce9-4024-87f4-2d026eb7ace0","type":"WheelZoomTool"},{"id":"a43a00c0-eae1-42dc-8eea-6c9bbaf8c34a","type":"BoxZoomTool"},{"id":"19d3c339-76bc-448d-83f7-a89deda7c7dd","type":"ResetTool"}]},"id":"49901990-25ac-46d3-b0c1-7c5a6552b90e","type":"Toolbar"},{"attributes":{"items":[{"id":"5407b2fb-47de-4bee-b290-ba7f572ceb08","type":"LegendItem"}],"location":[0,-40],"plot":{"id":"a1e8f0d7-9905-43c5-8ae5-2afe5270ff3f","subtype":"Figure","type":"Plot"}},"id":"4430a353-8128-44d3-9be0-87081d740338","type":"Legend"},{"attributes":{"label":{"field":"type"},"renderers":[{"id":"665394b8-c559-439d-aa9d-3fe361bb3c7f","type":"GlyphRenderer"}]},"id":"5407b2fb-47de-4bee-b290-ba7f572ceb08","type":"LegendItem"},{"attributes":{"plot":{"id":"a1e8f0d7-9905-43c5-8ae5-2afe5270ff3f","subtype":"Figure","type":"Plot"}},"id":"e7814d39-f867-4789-a2b8-3a643bd8ef4b","type":"PanTool"},{"attributes":{},"id":"2409e9bf-f05f-49b7-8546-2212dd31c853","type":"BasicTickFormatter"},{"attributes":{"data_source":{"id":"43474b8f-6c9f-422c-b312-32cf77cc5e42","type":"ColumnDataSource"},"glyph":{"id":"fac42025-6061-49ba-a6e5-2841faf60f27","type":"Circle"},"hover_glyph":null,"muted_glyph":{"id":"bb81a0b5-364c-4de8-b5ae-f20e07ffb53f","type":"Circle"},"nonselection_glyph":{"id":"734ecf4b-65ae-4f9b-9e1c-56af59f63d4d","type":"Circle"},"selection_glyph":null},"id":"665394b8-c559-439d-aa9d-3fe361bb3c7f","type":"GlyphRenderer"},{"attributes":{},"id":"a89f3e95-9f97-4204-9544-268ccb1ddcc8","type":"BasicTicker"},{"attributes":{"plot":null,"text":"Adrenal-ucsf","text_color":{"value":"black"},"text_font_size":{"value":"12pt"}},"id":"69d6e204-7214-48a4-a632-e7ea2c51dacc","type":"Title"},{"attributes":{"callback":null,"column_names":["dataset","tumor","tissue","y","x","sex","type","id"],"data":{"dataset":["tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","tcga","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex","gtex"],"id":["TCGA-QR-A70D-01","TCGA-SP-A6QH-01","TCGA-OR-A5LE-01","TCGA-W2-A7HB-01","TCGA-QR-A70X-01","TCGA-XG-A823-01","TCGA-WB-A81E-01","TCGA-OR-A5KY-01","TCGA-WB-A80Q-01","TCGA-WB-A814-01","TCGA-WB-A819-01","TCGA-S7-A7X0-01","TCGA-OR-A5JJ-01","TCGA-WB-A818-01","TCGA-OR-A5L4-01","TCGA-SR-A6MQ-01","TCGA-QR-A6H4-01","TCGA-QT-A5XO-01","TCGA-OR-A5LJ-01","TCGA-PK-A5H8-01","TCGA-QR-A707-01","TCGA-OR-A5J6-01","TCGA-OR-A5L8-01","TCGA-QR-A70J-01","TCGA-QT-A5XN-01","TCGA-RW-A67V-01","TCGA-QR-A6GZ-05","TCGA-WB-A80O-01","TCGA-OR-A5JO-01","TCGA-W2-A7HC-01","TCGA-WB-A816-01","TCGA-SP-A6QF-01","TCGA-P7-A5NY-01","TCGA-OR-A5JX-01","TCGA-S7-A7X2-01","TCGA-RW-A684-01","TCGA-WB-A81N-01","TCGA-WB-A80P-01","TCGA-WB-A81A-01","TCGA-OR-A5LT-01","TCGA-OR-A5JV-01","TCGA-PK-A5H9-01","TCGA-QR-A7IN-01","TCGA-SA-A6C2-01","TCGA-SR-A6MZ-01","TCGA-RM-A68T-01","TCGA-OR-A5JB-01","TCGA-OR-A5JP-01","TCGA-S7-A7X1-01","TCGA-QR-A70T-01","TCGA-RW-A686-06","TCGA-RW-A68G-01","TCGA-S7-A7WV-01","TCGA-P8-A5KD-11","TCGA-OR-A5KX-01","TCGA-RW-A68D-01","TCGA-OR-A5JF-01","TCGA-QT-A5XM-01","TCGA-PK-A5HA-01","TCGA-QT-A5XL-01","TCGA-WB-A81V-01","TCGA-QR-A70K-01","TCGA-QR-A70I-01","TCGA-RW-A681-01","TCGA-QR-A6GR-01","TCGA-SR-A6N0-01","TCGA-QR-A6H5-01","TCGA-OR-A5K3-01","TCGA-OR-A5JQ-01","TCGA-WB-A81J-01","TCGA-OR-A5JS-01","TCGA-SP-A6QI-01","TCGA-QR-A6GU-01","TCGA-S7-A7WO-01","TCGA-OR-A5L3-01","TCGA-QR-A702-01","TCGA-RW-A67W-01","TCGA-W2-A7H7-01","TCGA-SP-A6QG-01","TCGA-RW-A686-01","TCGA-OR-A5J9-01","TCGA-WB-A81T-01","TCGA-QR-A6GY-01","TCGA-OR-A5K8-01","TCGA-OR-A5LC-01","TCGA-SP-A6QJ-01","TCGA-W2-A7HE-01","TCGA-SP-A6QD-01","TCGA-SP-A6QC-01","TCGA-SP-A6QK-01","TCGA-OR-A5JI-01","TCGA-P8-A5KD-01","TCGA-QR-A70M-01","TCGA-OR-A5J3-01","TCGA-QR-A6H0-01","TCGA-OR-A5L9-01","TCGA-TT-A6YP-01","TCGA-OR-A5JK-01","TCGA-OR-A5J2-01","TCGA-QR-A700-01","TCGA-WB-A81I-01","TCGA-WB-A817-01","TCGA-OR-A5LP-01","TCGA-QR-A70N-01","TCGA-P8-A6RX-01","TCGA-SR-A6MV-01","TCGA-QR-A6H2-01","TCGA-P6-A5OG-01","TCGA-QR-A705-01","TCGA-OR-A5JE-01","TCGA-S7-A7WR-01","TCGA-WB-A80M-01","TCGA-OR-A5LN-01","TCGA-RW-A7CZ-01","TCGA-OR-A5KU-01","TCGA-OU-A5PI-01","TCGA-P8-A5KC-01","TCGA-OR-A5LG-01","TCGA-TT-A6YN-01","TCGA-QR-A70H-01","TCGA-WB-A80L-01","TCGA-P8-A6RY-01","TCGA-SR-A6MT-01","TCGA-SR-A6MU-01","TCGA-OR-A5LM-01","TCGA-OR-A5K0-01","TCGA-WB-A821-01","TCGA-P8-A5KC-11","TCGA-QT-A5XP-01","TCGA-OR-A5J8-01","TCGA-OR-A5JR-01","TCGA-QT-A5XK-01","TCGA-S7-A7WQ-01","TCGA-WB-A820-01","TCGA-S7-A7WL-01","TCGA-W2-A7HH-01","TCGA-QR-A6GX-01","TCGA-QR-A6H6-01","TCGA-OR-A5KO-01","TCGA-OR-A5LD-01","TCGA-SR-A6MX-06","TCGA-QR-A70W-01","TCGA-SQ-A6I4-11","TCGA-QR-A70Q-01","TCGA-WB-A81W-01","TCGA-QR-A708-01","TCGA-OR-A5K6-01","TCGA-OR-A5JW-01","TCGA-SR-A6MR-01","TCGA-S7-A7WX-01","TCGA-RW-A68C-01","TCGA-QR-A6H1-01","TCGA-SR-A6MP-01","TCGA-P7-A5NX-01","TCGA-OR-A5K9-01","TCGA-QR-A70U-01","TCGA-OR-A5J1-01","TCGA-OR-A5KZ-01","TCGA-QR-A70E-01","TCGA-OR-A5LL-01","TCGA-OR-A5JL-01","TCGA-QR-A6GZ-01","TCGA-WB-A81G-01","TCGA-RT-A6YC-01","TCGA-SR-A6MY-01","TCGA-WB-A81P-01","TCGA-WB-A81D-01","TCGA-RW-A68B-01","TCGA-RW-A67Y-01","TCGA-OR-A5K1-01","TCGA-QR-A6GT-01","TCGA-OR-A5JT-01","TCGA-WB-A822-01","TCGA-S7-A7WP-01","TCGA-RW-A68A-01","TCGA-QR-A70P-01","TCGA-OR-A5JY-01","TCGA-OR-A5KV-01","TCGA-QR-A6GW-01","TCGA-OR-A5JD-01","TCGA-QT-A69Q-01","TCGA-W2-A7HF-01","TCGA-RW-A688-01","TCGA-WB-A81R-01","TCGA-S7-A7WW-01","TCGA-PK-A5HB-01","TCGA-WB-A80V-01","TCGA-SR-A6MX-05","TCGA-OR-A5LB-01","TCGA-OR-A5LO-01","TCGA-RT-A6Y9-01","TCGA-OR-A5JC-01","TCGA-W2-A7HD-01","TCGA-OR-A5JM-01","TCGA-TT-A6YJ-01","TCGA-RW-A8AZ-01","TCGA-QR-A703-01","TCGA-PA-A5YG-01","TCGA-S7-A7WU-01","TCGA-OR-A5LS-01","TCGA-OR-A5LH-01","TCGA-QT-A7U0-01","TCGA-WB-A80N-01","TCGA-W2-A7UY-01","TCGA-W2-A7HA-01","TCGA-SQ-A6I6-01","TCGA-QT-A5XJ-01","TCGA-WB-A81K-01","TCGA-OR-A5L5-01","TCGA-OR-A5LK-01","TCGA-SR-A6MS-01","TCGA-OR-A5J5-01","TCGA-QR-A6GS-01","TCGA-PR-A5PH-01","TCGA-W2-A7H5-01","TCGA-QR-A70R-01","TCGA-OR-A5J7-01","TCGA-RW-A680-01","TCGA-WB-A815-01","TCGA-S7-A7WN-01","TCGA-OR-A5L6-01","TCGA-RT-A6YA-01","TCGA-RW-A685-01","TCGA-S7-A7WM-01","TCGA-OR-A5KT-01","TCGA-P7-A5NY-05","TCGA-RW-A7D0-01","TCGA-WB-A81H-01","TCGA-PR-A5PF-01","TCGA-QR-A70V-01","TCGA-P6-A5OF-01","TCGA-RW-A67X-01","TCGA-RX-A8JQ-01","TCGA-OR-A5JA-01","TCGA-OR-A5KW-01","TCGA-WB-A81M-01","TCGA-OR-A5K4-01","TCGA-OR-A5JG-01","TCGA-SR-A6MX-01","TCGA-PR-A5PG-01","TCGA-WB-A80Y-01","TCGA-S7-A7WT-01","TCGA-WB-A81Q-01","TCGA-RM-A68W-01","TCGA-QR-A6ZZ-01","TCGA-OR-A5LA-01","TCGA-QR-A6H3-01","TCGA-WB-A81S-01","TCGA-TT-A6YO-01","TCGA-QR-A706-01","TCGA-RW-A68F-01","TCGA-WB-A81F-01","TCGA-OR-A5JZ-01","TCGA-QR-A6GO-01","TCGA-QR-A70C-01","TCGA-QR-A7IP-01","TCGA-QR-A70A-01","TCGA-SQ-A6I4-01","TCGA-TT-A6YK-01","TCGA-WB-A80K-01","TCGA-RW-A689-01","TCGA-OR-A5K5-01","GTEX-OOBK-3125-SM-3LK5R","GTEX-12WSK-0326-SM-5GCOJ","GTEX-WHPG-1526-SM-4M1ZK","GTEX-11DXY-1626-SM-5H12L","GTEX-Q2AI-0226-SM-48U1D","GTEX-ZYVF-1626-SM-5N9EH","GTEX-13N11-0826-SM-5IJFP","GTEX-11EMC-0526-SM-5EGJN","GTEX-U3ZN-0826-SM-4DXSZ","GTEX-111YS-0126-SM-5987T","GTEX-WY7C-0326-SM-4OND5","GTEX-Q734-0126-SM-48U1E","GTEX-X4EO-1726-SM-4QARN","GTEX-PWCY-0226-SM-48TD8","GTEX-SUCS-0526-SM-4DM56","GTEX-13O61-0126-SM-5KM4P","GTEX-ZYFG-0926-SM-5BC5U","GTEX-RWSA-1726-SM-47JX7","GTEX-12WSJ-0126-SM-5GCOM","GTEX-13PVR-0226-SM-5RQJI","GTEX-ZLV1-0226-SM-4WWC1","GTEX-REY6-1726-SM-48FDL","GTEX-QCQG-0126-SM-48U27","GTEX-QEG5-1826-SM-4R1JP","GTEX-ZA64-0226-SM-5HL9C","GTEX-Y9LG-0126-SM-5Q59W","GTEX-YFCO-0126-SM-4W1YT","GTEX-11P7K-0126-SM-5986E","GTEX-U3ZM-0226-SM-4DXTA","GTEX-V955-0126-SM-4JBH5","GTEX-13111-0326-SM-5DUXF","GTEX-WFG8-0126-SM-4LVMH","GTEX-139YR-0126-SM-5IJEY","GTEX-S32W-0126-SM-4AD61","GTEX-VJYA-0526-SM-4KL1R","GTEX-11TT1-0126-SM-5LUAA","GTEX-13OW7-2726-SM-5L3HN","GTEX-P4QS-1326-SM-3NMCD","GTEX-QLQ7-0126-SM-4R1JW","GTEX-12696-0626-SM-5EGGD","GTEX-XUZC-0226-SM-4BOO7","GTEX-11DXX-0126-SM-5EGH7","GTEX-ZZPU-1226-SM-5N9CK","GTEX-13FTW-0126-SM-5IJED","GTEX-PLZ6-0226-SM-3P61I","GTEX-XMK1-0226-SM-4B65D","GTEX-14A5I-2126-SM-5NQA8","GTEX-ZVP2-0126-SM-5NQ7D","GTEX-11NSD-0226-SM-5A5LR","GTEX-12WSN-0926-SM-5GCN1","GTEX-13W3W-1326-SM-5LU4T","GTEX-QLQW-0226-SM-447BJ","GTEX-Y5V5-1326-SM-4V6G9","GTEX-WQUQ-0126-SM-4OOSS","GTEX-YB5E-0226-SM-5IFHI","GTEX-14753-1726-SM-5NQ9X","GTEX-YF7O-0126-SM-5IFIR","GTEX-U4B1-0126-SM-4DXSN","GTEX-R55C-0226-SM-48FEO","GTEX-S4Q7-0226-SM-4AD5O","GTEX-ZLFU-0826-SM-4WWBP","GTEX-ZDTT-0126-SM-4WKHA","GTEX-VUSG-1526-SM-4KKZH","GTEX-1399R-0326-SM-5KM1X","GTEX-RUSQ-0226-SM-47JWT","GTEX-R55G-0126-SM-48FDS","GTEX-QMRM-0126-SM-4R1K9","GTEX-ZF2S-0126-SM-4WKFO","GTEX-11EQ9-0126-SM-5986I","GTEX-XYKS-0926-SM-4BRVG","GTEX-T6MO-0126-SM-4DM6X","GTEX-145LT-0126-SM-5S2QJ","GTEX-1399U-0226-SM-5P9J2","GTEX-146FR-1526-SM-5SIB8","GTEX-132AR-1726-SM-5EGHQ","GTEX-R53T-0226-SM-48FEH","GTEX-14H4A-0226-SM-5SI6Q","GTEX-QDVN-0426-SM-48TZ6","GTEX-13D11-0426-SM-5LZYA","GTEX-13OVI-1226-SM-5J2ME","GTEX-XV7Q-0226-SM-4BRVL","GTEX-TKQ2-0226-SM-4DM6V","GTEX-13FH7-0226-SM-5IFGG","GTEX-12WSD-2126-SM-5LZWK","GTEX-14BMU-0126-SM-5S2Q9","GTEX-Y3IK-0226-SM-51MRJ","GTEX-NFK9-1726-SM-3TW8P","GTEX-13O21-0126-SM-5IJE8","GTEX-X4LF-0126-SM-4QAS7","GTEX-OHPK-1326-SM-3MJGN","GTEX-O5YT-1326-SM-3MJGR","GTEX-13O1R-2326-SM-5IJF9","GTEX-OIZH-1326-SM-3NB1H","GTEX-Y5V6-1926-SM-5IFIL","GTEX-11GSP-0326-SM-5A5KW","GTEX-ZLWG-0126-SM-4WWC5","GTEX-O5YV-1126-SM-3LK73","GTEX-ZVT2-0826-SM-5GIEO","GTEX-Q2AH-0126-SM-48U2B","GTEX-Y114-0526-SM-4TT8V","GTEX-1211K-0126-SM-59HJE","GTEX-147F4-2526-SM-5NQBB","GTEX-S341-0126-SM-4AD64","GTEX-12WSG-0726-SM-5EGIG","GTEX-11DXZ-0226-SM-5EGGZ","GTEX-131XF-0126-SM-5DUVF","GTEX-OHPL-1326-SM-3MJGG","GTEX-111CU-0126-SM-5GZWZ","GTEX-132QS-0126-SM-5IFH9","GTEX-11XUK-0126-SM-5CVLK","GTEX-XQ3S-1726-SM-4BOOD","GTEX-PLZ5-0326-SM-3P614","GTEX-13PL7-1026-SM-5MR5C","GTEX-14DAQ-1826-SM-5S2VV","GTEX-131XG-1326-SM-5DUX4","GTEX-148VJ-1626-SM-5QGPH","GTEX-OXRK-0126-SM-3NB1E","GTEX-1122O-0326-SM-5H124","GTEX-11I78-1826-SM-5A5M4","GTEX-ZYWO-0126-SM-5GZWQ","GTEX-QXCU-1326-SM-48FE2","GTEX-1399S-0426-SM-5IFG5","GTEX-V1D1-0226-SM-4JBHG","GTEX-WYVS-0226-SM-4ONDK","GTEX-13O3O-1626-SM-5KM1O"],"sex":["female","female","male","male","female","female","female","female","female","female","male","female","male","male","female","female","female","female","female","male","female","female","female","female","female","female","male","female","female","male","female","male","female","male","female","female","female","male","female","male","male","female","female","female","female","male","male","male","male","female","male","male","female","female","female","female","female","male","male","male","male","male","male","male","female","female","female","male","female","male","female","male","male","female","female","female","female","male","female","male","female","male","female","male","female","female","male","male","male","female","male","female","male","female","male","female","female","male","female","male","male","male","female","male","male","female","male","female","female","female","female","male","female","female","female","female","male","male","female","male","female","male","female","female","male","female","female","male","female","male","male","female","male","male","male","female","female","male","female","male","male","male","male","male","male","female","female","male","male","male","male","male","female","female","female","female","male","male","female","female","female","male","male","male","female","female","female","male","female","male","female","female","male","female","female","female","female","female","female","female","male","female","female","female","male","male","female","male","male","female","female","male","female","female","female","male","male","male","female","female","female","male","male","female","female","male","female","male","female","male","female","male","female","male","female","male","female","female","female","male","male","female","female","male","female","female","female","female","female","female","female","male","male","female","female","female","female","male","male","female","female","male","male","female","female","female","male","female","female","female","female","male","male","male","female","male","female","male","male","male","male","female","male","female","male","male","male","female","female","female","female","male","male","female","female","female","male","male","female","male","female","female","female","male","female","male","male","male","male","male","male","male","male","male","male","female","male","male","male","male","male","male","female","female","female","male","male","male","female","male","male","male","female","male","female","male","male","male","male","male","male","male","male","male","male","male","male","female","male","female","male","female","female","male","female","female","female","female","female","male","female","female","female","male","female","female","female","female","male","male","male","female","male","male","male","male","female","female","female","female","male","female","female","male","female","female","male","male","female","male","male","female","male","male","female","female","female","male","female","female","female","female","male","female","male","female","female"],"tissue":["Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal","Adrenal"],"tumor":["yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","no","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","no","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","no","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","yes","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no"],"type":["Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Pheochromocytoma_and_Paraganglioma","Adrenocortical_Carcinoma","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland","Adrenal_Gland"],"x":{"__ndarray__":"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","dtype":"float64","shape":[387]},"y":{"__ndarray__":"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","dtype":"float64","shape":[387]}}},"id":"43fb88af-495f-4ced-badc-d57ef6cd9014","type":"ColumnDataSource"},{"attributes":{"fill_alpha":{"value":0.2},"fill_color":{"field":"type","transform":{"id":"4a3f50e5-1cd3-4ede-8cac-10c191307938","type":"CategoricalColorMapper"}},"line_alpha":{"value":0.2},"line_color":{"field":"type","transform":{"id":"4a3f50e5-1cd3-4ede-8cac-10c191307938","type":"CategoricalColorMapper"}},"size":{"units":"screen","value":2.449489742783178},"x":{"field":"x"},"y":{"field":"y"}},"id":"bb81a0b5-364c-4de8-b5ae-f20e07ffb53f","type":"Circle"},{"attributes":{"callback":null,"tabs":[{"id":"e72dd56f-89f6-4d60-b231-7690fd4b16d2","type":"Panel"},{"id":"53b0490f-097b-4dc1-be2c-f4e3cd527946","type":"Panel"}]},"id":"1fb39fbc-9345-41f5-a2df-0ff82cd06d22","type":"Tabs"},{"attributes":{"fill_alpha":{"value":0.1},"fill_color":{"field":"type","transform":{"id":"ed36bbfc-4c91-4341-beef-41eecd118b26","type":"CategoricalColorMapper"}},"line_alpha":{"value":0.1},"line_color":{"field":"type","transform":{"id":"ed36bbfc-4c91-4341-beef-41eecd118b26","type":"CategoricalColorMapper"}},"size":{"units":"screen","value":2.449489742783178},"x":{"field":"x"},"y":{"field":"y"}},"id":"cec8df32-b7a1-48d1-a203-d460e40b4cec","type":"Circle"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_scroll":"auto","active_tap":"auto","tools":[{"id":"254b0d06-1bb8-48d2-b5da-cb1a02bbcf02","type":"HoverTool"},{"id":"520d40c2-b556-486c-9512-f73063d98e07","type":"SaveTool"},{"id":"e7814d39-f867-4789-a2b8-3a643bd8ef4b","type":"PanTool"},{"id":"fb34eeb3-cf34-4bc3-99ee-ca6d986a029c","type":"WheelZoomTool"},{"id":"a2fb6cea-5cf4-4753-8954-14ff6816a179","type":"BoxZoomTool"},{"id":"7dcadbc6-6f18-4dd5-aeb7-7efb7ad2ec04","type":"ResetTool"}]},"id":"c329acc5-1963-4c2a-b7ce-fb06ffce9d2d","type":"Toolbar"},{"attributes":{"axis_label":"y","formatter":{"id":"2409e9bf-f05f-49b7-8546-2212dd31c853","type":"BasicTickFormatter"},"plot":{"id":"307f6d6f-9040-4692-891f-abd2ddd8799f","subtype":"Figure","type":"Plot"},"ticker":{"id":"c7e5ee18-cc73-41ab-b156-13cedb4b6651","type":"BasicTicker"}},"id":"d773e8bc-6c86-4cb6-9292-d1f657466fdc","type":"LinearAxis"},{"attributes":{"items":[{"id":"53c6903c-1226-44bb-8282-de5cc9c3b83a","type":"LegendItem"}],"location":[0,-40],"plot":{"id":"307f6d6f-9040-4692-891f-abd2ddd8799f","subtype":"Figure","type":"Plot"}},"id":"7125efec-5c1e-4867-a62b-de69937cde1c","type":"Legend"},{"attributes":{},"id":"6396ae13-2705-4e7e-8150-412ee5bce160","type":"BasicTicker"},{"attributes":{"background_fill_color":{"value":"white"},"below":[{"id":"e53fb4dd-a141-4755-9973-ee2f79383874","type":"LinearAxis"}],"left":[{"id":"81ddb5b0-e9e6-4973-91db-cdb940f74ee2","type":"LinearAxis"},{"id":"4430a353-8128-44d3-9be0-87081d740338","type":"Legend"}],"min_border_bottom":10,"min_border_left":10,"min_border_right":10,"min_border_top":10,"plot_height":500,"plot_width":800,"renderers":[{"id":"e53fb4dd-a141-4755-9973-ee2f79383874","type":"LinearAxis"},{"id":"273d9d12-712f-4f4b-ade0-66482a7c8244","type":"Grid"},{"id":"81ddb5b0-e9e6-4973-91db-cdb940f74ee2","type":"LinearAxis"},{"id":"30c58266-b9dd-4770-a3b8-1b7e6a4427b5","type":"Grid"},{"id":"7fc0477f-b085-4db6-babf-c45ef5e60b34","type":"BoxAnnotation"},{"id":"4430a353-8128-44d3-9be0-87081d740338","type":"Legend"},{"id":"665394b8-c559-439d-aa9d-3fe361bb3c7f","type":"GlyphRenderer"},{"id":"4430a353-8128-44d3-9be0-87081d740338","type":"Legend"}],"title":{"id":"69d6e204-7214-48a4-a632-e7ea2c51dacc","type":"Title"},"tool_events":{"id":"2aa02abb-6d0a-4f18-8a2e-5c2fbb04aa37","type":"ToolEvents"},"toolbar":{"id":"c329acc5-1963-4c2a-b7ce-fb06ffce9d2d","type":"Toolbar"},"x_range":{"id":"b0c583d0-cb9c-4466-b1b9-85c83084b81c","type":"Range1d"},"x_scale":{"id":"8c4ac330-c9ab-438f-adef-1b446fe190b7","type":"LinearScale"},"y_range":{"id":"c5026805-ecdb-4e19-945f-2d356784a28e","type":"Range1d"},"y_scale":{"id":"abcc958c-0244-4b16-9024-8c88c4a8341e","type":"LinearScale"}},"id":"a1e8f0d7-9905-43c5-8ae5-2afe5270ff3f","subtype":"Figure","type":"Plot"},{"attributes":{},"id":"63434bd7-f9e7-45e8-a3db-6df56704203a","type":"BasicTickFormatter"},{"attributes":{"grid_line_color":{"value":null},"plot":{"id":"307f6d6f-9040-4692-891f-abd2ddd8799f","subtype":"Figure","type":"Plot"},"ticker":{"id":"a89f3e95-9f97-4204-9544-268ccb1ddcc8","type":"BasicTicker"}},"id":"414c422f-a290-4633-bccb-00057641267a","type":"Grid"}],"root_ids":["1fb39fbc-9345-41f5-a2df-0ff82cd06d22"]},"title":"Bokeh Application","version":"0.12.6"}};
+            var render_items = [{"docid":"2d0f8c6f-06e3-450b-9ec0-4fb5553185ef","elementid":"8a51b68a-0045-4bd3-b971-ae6c88ec9ac0","modelid":"1fb39fbc-9345-41f5-a2df-0ff82cd06d22"}];
+            
+            Bokeh.embed.embed_items(docs_json, render_items);
+          };
+          if (document.readyState != "loading") fn();
+          else document.addEventListener("DOMContentLoaded", fn);
+        })();
+      },
+      function(Bokeh) {
+      }
+    ];
+  
+    function run_inline_js() {
+      
+      if ((window.Bokeh !== undefined) || (force === true)) {
+        for (var i = 0; i < inline_js.length; i++) {
+          inline_js[i](window.Bokeh);
+        }if (force === true) {
+          display_loaded();
+        }} else if (Date.now() < window._bokeh_timeout) {
+        setTimeout(run_inline_js, 100);
+      } else if (!window._bokeh_failed_load) {
+        console.log("Bokeh: BokehJS failed to load within specified timeout.");
+        window._bokeh_failed_load = true;
+      } else if (force !== true) {
+        var cell = $(document.getElementById("8a51b68a-0045-4bd3-b971-ae6c88ec9ac0")).parents('.cell').data().cell;
+        cell.output_area.append_execute_result(NB_LOAD_WARNING)
+      }
+  
+    }
+  
+    if (window._bokeh_is_loading === 0) {
+      console.log("Bokeh: BokehJS loaded, going straight to plotting");
+      run_inline_js();
+    } else {
+      load_libs(js_urls, function() {
+        console.log("Bokeh: BokehJS plotting callback run at", now());
+        run_inline_js();
+      });
+    }
+  }(this));
+</script></div>
