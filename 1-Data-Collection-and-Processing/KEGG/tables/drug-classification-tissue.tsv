@@ -1,0 +1,67 @@
+	Class	Subgroup	Specification	Name	Tissue
+Abiraterone acetate	Endocrine	Hormone antagonists	Other antagonist	Abiraterone	Prostate
+AFATINIB	Antineoplastic	Other	Kinase inhibitors	Afatinib	Lung
+ALECTINIB HYDROCHLORIDE	Antineoplastic	Other	Kinase inhibitors	Alectinib	Lung
+ATEZOLIZUMAB	Antineoplastic	Other	Monoclonal antibodies	Atezolizumab	Bladder
+AVELUMAB	Antineoplastic	Other	Monoclonal antibodies	Avelumab	Skin
+AVELUMAB	Antineoplastic	Other	Monoclonal antibodies	Avelumab	Bladder
+AXITINIB	Antineoplastic	Other	Kinase inhibitors	Axitinib	Kidney
+BEVACIZUMAB	Antineoplastic	Other	Monoclonal antibodies	Bevacizumab	Cervix
+BEVACIZUMAB	Antineoplastic	Other	Monoclonal antibodies	Bevacizumab	Ovary
+BEVACIZUMAB	Antineoplastic	Other	Monoclonal antibodies	Bevacizumab	Lung
+BEVACIZUMAB	Antineoplastic	Other	Monoclonal antibodies	Bevacizumab	Kidney
+BEVACIZUMAB	Antineoplastic	Other	Monoclonal antibodies	Bevacizumab	Colon
+BICALUTAMIDE	Endocrine	Hormone antagonists	Anti-androgens	Bicalutamide	Prostate
+CABOZANTINIB	Antineoplastic	Other	Kinase inhibitors	Cabozantinib	Thyroid
+Capecitabine	Antineoplastic	Antimetabolites	Pyrimidine analogues	Capecitabine	Breast
+Capecitabine	Antineoplastic	Antimetabolites	Pyrimidine analogues	Capecitabine	Colon
+Capecitabine	Antineoplastic	Antimetabolites	Pyrimidine analogues	Capecitabine	Stomach
+CETUXIMAB	Antineoplastic	Other	Monoclonal antibodies	Cetuximab	Colon
+CRIZOTINIB	Antineoplastic	Other	Kinase inhibitors	Crizotinib	Lung
+DABRAFENIB	Antineoplastic	Other	Kinase inhibitors	Dabrafenib	Skin
+DOXORUBICIN HYDROCHLORIDE	Antineoplastic	Cytotoxic antibiotics	Anthracyclines	Doxorubicin	Ovary
+DURVALUMAB	Antineoplastic	Other	Monoclonal antibodies	Durvalumab	Bladder
+Erlotinib	Antineoplastic	Other	Kinase inhibitors	Erlotinib	Lung
+Erlotinib	Antineoplastic	Other	Kinase inhibitors	Erlotinib	Pancreas
+ETOPOSIDE	Antineoplastic	Plant alkaloids	Podophyllotoxin derivatives	Etoposide	Testis
+ETOPOSIDE	Antineoplastic	Plant alkaloids	Podophyllotoxin derivatives	Etoposide	Lung
+Everolimus	Antineoplastic	Other	Kinase inhibitors	Everolimus	Brain
+Everolimus	Antineoplastic	Other	Kinase inhibitors	Everolimus	Breast
+Everolimus	Antineoplastic	Other	Kinase inhibitors	Everolimus	Kidney
+Everolimus	Antineoplastic	Other	Kinase inhibitors	Everolimus	Pancreas
+GEFITINIB	Antineoplastic	Other	Kinase inhibitors	Gefitinib	Lung
+Girentuximab	Antineoplastic	Other	Monoclonal antibodies	Girentuximab	Kidney
+Goserelin acetate	Endocrine	Hormones	Gonadotropin analogue	Goserelin	Breast
+IMATINIB MESYLATE	Antineoplastic	Other	Kinase inhibitors	Imatinib	Stomach
+IPILIMUMAB	Antineoplastic	Other	Monoclonal antibodies	Ipilimumab	Skin
+LAPATINIB	Antineoplastic	Other	Kinase inhibitors	Lapatinib	Breast
+LENALIDOMIDE	Immunosuppressants	Suppressants	Other suppressant	Lenalidomide	Brain
+LENALIDOMIDE	Immunosuppressants	Suppressants	Other suppressant	Lenalidomide	Skin
+NECITUMUMAB	Antineoplastic	Other	Monoclonal antibodies	Necitumumab	Lung
+NIVOLUMAB	Antineoplastic	Other	Monoclonal antibodies	Nivolumab	Lung
+NIVOLUMAB	Antineoplastic	Other	Monoclonal antibodies	Nivolumab	Kidney
+OLAPARIB	Antineoplastic	Other	Other agent	Olaparib	Ovary
+OLAPARIB	Antineoplastic	Other	Other agent	Olaparib	Breast
+OLAPARIB	Antineoplastic	Other	Other agent	Olaparib	Prostate
+PALBOCICLIB	Antineoplastic	Other	Kinase inhibitors	Palbociclib	Breast
+PANITUMUMAB	Antineoplastic	Other	Monoclonal antibodies	Panitumumab	Colon
+PAZOPANIB HYDROCHLORIDE	Antineoplastic	Other	Kinase inhibitors	Pazopanib	Kidney
+PEMBROLIZUMAB	Antineoplastic	Other	Monoclonal antibodies	Pembrolizumab	Stomach
+PEMBROLIZUMAB	Antineoplastic	Other	Monoclonal antibodies	Pembrolizumab	Lung
+PEMBROLIZUMAB	Antineoplastic	Other	Monoclonal antibodies	Pembrolizumab	Bladder
+PEMBROLIZUMAB	Antineoplastic	Other	Monoclonal antibodies	Pembrolizumab	Colon
+PERTUZUMAB	Antineoplastic	Other	Monoclonal antibodies	Pertuzumab	Breast
+RAMUCIRUMAB	Antineoplastic	Other	Monoclonal antibodies	Ramucirumab	Stomach
+RAMUCIRUMAB	Antineoplastic	Other	Monoclonal antibodies	Ramucirumab	Lung
+RAMUCIRUMAB	Antineoplastic	Other	Monoclonal antibodies	Ramucirumab	Colon
+RUCAPARIB	Antineoplastic	Other	Parp inhibitor	Rucaparib	Ovary
+SORAFENIB	Antineoplastic	Other	Kinase inhibitors	Sorafenib	Thyroid
+SORAFENIB	Antineoplastic	Other	Kinase inhibitors	Sorafenib	Liver
+SORAFENIB	Antineoplastic	Other	Kinase inhibitors	Sorafenib	Kidney
+SUNITINIB MALATE	Antineoplastic	Other	Kinase inhibitors	Sunitinib	Kidney
+SUNITINIB MALATE	Antineoplastic	Other	Kinase inhibitors	Sunitinib	Pancreas
+TAMOXIFEN CITRATE	Endocrine	Hormone antagonists	Anti-estrogens	Tamoxifen	Breast
+TEMSIROLIMUS	Antineoplastic	Other	Kinase inhibitors	Temsirolimus	Kidney
+TRAMETINIB	Antineoplastic	Other	Kinase inhibitors	Trametinib	Skin
+ADO-TRASTUZUMAB EMTANSINE	Antineoplastic	Other	Monoclonal antibodies	Trastuzumab emtansine	Breast
+VISMODEGIB	Antineoplastic	Other	Other agent	Vismodegib	Skin
