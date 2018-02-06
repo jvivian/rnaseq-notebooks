@@ -1,0 +1,22 @@
+INFO:main:started ipypublish v0.6.5 at Tue Feb  6 06:37:55 2018
+INFO:main:logging to: output/Narrative.pdf/Narrative.nbpub.log
+INFO:main:running for ipynb(s) at: Narrative.ipynb
+INFO:main:with conversion: latex_ipypublish_all
+INFO:nbmerge:Reading notebook
+INFO:main:getting output format from exporter plugin
+INFO:nbexport:running nbconvert
+INFO:latex_doc_defaults:adding ipub defaults to notebook
+INFO:split_outputs:splitting outputs into separate cells
+INFO:latex_doc_links:resolving external file paths in ipub metadata to: Narrative.ipynb
+INFO:latex_doc_captions:extracting caption cells
+INFO:main:outputting converted file to: output/Narrative.pdf/Narrative.tex
+INFO:main:dumping external files to: output/Narrative.pdf/Narrative_files
+INFO:main:running pdf conversion
+INFO:pdfexport:running: latexmk -xelatex -bibtex -pdf <outpath>
+INFO:pdfexport:latexmk: Latexmk: This is Latexmk, John Collins, 1 January 2015, version: 4.41.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: ------------
+INFO:pdfexport:latexmk: Latexmk: Could not find file [output/Narrative.pdf/Narrative.tex].
+INFO:pdfexport:latexmk: -- Use the -f option to force complete processing.
+ERROR:pdfexport:pdf conversion failed: Try running with pdf_debug=True
+ERROR:main:pdf export returned false, try running with pdf_debug=True

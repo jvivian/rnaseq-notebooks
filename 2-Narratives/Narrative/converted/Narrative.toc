@@ -1,0 +1,10 @@
+\contentsline {section}{\numberline {1}Identifying Repositioning Candidates for Antineoplastics}{2}{section.1}
+\contentsline {subsection}{\numberline {1.1}Abstract}{2}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Introduction}{2}{subsection.1.2}
+\contentsline {subsection}{\numberline {1.3}RNA-seq Datasets}{3}{subsection.1.3}
+\contentsline {subsection}{\numberline {1.4}Large-scale RNA-seq Compute}{3}{subsection.1.4}
+\contentsline {subsection}{\numberline {1.5}GTEx as a Prior for TCGA Normals}{3}{subsection.1.5}
+\contentsline {subsection}{\numberline {1.6}Validating Known Targets of Cancer Drugs}{4}{subsection.1.6}
+\contentsline {subsection}{\numberline {1.7}Identifying Repositionable Candidates}{4}{subsection.1.7}
+\contentsline {subsection}{\numberline {1.8}Discussion}{4}{subsection.1.8}
+\contentsline {section}{\numberline {2}References}{5}{section.2}

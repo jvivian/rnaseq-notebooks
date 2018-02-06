@@ -1,0 +1,741 @@
+INFO:main:started ipypublish v0.6.5 at Tue Feb  6 07:22:11 2018
+INFO:main:logging to: /home/ubuntu/rnaseq-notebooks/2-Narratives/Narrative/converted/Narrative.nbpub.log
+INFO:main:running for ipynb(s) at: Narrative.ipynb
+INFO:main:with conversion: latex_ipypublish_all
+INFO:nbmerge:Reading notebook
+INFO:main:getting output format from exporter plugin
+INFO:nbexport:running nbconvert
+INFO:latex_doc_defaults:adding ipub defaults to notebook
+INFO:split_outputs:splitting outputs into separate cells
+INFO:latex_doc_links:resolving external file paths in ipub metadata to: Narrative.ipynb
+INFO:latex_doc_captions:extracting caption cells
+INFO:main:outputting converted file to: /home/ubuntu/rnaseq-notebooks/2-Narratives/Narrative/converted/Narrative.tex
+INFO:main:dumping external files to: /home/ubuntu/rnaseq-notebooks/2-Narratives/Narrative/converted/Narrative_files
+INFO:main:running pdf conversion
+INFO:pdfexport:running: latexmk -xelatex -bibtex -pdf <outpath>
+INFO:pdfexport:latexmk: Latexmk: This is Latexmk, John Collins, 1 January 2015, version: 4.41.
+INFO:pdfexport:latexmk: Rule 'pdflatex': Rules & subrules not known to be previously run:
+INFO:pdfexport:latexmk: pdflatex
+INFO:pdfexport:latexmk: Rule 'pdflatex': The following rules & subrules became out-of-date:
+INFO:pdfexport:latexmk: 'pdflatex'
+INFO:pdfexport:latexmk: ------------
+INFO:pdfexport:latexmk: Run number 1 of rule 'pdflatex'
+INFO:pdfexport:latexmk: ------------
+INFO:pdfexport:latexmk: ------------
+INFO:pdfexport:latexmk: Running 'xelatex  -recorder  "/home/ubuntu/rnaseq-notebooks/2-Narratives/Narrative/converted/Narrative.tex"'
+INFO:pdfexport:latexmk: ------------
+INFO:pdfexport:latexmk: Latexmk: applying rule 'pdflatex'...
+INFO:pdfexport:latexmk: This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015/dev/Debian) (preloaded format=xelatex)
+INFO:pdfexport:latexmk: restricted \write18 enabled.
+INFO:pdfexport:latexmk: entering extended mode
+INFO:pdfexport:latexmk: (/home/ubuntu/rnaseq-notebooks/2-Narratives/Narrative/converted/Narrative.tex
+INFO:pdfexport:latexmk: LaTeX2e <2014/05/01>
+INFO:pdfexport:latexmk: Babel <3.9l> and hyphenation patterns for 2 languages loaded.
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/koma-script/scrartcl.cls
+INFO:pdfexport:latexmk: Document Class: scrartcl 2013/12/19 v3.12 KOMA-Script document class (article)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/koma-script/scrkbase.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/koma-script/scrbase.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/koma-script/scrlfile.sty
+INFO:pdfexport:latexmk: Package scrlfile, 2013/12/19 v3.12 KOMA-Script package (loading files)
+INFO:pdfexport:latexmk: Copyright (C) Markus Kohm
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: ))) (/usr/share/texlive/texmf-dist/tex/latex/koma-script/tocbasic.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/koma-script/scrsize10pt.clo)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/koma-script/typearea.sty
+INFO:pdfexport:latexmk: Package typearea, 2013/12/19 v3.12 KOMA-Script package (type area)
+INFO:pdfexport:latexmk: Copyright (C) Frank Neukam, 1992-1994
+INFO:pdfexport:latexmk: Copyright (C) Markus Kohm, 1994-
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: )) (/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/psnfss/mathpazo.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/xelatex/xetex-def/xetex.def)))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/adjustbox/adjustbox.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkvutils.tex)))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/adjustbox/adjcalc.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/adjustbox/trimclip.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/collectbox/collectbox.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/adjustbox/tc-xetex.def))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/ifoddpage/ifoddpage.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/varwidth/varwidth.sty))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/colortbl/colortbl.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty)))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/tools/enumerate.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+INFO:pdfexport:latexmk: For additional information on amsmath, use the `?' option.
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.def))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/upquote/upquote.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/eurosym/eurosym.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/ucs/ucs.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-global.def))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Package inputenc Warning: inputenc package ignored with utf8 based engines.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: ) (/usr/share/texlive/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
+INFO:pdfexport:latexmk: Style option: `fancyvrb' v2.7a, with DG/SPQR fixes, and firstline=lastline fix
+INFO:pdfexport:latexmk: <2008/02/07> (tvz))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grffile.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifluatex.sty))))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/url/url.sty))
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Package hyperref Message: Driver (autodetected): hxetex.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hxetex.def
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/stringenc.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/booktabs/booktabs.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/enumitem/enumitem.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/ulem/ulem.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/translations/translations.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/cnltx/cnltx-base.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/pgfopts/pgfopts.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/pgf/utilities/pgfkeys.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfkeysfiltered.code.t
+INFO:pdfexport:latexmk: ex)))) (/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/etex-pkg/etex.sty))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/trimspaces/trimspaces.sty)))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/microtype/microtype.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/microtype/microtype-xetex.def)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/microtype/microtype.cfg))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/placeins/placeins.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/todonotes/todonotes.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfutil-common-lists.t
+INFO:pdfexport:latexmk: ex)) (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/ms/everyshi.sty))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.tex))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-xetex.def
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-dvipdfmx.def
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-pdf.de
+INFO:pdfexport:latexmk: f))))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.
+INFO:pdfexport:latexmk: tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.code.
+INFO:pdfexport:latexmk: tex))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcore.code.tex
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.tex
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic.code
+INFO:pdfexport:latexmk: .tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.trigonomet
+INFO:pdfexport:latexmk: ric.code.tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.random.cod
+INFO:pdfexport:latexmk: e.tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.comparison
+INFO:pdfexport:latexmk: .code.tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.base.code.
+INFO:pdfexport:latexmk: tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round.code
+INFO:pdfexport:latexmk: .tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.code.
+INFO:pdfexport:latexmk: tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integerari
+INFO:pdfexport:latexmk: thmetics.code.tex)))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.te
+INFO:pdfexport:latexmk: x)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconstruct.
+INFO:pdfexport:latexmk: code.tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage.code
+INFO:pdfexport:latexmk: .tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.code.te
+INFO:pdfexport:latexmk: x)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.c
+INFO:pdfexport:latexmk: ode.tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransformation
+INFO:pdfexport:latexmk: s.code.tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.code.tex
+INFO:pdfexport:latexmk: )
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreobjects.code.t
+INFO:pdfexport:latexmk: ex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathprocessing
+INFO:pdfexport:latexmk: .code.tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.code.te
+INFO:pdfexport:latexmk: x)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
+INFO:pdfexport:latexmk: )
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreexternal.code.
+INFO:pdfexport:latexmk: tex))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorelayers.code.te
+INFO:pdfexport:latexmk: x)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransparency.c
+INFO:pdfexport:latexmk: ode.tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepatterns.code.
+INFO:pdfexport:latexmk: tex)))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.code.tex
+INFO:pdfexport:latexmk: ) (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.tex
+INFO:pdfexport:latexmk: )
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65
+INFO:pdfexport:latexmk: .sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-1-18
+INFO:pdfexport:latexmk: .sty)) (/usr/share/texlive/texmf-dist/tex/latex/pgf/utilities/pgffor.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/pgf/math/pgfmath.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers
+INFO:pdfexport:latexmk: .code.tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
+INFO:pdfexport:latexmk: )
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+INFO:pdfexport:latexmk: zlibrarytopaths.code.tex)))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+INFO:pdfexport:latexmk: zlibrarypositioning.code.tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/chngcntr/chngcntr.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/koma-script/scrlayer-scrpage.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/koma-script/scrlayer.sty))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/natbib/natbib.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/doi/doi.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/caption/newfloat.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/mdframed/mdframed.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3-code.tex)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/l3kernel/l3unicode-data.def)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/l3kernel/l3xdvipdfmx.def)))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/zref-abspage.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/zref-base.sty))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/needspace/needspace.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/mdframed/md-frame-1.mdf))
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty)
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: ! Package scrbase Error: unknown option `addvoffset=.6ex'.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: See the scrbase package documentation for explanation.
+INFO:pdfexport:latexmk: Type  H <return>  for immediate help.
+INFO:pdfexport:latexmk: ...
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: l.361 ...er[addvoffset=.6ex]{scrheadings.foot.odd}
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: ?
+INFO:pdfexport:latexmk: ! Package scrbase Error: unknown option `addvoffset=.6ex'.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: See the scrbase package documentation for explanation.
+INFO:pdfexport:latexmk: Type  H <return>  for immediate help.
+INFO:pdfexport:latexmk: ...
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: l.362 ...r[addvoffset=.6ex]{scrheadings.foot.even}
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: ?
+INFO:pdfexport:latexmk: ! Package scrbase Error: unknown option `addvoffset=.6ex'.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: See the scrbase package documentation for explanation.
+INFO:pdfexport:latexmk: Type  H <return>  for immediate help.
+INFO:pdfexport:latexmk: ...
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: l.363 ...ddvoffset=.6ex]{scrheadings.foot.oneside}
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: ?
+INFO:pdfexport:latexmk: ! Package scrbase Error: unknown option `addvoffset=.6ex'.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: See the scrbase package documentation for explanation.
+INFO:pdfexport:latexmk: Type  H <return>  for immediate help.
+INFO:pdfexport:latexmk: ...
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: l.364 ...voffset=.6ex]{plain.scrheadings.foot.odd}
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: ?
+INFO:pdfexport:latexmk: ! Package scrbase Error: unknown option `addvoffset=.6ex'.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: See the scrbase package documentation for explanation.
+INFO:pdfexport:latexmk: Type  H <return>  for immediate help.
+INFO:pdfexport:latexmk: ...
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: l.365 ...offset=.6ex]{plain.scrheadings.foot.even}
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: ?
+INFO:pdfexport:latexmk: ! Package scrbase Error: unknown option `addvoffset=.6ex'.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: See the scrbase package documentation for explanation.
+INFO:pdfexport:latexmk: Type  H <return>  for immediate help.
+INFO:pdfexport:latexmk: ...
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: l.366 ...set=.6ex]{plain.scrheadings.foot.oneside}
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: ? (/usr/share/texlive/texmf-dist/tex/latex/cleveref/cleveref.sty)
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: LaTeX Warning: Unused global option(s):
+INFO:pdfexport:latexmk: [toc=sectionentrywithdots].
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: (./Narrative.aux) (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ppl.fd)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/caption/ltcaption.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/ucs/ucsencs.def)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Package hyperref Warning: Rerun to get /PageLabels entry.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/translations/translations-basic-dictio
+INFO:pdfexport:latexmk: nary-english.trsl)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-ppl.cfg)
+INFO:pdfexport:latexmk: ABD: EveryShipout initializing macros
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Package scrlayer-scrpage Warning: Very small head height detected!
+INFO:pdfexport:latexmk: (scrlayer-scrpage)                Using scrlayer-scrpage the head height
+INFO:pdfexport:latexmk: (scrlayer-scrpage)                should be at least \baselineskip, which is
+INFO:pdfexport:latexmk: (scrlayer-scrpage)                12.0pt currently.
+INFO:pdfexport:latexmk: (scrlayer-scrpage)                But head height is currently 0.0pt only.
+INFO:pdfexport:latexmk: (scrlayer-scrpage)                You may use
+INFO:pdfexport:latexmk: (scrlayer-scrpage)                geometry option `head=12.0pt'
+INFO:pdfexport:latexmk: (scrlayer-scrpage)                to avoid this warning.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: *geometry* driver: auto-detecting
+INFO:pdfexport:latexmk: *geometry* detected driver: xetex
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmss.fd)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ppl.fd)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omlzplm.fd)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omszplm.fd)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omxzplm.fd)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1zplm.fd)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msa.cfg)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msb.cfg)
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: LaTeX Warning: No \author given.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Class scrartcl Warning: \float@listhead detected!
+INFO:pdfexport:latexmk: (scrartcl)              Implementation of \float@listhead became
+INFO:pdfexport:latexmk: (scrartcl)              deprecated in KOMA-Script v3.01 2008/11/14 and
+INFO:pdfexport:latexmk: (scrartcl)              has been replaced by more several more flexible
+INFO:pdfexport:latexmk: (scrartcl)              features of package `tocbasic`.
+INFO:pdfexport:latexmk: (scrartcl)              Maybe implementation of \float@listhead will
+INFO:pdfexport:latexmk: (scrartcl)              be removed from KOMA-Script soon.
+INFO:pdfexport:latexmk: (scrartcl)              Loading of package `scrhack' may help to
+INFO:pdfexport:latexmk: (scrartcl)              avoid this warning, if you are using a
+INFO:pdfexport:latexmk: (scrartcl)              a package that still implements the
+INFO:pdfexport:latexmk: (scrartcl)              deprecated \float@listhead interface  on input line 396
+INFO:pdfexport:latexmk: .
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd)
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Package scrlayer-scrpage Warning: \headheight to low.
+INFO:pdfexport:latexmk: (scrlayer-scrpage)                At least 12.0pt needed,
+INFO:pdfexport:latexmk: (scrlayer-scrpage)                but only 0.0pt found.
+INFO:pdfexport:latexmk: (scrlayer-scrpage)                I'll enlarge \headheight, for further
+INFO:pdfexport:latexmk: (scrlayer-scrpage)                processing, but you should do this yourself,
+INFO:pdfexport:latexmk: (scrlayer-scrpage)                e.g., setting geometry's option
+INFO:pdfexport:latexmk: (scrlayer-scrpage)                `head=12.0pt'.
+INFO:pdfexport:latexmk: (scrlayer-scrpage)                I'll also decrease \topmargin on input line 4
+INFO:pdfexport:latexmk: 05.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/se-ascii-print.def)
+INFO:pdfexport:latexmk: [1] (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmtt.fd)
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Package natbib Warning: Citation `guo_large_2013' on page 2 undefined on input
+INFO:pdfexport:latexmk: line 468.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Package natbib Warning: Citation `peng_large-scale_2015-1' on page 2 undefined
+INFO:pdfexport:latexmk: on input line 468.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Package natbib Warning: Citation `peng_large-scale_2015-1' on page 2 undefined
+INFO:pdfexport:latexmk: on input line 472.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Package natbib Warning: Citation `consortium_genotype-tissue_2015' on page 2 un
+INFO:pdfexport:latexmk: defined on input line 483.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: [2]
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Package natbib Warning: Citation `the_cancer_genome_atlas_research_network_canc
+INFO:pdfexport:latexmk: er_2013-1' on page 3 undefined on input line 502.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Package natbib Warning: Citation `consortium_genotype-tissue_2015' on page 3 un
+INFO:pdfexport:latexmk: defined on input line 505.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Package natbib Warning: Citation `vivian_rapid_2016-1' on page 3 undefined on i
+INFO:pdfexport:latexmk: nput line 513.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: LaTeX Warning: Reference `fig:workflow' on page 1 undefined on input line 516.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Package natbib Warning: Citation `vivian_bd2kgenomics/toil-rnaseq_' on page 3 u
+INFO:pdfexport:latexmk: ndefined on input line 517.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Package natbib Warning: Citation `johnson_adjusting_2007' on page 3 undefined o
+INFO:pdfexport:latexmk: n input line 535.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Package natbib Warning: Citation `shaham_removal_2017' on page 3 undefined on i
+INFO:pdfexport:latexmk: nput line 535.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Package natbib Warning: Citation `love_moderated_2014' on page 3 undefined on i
+INFO:pdfexport:latexmk: nput line 537.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Package mdframed Warning: You got a bad break
+INFO:pdfexport:latexmk: (mdframed)                because the last box will be empty
+INFO:pdfexport:latexmk: (mdframed)                you have to change it manually
+INFO:pdfexport:latexmk: (mdframed)                by changing the text, the space
+INFO:pdfexport:latexmk: (mdframed)                or something else on input line 557.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: [3]
+INFO:pdfexport:latexmk: kpathsea: Running mktexpk --mfmode / --bdpi 600 --mag 1+0/600 --dpi 600 ecsx2074
+INFO:pdfexport:latexmk: [4]
+INFO:pdfexport:latexmk: No file Narrative.bbl.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: Package natbib Warning: There were undefined citations.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: [5] (./Narrative.aux)mktexpk: Running mf-nowin -progname=mf \mode:=ljfour; mag:=1+0/600; nonstopmode; input ecsx2074
+INFO:pdfexport:latexmk: This is METAFONT, Version 2.7182818 (TeX Live 2015/dev/Debian) (preloaded base=mf)
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/ecsx2074.mf
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exbase.mf)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/ecsx.mf
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exroman.mf
+INFO:pdfexport:latexmk: Ok (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exaccess.mf
+INFO:pdfexport:latexmk: Ok) (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/expseudo.mf
+INFO:pdfexport:latexmk: Ok) (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exruwest.mf
+INFO:pdfexport:latexmk: Ok [192] [193] [194] [195] [196] [197] [198] [199] [200] [201] [202] [203]
+INFO:pdfexport:latexmk: [204] [205] [206] [207] [208] [209] [210] [211] [212] [213] [214] [215]
+INFO:pdfexport:latexmk: [216] [217] [218] [219] [220] [221] [222] [223])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrlwest.mf
+INFO:pdfexport:latexmk: Ok [224] [225] [226] [227] [228] [229] [230] [231] [232] [233] [234] [235]
+INFO:pdfexport:latexmk: [236] [237] [238] [239] [240] [241] [242] [243] [244] [245] [246] [247]
+INFO:pdfexport:latexmk: [248] [249] [250] [251] [252] [253] [254] [255])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrueast.mf
+INFO:pdfexport:latexmk: Ok [128] [129] [130] [131] [132] [133] [134] [135] [136] [137] [138] [139]
+INFO:pdfexport:latexmk: [140] [141] [142] [143] [144] [145] [146] [147] [148] [149] [150] [151]
+INFO:pdfexport:latexmk: [152] [153] [154] [155] [156] [157])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrleast.mf
+INFO:pdfexport:latexmk: Ok [158] [160] [161] [162] [163] [164] [165] [166] [167] [168] [169] [170]
+INFO:pdfexport:latexmk: [171] [172] [173] [174] [175] [176] [177] [178] [179] [180] [181] [182]
+INFO:pdfexport:latexmk: [183] [184] [185] [186] [187] [188])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exbraces.mf
+INFO:pdfexport:latexmk: Ok [94] [126] [23] [40] [41] [60] [124] [62] [91] [93] [92] [123] [125]
+INFO:pdfexport:latexmk: [95] [127] [32])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/expunct.mf
+INFO:pdfexport:latexmk: Ok [14] [15] [19] [20] [13] [18] [33] [39] [42] [43] [44] [46] [47] [58]
+INFO:pdfexport:latexmk: [59] [61] [96] [189] [17] [45] [16] [21] [22])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exaccent.mf
+INFO:pdfexport:latexmk: Ok [0] [1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exsign.mf
+INFO:pdfexport:latexmk: Ok [24] [34] [35] [36] [37] [64] [191] [159])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrlig.mf
+INFO:pdfexport:latexmk: Ok [25] [26] [28] [27] [29] [30] [31])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exromp.mf
+INFO:pdfexport:latexmk: Ok [38] [63] [190])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrulett.mf
+INFO:pdfexport:latexmk: Ok [65] [66] [67] [68] [69] [70] [71] [72] [73] [74] [75] [76] [77] [78]
+INFO:pdfexport:latexmk: [79] [80] [81] [82] [83] [84] [85] [86] [87] [88] [89] [90])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrllett.mf
+INFO:pdfexport:latexmk: Ok [97] [98] [99] [100] [101] [102] [103] [104] [105] [106] [107] [108]
+INFO:pdfexport:latexmk: [109] [110] [111] [112] [113] [114] [115] [116] [117] [118] [119] [120]
+INFO:pdfexport:latexmk: [121] [122])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrdigit.mf
+INFO:pdfexport:latexmk: Ok [48] [49] [50] [51] [52] [53] [54] [55] [56] [57])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrligtb.mf
+INFO:pdfexport:latexmk: Ok) ) ) )
+INFO:pdfexport:latexmk: (some charht values had to be adjusted by as much as 0.13551pt)
+INFO:pdfexport:latexmk: Font metrics written on ecsx2074.tfm.
+INFO:pdfexport:latexmk: Output written on ecsx2074.600gf (256 characters, 93548 bytes).
+INFO:pdfexport:latexmk: Transcript written on ecsx2074.log.
+INFO:pdfexport:latexmk: mktexpk: /home/ubuntu/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx2074.600pk: successfully generated.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: kpathsea: Running mktexpk --mfmode / --bdpi 600 --mag 1+0/600 --dpi 600 ecsx1440
+INFO:pdfexport:latexmk: mktexpk: Running mf-nowin -progname=mf \mode:=ljfour; mag:=1+0/600; nonstopmode; input ecsx1440
+INFO:pdfexport:latexmk: This is METAFONT, Version 2.7182818 (TeX Live 2015/dev/Debian) (preloaded base=mf)
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/ecsx1440.mf
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exbase.mf)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/ecsx.mf
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exroman.mf
+INFO:pdfexport:latexmk: Ok (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exaccess.mf
+INFO:pdfexport:latexmk: Ok) (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/expseudo.mf
+INFO:pdfexport:latexmk: Ok) (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exruwest.mf
+INFO:pdfexport:latexmk: Ok [192] [193] [194] [195] [196] [197] [198] [199] [200] [201] [202] [203]
+INFO:pdfexport:latexmk: [204] [205] [206] [207] [208] [209] [210] [211] [212] [213] [214] [215]
+INFO:pdfexport:latexmk: [216] [217] [218] [219] [220] [221] [222] [223])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrlwest.mf
+INFO:pdfexport:latexmk: Ok [224] [225] [226] [227] [228] [229] [230] [231] [232] [233] [234] [235]
+INFO:pdfexport:latexmk: [236] [237] [238] [239] [240] [241] [242] [243] [244] [245] [246] [247]
+INFO:pdfexport:latexmk: [248] [249] [250] [251] [252] [253] [254] [255])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrueast.mf
+INFO:pdfexport:latexmk: Ok [128] [129] [130] [131] [132] [133] [134] [135] [136] [137] [138] [139]
+INFO:pdfexport:latexmk: [140] [141] [142] [143] [144] [145] [146] [147] [148] [149] [150] [151]
+INFO:pdfexport:latexmk: [152] [153] [154] [155] [156] [157])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrleast.mf
+INFO:pdfexport:latexmk: Ok [158] [160] [161] [162] [163] [164] [165] [166] [167] [168] [169] [170]
+INFO:pdfexport:latexmk: [171] [172] [173] [174] [175] [176] [177] [178] [179] [180] [181] [182]
+INFO:pdfexport:latexmk: [183] [184] [185] [186] [187] [188])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exbraces.mf
+INFO:pdfexport:latexmk: Ok [94] [126] [23] [40] [41] [60] [124] [62] [91] [93] [92] [123] [125]
+INFO:pdfexport:latexmk: [95] [127] [32])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/expunct.mf
+INFO:pdfexport:latexmk: Ok [14] [15] [19] [20] [13] [18] [33] [39] [42] [43] [44] [46] [47] [58]
+INFO:pdfexport:latexmk: [59] [61] [96] [189] [17] [45] [16] [21] [22])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exaccent.mf
+INFO:pdfexport:latexmk: Ok [0] [1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exsign.mf
+INFO:pdfexport:latexmk: Ok [24] [34] [35] [36] [37] [64] [191] [159])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrlig.mf
+INFO:pdfexport:latexmk: Ok [25] [26] [28] [27] [29] [30] [31])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exromp.mf
+INFO:pdfexport:latexmk: Ok [38] [63] [190])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrulett.mf
+INFO:pdfexport:latexmk: Ok [65] [66] [67] [68] [69] [70] [71] [72] [73] [74] [75] [76] [77] [78]
+INFO:pdfexport:latexmk: [79] [80] [81] [82] [83] [84] [85] [86] [87] [88] [89] [90])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrllett.mf
+INFO:pdfexport:latexmk: Ok [97] [98] [99] [100] [101] [102] [103] [104] [105] [106] [107] [108]
+INFO:pdfexport:latexmk: [109] [110] [111] [112] [113] [114] [115] [116] [117] [118] [119] [120]
+INFO:pdfexport:latexmk: [121] [122])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrdigit.mf
+INFO:pdfexport:latexmk: Ok [48] [49] [50] [51] [52] [53] [54] [55] [56] [57])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrligtb.mf
+INFO:pdfexport:latexmk: Ok) ) ) )
+INFO:pdfexport:latexmk: (some charht values had to be adjusted by as much as 0.07274pt)
+INFO:pdfexport:latexmk: Font metrics written on ecsx1440.tfm.
+INFO:pdfexport:latexmk: Output written on ecsx1440.600gf (256 characters, 64452 bytes).
+INFO:pdfexport:latexmk: Transcript written on ecsx1440.log.
+INFO:pdfexport:latexmk: mktexpk: /home/ubuntu/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1440.600pk: successfully generated.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: kpathsea: Running mktexpk --mfmode / --bdpi 600 --mag 1+0/600 --dpi 600 ectt1000
+INFO:pdfexport:latexmk: mktexpk: Running mf-nowin -progname=mf \mode:=ljfour; mag:=1+0/600; nonstopmode; input ectt1000
+INFO:pdfexport:latexmk: This is METAFONT, Version 2.7182818 (TeX Live 2015/dev/Debian) (preloaded base=mf)
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/ectt1000.mf
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exbase.mf)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/ectt.mf
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exroman.mf
+INFO:pdfexport:latexmk: Ok (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exaccess.mf
+INFO:pdfexport:latexmk: Ok) (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/expseudo.mf
+INFO:pdfexport:latexmk: Ok) (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exruwest.mf
+INFO:pdfexport:latexmk: Ok [192] [193] [194] [195] [196] [197] [198] [199] [200] [201] [202] [203]
+INFO:pdfexport:latexmk: [204] [205] [206] [207] [208] [209] [210] [211] [212] [213] [214] [215]
+INFO:pdfexport:latexmk: [216] [217] [218] [219] [220] [221] [222] [223])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrlwest.mf
+INFO:pdfexport:latexmk: Ok [224] [225] [226] [227] [228] [229] [230] [231] [232] [233] [234] [235]
+INFO:pdfexport:latexmk: [236] [237] [238] [239] [240] [241] [242] [243] [244] [245] [246] [247]
+INFO:pdfexport:latexmk: [248] [249] [250] [251] [252] [253] [254] [255])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrueast.mf
+INFO:pdfexport:latexmk: Ok [128] [129] [130] [131] [132] [133] [134] [135] [136] [137] [138] [139]
+INFO:pdfexport:latexmk: [140] [141] [142] [143] [144] [145] [146] [147] [148] [149] [150] [151]
+INFO:pdfexport:latexmk: [152] [153] [154] [155] [156] [157])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrleast.mf
+INFO:pdfexport:latexmk: Ok [158] [160] [161] [162] [163] [164] [165] [166] [167] [168] [169] [170]
+INFO:pdfexport:latexmk: [171] [172] [173] [174] [175] [176] [177] [178] [179] [180] [181] [182]
+INFO:pdfexport:latexmk: [183] [184] [185] [186] [187] [188])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exbraces.mf
+INFO:pdfexport:latexmk: Ok [94] [126] [23] [40] [41] [60] [124] [62] [91] [93] [92] [123] [125]
+INFO:pdfexport:latexmk: [95] [127] [32])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/expunct.mf
+INFO:pdfexport:latexmk: Ok [14] [15] [19] [20] [13] [18] [33] [39] [42] [43] [44] [46] [47] [58]
+INFO:pdfexport:latexmk: [59] [61] [96] [189] [17] [45] [16] [21] [22])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exaccent.mf
+INFO:pdfexport:latexmk: Ok [0] [1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exsign.mf
+INFO:pdfexport:latexmk: Ok [24] [34] [35] [36] [37] [64] [191] [159])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrlig.mf
+INFO:pdfexport:latexmk: Ok [25] [26] [28] [27] [29] [30] [31])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exromp.mf
+INFO:pdfexport:latexmk: Ok [38] [63] [190])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrulett.mf
+INFO:pdfexport:latexmk: Ok [65] [66] [67] [68] [69] [70] [71] [72] [73] [74] [75] [76] [77] [78]
+INFO:pdfexport:latexmk: [79] [80] [81] [82] [83] [84] [85] [86] [87] [88] [89] [90])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrllett.mf
+INFO:pdfexport:latexmk: Ok [97] [98] [99] [100] [101] [102] [103] [104] [105] [106] [107] [108]
+INFO:pdfexport:latexmk: [109] [110] [111] [112] [113] [114] [115] [116] [117] [118] [119] [120]
+INFO:pdfexport:latexmk: [121] [122])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrdigit.mf
+INFO:pdfexport:latexmk: Ok [48] [49] [50] [51] [52] [53] [54] [55] [56] [57])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exmligtb.mf
+INFO:pdfexport:latexmk: Ok) ) ) )
+INFO:pdfexport:latexmk: Font metrics written on ectt1000.tfm.
+INFO:pdfexport:latexmk: Output written on ectt1000.600gf (256 characters, 43832 bytes).
+INFO:pdfexport:latexmk: Transcript written on ectt1000.log.
+INFO:pdfexport:latexmk: mktexpk: /home/ubuntu/.texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk: successfully generated.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: kpathsea: Running mktexpk --mfmode / --bdpi 600 --mag 1+0/600 --dpi 600 ecsx1200
+INFO:pdfexport:latexmk: mktexpk: Running mf-nowin -progname=mf \mode:=ljfour; mag:=1+0/600; nonstopmode; input ecsx1200
+INFO:pdfexport:latexmk: This is METAFONT, Version 2.7182818 (TeX Live 2015/dev/Debian) (preloaded base=mf)
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/ecsx1200.mf
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exbase.mf)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/ecsx.mf
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exroman.mf
+INFO:pdfexport:latexmk: Ok (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exaccess.mf
+INFO:pdfexport:latexmk: Ok) (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/expseudo.mf
+INFO:pdfexport:latexmk: Ok) (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exruwest.mf
+INFO:pdfexport:latexmk: Ok [192] [193] [194] [195] [196] [197] [198] [199] [200] [201] [202] [203]
+INFO:pdfexport:latexmk: [204] [205] [206] [207] [208] [209] [210] [211] [212] [213] [214] [215]
+INFO:pdfexport:latexmk: [216] [217] [218] [219] [220] [221] [222] [223])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrlwest.mf
+INFO:pdfexport:latexmk: Ok [224] [225] [226] [227] [228] [229] [230] [231] [232] [233] [234] [235]
+INFO:pdfexport:latexmk: [236] [237] [238] [239] [240] [241] [242] [243] [244] [245] [246] [247]
+INFO:pdfexport:latexmk: [248] [249] [250] [251] [252] [253] [254] [255])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrueast.mf
+INFO:pdfexport:latexmk: Ok [128] [129] [130] [131] [132] [133] [134] [135] [136] [137] [138] [139]
+INFO:pdfexport:latexmk: [140] [141] [142] [143] [144] [145] [146] [147] [148] [149] [150] [151]
+INFO:pdfexport:latexmk: [152] [153] [154] [155] [156] [157])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrleast.mf
+INFO:pdfexport:latexmk: Ok [158] [160] [161] [162] [163] [164] [165] [166] [167] [168] [169] [170]
+INFO:pdfexport:latexmk: [171] [172] [173] [174] [175] [176] [177] [178] [179] [180] [181] [182]
+INFO:pdfexport:latexmk: [183] [184] [185] [186] [187] [188])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exbraces.mf
+INFO:pdfexport:latexmk: Ok [94] [126] [23] [40] [41] [60] [124] [62] [91] [93] [92] [123] [125]
+INFO:pdfexport:latexmk: [95] [127] [32])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/expunct.mf
+INFO:pdfexport:latexmk: Ok [14] [15] [19] [20] [13] [18] [33] [39] [42] [43] [44] [46] [47] [58]
+INFO:pdfexport:latexmk: [59] [61] [96] [189] [17] [45] [16] [21] [22])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exaccent.mf
+INFO:pdfexport:latexmk: Ok [0] [1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exsign.mf
+INFO:pdfexport:latexmk: Ok [24] [34] [35] [36] [37] [64] [191] [159])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrlig.mf
+INFO:pdfexport:latexmk: Ok [25] [26] [28] [27] [29] [30] [31])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exromp.mf
+INFO:pdfexport:latexmk: Ok [38] [63] [190])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrulett.mf
+INFO:pdfexport:latexmk: Ok [65] [66] [67] [68] [69] [70] [71] [72] [73] [74] [75] [76] [77] [78]
+INFO:pdfexport:latexmk: [79] [80] [81] [82] [83] [84] [85] [86] [87] [88] [89] [90])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrllett.mf
+INFO:pdfexport:latexmk: Ok [97] [98] [99] [100] [101] [102] [103] [104] [105] [106] [107] [108]
+INFO:pdfexport:latexmk: [109] [110] [111] [112] [113] [114] [115] [116] [117] [118] [119] [120]
+INFO:pdfexport:latexmk: [121] [122])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrdigit.mf
+INFO:pdfexport:latexmk: Ok [48] [49] [50] [51] [52] [53] [54] [55] [56] [57])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exrligtb.mf
+INFO:pdfexport:latexmk: Ok) ) ) )
+INFO:pdfexport:latexmk: (some charht values had to be adjusted by as much as 0.07016pt)
+INFO:pdfexport:latexmk: Font metrics written on ecsx1200.tfm.
+INFO:pdfexport:latexmk: Output written on ecsx1200.600gf (256 characters, 54960 bytes).
+INFO:pdfexport:latexmk: Transcript written on ecsx1200.log.
+INFO:pdfexport:latexmk: mktexpk: /home/ubuntu/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1200.600pk: successfully generated.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: kpathsea: Running mktexpk --mfmode / --bdpi 600 --mag 1+0/600 --dpi 600 tctt1000
+INFO:pdfexport:latexmk: mktexpk: Running mf-nowin -progname=mf \mode:=ljfour; mag:=1+0/600; nonstopmode; input tctt1000
+INFO:pdfexport:latexmk: This is METAFONT, Version 2.7182818 (TeX Live 2015/dev/Debian) (preloaded base=mf)
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/tctt1000.mf
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exbase.mf)
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/tctt.mf
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/txsymb.mf
+INFO:pdfexport:latexmk: Ok (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/exaccess.mf
+INFO:pdfexport:latexmk: Ok) (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/txpseudo.mf
+INFO:pdfexport:latexmk: Ok) (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/txaccent.mf
+INFO:pdfexport:latexmk: Ok [0] [1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12] [27] [29])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/txgen.mf
+INFO:pdfexport:latexmk: Ok [100] [109] [98] [99] [108])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/txsymbol.mf
+INFO:pdfexport:latexmk: Ok [13] [18] [21] [22] [23] [24] [25] [26] [28] [31] [32] [36] [39] [44]
+INFO:pdfexport:latexmk: [45] [46] [42] [47] [60] [61] [62] [77] [79] [87] [110] [91] [93] [94] [95]
+INFO:pdfexport:latexmk: [96] [126] [127] [128] [129] [130] [131] [132] [133] [134] [135] [136] [137]
+INFO:pdfexport:latexmk: [138] [139] [140] [141] [142] [143] [144] [145] [146] [147] [148] [149]
+INFO:pdfexport:latexmk: [150] [151] [152] [153] [154] [155] [156] [157] [158] [159] [160] [161]
+INFO:pdfexport:latexmk: [162] [163] [164] [165] [166] [167] [168] [169] [171] [172] [173] [174]
+INFO:pdfexport:latexmk: [175] [177] [176] [180] [181] [182] [183] [184] [187] [191] [214] [246])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/txromod.mf
+INFO:pdfexport:latexmk: Ok [48] [49] [50] [51] [52] [53] [54] [55] [56] [57])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/txrsuper.mf
+INFO:pdfexport:latexmk: Ok [185] [178] [179] [170] [186])
+INFO:pdfexport:latexmk: (/usr/share/texlive/texmf-dist/fonts/source/jknappen/ec/txrfract.mf
+INFO:pdfexport:latexmk: Ok [188] [189] [190]) ) ) )
+INFO:pdfexport:latexmk: Font metrics written on tctt1000.tfm.
+INFO:pdfexport:latexmk: Output written on tctt1000.600gf (128 characters, 19540 bytes).
+INFO:pdfexport:latexmk: Transcript written on tctt1000.log.
+INFO:pdfexport:latexmk: mktexpk: /home/ubuntu/.texmf-var/fonts/pk/ljfour/jknappen/ec/tctt1000.600pk: successfully generated.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: LaTeX Warning: There were undefined references.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+INFO:pdfexport:latexmk: 
+INFO:pdfexport:latexmk: )
+INFO:pdfexport:latexmk: Output written on Narrative.pdf (5 pages).
+INFO:pdfexport:latexmk: Transcript written on Narrative.log.
+INFO:pdfexport:latexmk: Latexmk: References changed.
+INFO:pdfexport:latexmk: Latexmk: Non-existent bbl file 'Narrative.bbl'
+INFO:pdfexport:latexmk: No file Narrative.bbl.
+INFO:pdfexport:latexmk: Latexmk: References changed.
+INFO:pdfexport:latexmk: Latexmk: Log file says output to 'Narrative.pdf'
+INFO:pdfexport:latexmk: Latexmk: List of undefined refs and citations:
+INFO:pdfexport:latexmk: Citation `consortium_genotype-tissue_2015' on page 2 undefined on input line 483
+INFO:pdfexport:latexmk: Citation `consortium_genotype-tissue_2015' on page 3 undefined on input line 505
+INFO:pdfexport:latexmk: Citation `guo_large_2013' on page 2 undefined on input line 468
+INFO:pdfexport:latexmk: Citation `johnson_adjusting_2007' on page 3 undefined on input line 535
+INFO:pdfexport:latexmk: Citation `love_moderated_2014' on page 3 undefined on input line 537
+INFO:pdfexport:latexmk: Citation `peng_large-scale_2015-1' on page 2 undefined on input line 468
+INFO:pdfexport:latexmk: Citation `peng_large-scale_2015-1' on page 2 undefined on input line 472
+INFO:pdfexport:latexmk: Citation `shaham_removal_2017' on page 3 undefined on input line 535
+INFO:pdfexport:latexmk: Citation `the_cancer_genome_atlas_research_network_cancer_2013-1' on page 3 undefined on input line 502
+INFO:pdfexport:latexmk: Citation `vivian_bd2kgenomics/toil-rnaseq_' on page 3 undefined on input line 517
+INFO:pdfexport:latexmk: Citation `vivian_rapid_2016-1' on page 3 undefined on input line 513
+INFO:pdfexport:latexmk: Reference `fig:workflow' on page 1 undefined on input line 516
+INFO:pdfexport:latexmk: Latexmk: Found bibliography file(s) [Narrative_files/rnaseq_cancer.bib]
+INFO:pdfexport:latexmk: Latexmk: Summary of warnings:
+INFO:pdfexport:latexmk: Latex failed to resolve 1 reference(s)
+INFO:pdfexport:latexmk: Latex failed to resolve 11 citation(s)
+INFO:pdfexport:latexmk: Collected error summary (may duplicate other messages):
+INFO:pdfexport:latexmk: pdflatex: Command for 'pdflatex' gave return code 256
+INFO:pdfexport:latexmk: Latexmk: Use the -f option to force complete processing,
+INFO:pdfexport:latexmk: unless error was exceeding maximum runs of latex/pdflatex.
+INFO:pdfexport:latexmk: Latexmk: Errors, so I did not complete making targets
+ERROR:pdfexport:pdf conversion failed: Try running with pdf_debug=True
+ERROR:main:pdf export returned false, try running with pdf_debug=True
