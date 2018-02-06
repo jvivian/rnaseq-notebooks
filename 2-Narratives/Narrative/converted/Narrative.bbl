@@ -1,0 +1,84 @@
+\begin{thebibliography}{8}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Guo et~al.(2013)Guo, Sheng, Li, Ye, Samuels, and Shyr]{guo_large_2013}
+Yan Guo, Quanhu Sheng, Jiang Li, Fei Ye, David~C. Samuels, and Yu~Shyr.
+\newblock Large {{Scale Comparison}} of {{Gene Expression Levels}} by
+  {{Microarrays}} and {{RNAseq Using TCGA Data}}.
+\newblock \emph{PLoS ONE}, 8\penalty0 (8):\penalty0 e71462, August 2013.
+\newblock ISSN 1932-6203.
+\newblock \doi{10.1371/journal.pone.0071462}.
+
+\bibitem[Peng et~al.(2015)Peng, Bian, Li, Xu, Wang, Xia, and
+  Xiong]{peng_large-scale_2015-1}
+Li~Peng, Xiu~Wu Bian, Di~Kang Li, Chuan Xu, Guang~Ming Wang, Qing~You Xia, and
+  Qing Xiong.
+\newblock Large-scale {{RNA}}-{{Seq Transcriptome Analysis}} of 4043
+  {{Cancers}} and 548 {{Normal Tissue Controls}} across 12 {{TCGA Cancer
+  Types}}.
+\newblock \emph{Scientific Reports}, 5:\penalty0 13413, August 2015.
+\newblock ISSN 2045-2322.
+\newblock \doi{10.1038/srep13413}.
+
+\bibitem[Consortium and {others}(2015)]{consortium_genotype-tissue_2015}
+GTEx Consortium and {others}.
+\newblock The {{Genotype}}-{{Tissue Expression}} ({{GTEx}}) pilot analysis:
+  {{Multitissue}} gene regulation in humans.
+\newblock \emph{Science}, 348\penalty0 (6235):\penalty0 648--660, 2015.
+
+\bibitem[{The Cancer Genome Atlas Research Network} et~al.(2013){The Cancer
+  Genome Atlas Research Network}, Weinstein, Collisson, Mills, Shaw,
+  Ozenberger, Ellrott, Shmulevich, Sander, and
+  Stuart]{the_cancer_genome_atlas_research_network_cancer_2013-1}
+{The Cancer Genome Atlas Research Network}, John~N. Weinstein, Eric~A.
+  Collisson, Gordon~B. Mills, Kenna R.~Mills Shaw, Brad~A. Ozenberger, Kyle
+  Ellrott, Ilya Shmulevich, Chris Sander, and Joshua~M. Stuart.
+\newblock The {{Cancer Genome Atlas Pan}}-{{Cancer}} analysis project.
+\newblock \emph{Nature Genetics}, 45\penalty0 (10):\penalty0 1113--1120,
+  October 2013.
+\newblock ISSN 1061-4036.
+\newblock \doi{10.1038/ng.2764}.
+
+\bibitem[Vivian et~al.(2016)Vivian, Rao, Nothaft, Ketchum, Armstrong, Novak,
+  Pfeil, Narkizian, Deran, Musselman-Brown, and {others}]{vivian_rapid_2016-1}
+John Vivian, Arjun Rao, Frank~Austin Nothaft, Christopher Ketchum, Joel
+  Armstrong, Adam Novak, Jacob Pfeil, Jake Narkizian, Alden~D. Deran, Audrey
+  Musselman-Brown, and {others}.
+\newblock Rapid and efficient analysis of 20,000 {{RNA}}-seq samples with
+  {{Toil}}.
+\newblock \emph{bioRxiv}, page 062497, 2016.
+
+\bibitem[Johnson et~al.(2007)Johnson, Li, and
+  Rabinovic]{johnson_adjusting_2007}
+W.~Evan Johnson, Cheng Li, and Ariel Rabinovic.
+\newblock Adjusting batch effects in microarray expression data using empirical
+  {{Bayes}} methods.
+\newblock \emph{Biostatistics}, 8\penalty0 (1):\penalty0 118--127, January
+  2007.
+\newblock ISSN 1465-4644.
+\newblock \doi{10.1093/biostatistics/kxj037}.
+
+\bibitem[Shaham et~al.(2017)Shaham, Stanton, Zhao, Li, Raddassi, Montgomery,
+  and Kluger]{shaham_removal_2017}
+Uri Shaham, Kelly~P. Stanton, Jun Zhao, Huamin Li, Khadir Raddassi, Ruth
+  Montgomery, and Yuval Kluger.
+\newblock Removal of batch effects using distribution-matching residual
+  networks.
+\newblock \emph{Bioinformatics}, 33\penalty0 (16):\penalty0 2539--2546, August
+  2017.
+\newblock ISSN 1367-4803.
+\newblock \doi{10.1093/bioinformatics/btx196}.
+
+\bibitem[Love et~al.(2014)Love, Huber, and Anders]{love_moderated_2014}
+Michael~I Love, Wolfgang Huber, and Simon Anders.
+\newblock Moderated estimation of fold change and dispersion for {{RNA}}-seq
+  data with {{DESeq2}}.
+\newblock \emph{Genome Biology}, 15\penalty0 (12), December 2014.
+\newblock ISSN 1474-760X.
+\newblock \doi{10.1186/s13059-014-0550-8}.
+
+\end{thebibliography}

@@ -552,17 +552,30 @@ sp_counts
 \end{lstlisting}
 
 \begin{lstlisting}[language=Python,numbers=left,xleftmargin=20pt,xrightmargin=5pt,belowskip=5pt,aboveskip=5pt]
-%%opts HeatMap [width=600]
-(de_gtex + de_tcga).relabel('Differential Expressoin Gene Concordance')
+%%opts HeatMap [width=400]
+(de_gtex + de_tcga).relabel('Differential Expression Gene Concordance')
 \end{lstlisting}
 
-\begin{lstlisting}[language={},postbreak={},numbers=none,xrightmargin=7pt,breakindent=0pt,aboveskip=5pt,belowskip=5pt]
-:Layout
-   .HeatMap.GTEx :HeatMap   [Tissue-Tumor/Normal,Tissue-Normal]   (PearsonR)
-   .HeatMap.TCGA :HeatMap   [Tissue-Tumor/Normal,Tissue-Normal]   (PearsonR)
+\begin{lstlisting}[language=Python,numbers=none,xrightmargin=5pt,belowskip=2pt,aboveskip=2pt]
+    ---------------------------------------------------------------------------
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python,numbers=none,xrightmargin=5pt,belowskip=2pt,aboveskip=2pt]
+    NameError                                 Traceback (most recent call last)
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python,numbers=none,xrightmargin=5pt,belowskip=2pt,aboveskip=2pt]
+    <ipython-input-13-e6c4a4f2ba3d> in <module>()
+    ----> 1 (de_gtex + de_tcga).relabel('Differential Expressoin Gene Concordance')
+
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python,numbers=none,xrightmargin=5pt,belowskip=2pt,aboveskip=2pt]
+    NameError: name 'de_gtex' is not defined
 \end{lstlisting}
 
 \begin{lstlisting}[language=Python,numbers=left,xleftmargin=20pt,xrightmargin=5pt,belowskip=5pt,aboveskip=5pt]
+%%opts HeatMap [width=500]
 tissues = ['Breast', 'Colon', 'Kidney', 'Liver', 'Lung', 'Prostate', 'Stomach', 'Thyroid', 'Uterus']
 (h.differential_expression_tissue_concordance(tissue_subset=tissues, tcga=False).relabel('GTEx') + \
 h.differential_expression_tissue_concordance(tissue_subset=tissues, gtex=False).relabel('TCGA')).relabel('Differential Expression Gene Concordance (PearsonR)')
@@ -604,30 +617,13 @@ Candidates}\label{identifying-repositionable-candidates}}
 
 \end{lstlisting}
 
-\hypertarget{references}{%
-\section{References}\label{references}}
+\begin{lstlisting}[language=Python,numbers=left,xleftmargin=20pt,xrightmargin=5pt,belowskip=5pt,aboveskip=5pt]
 
- The bib file biblio.bib was not found
-
- (?) !! \emph{This reference was not found in biblio.bib } !!
-
-(?) !! \emph{This reference was not found in biblio.bib } !!
-
-(?) !! \emph{This reference was not found in biblio.bib } !!
-
-(?) !! \emph{This reference was not found in biblio.bib } !!
-
-(?) !! \emph{This reference was not found in biblio.bib } !!
-
-(?) !! \emph{This reference was not found in biblio.bib } !!
-
-(?) !! \emph{This reference was not found in biblio.bib } !!
-
-(?) !! \emph{This reference was not found in biblio.bib } !!
+\end{lstlisting}
 
 % sort citations by order of first appearance
 \bibliographystyle{unsrtnat}
-\bibliography{Narrative_files/rnaseq_cancer.bib}
+\bibliography{Narrative_files/biblio.bib}
 
 	\end{document}
 
