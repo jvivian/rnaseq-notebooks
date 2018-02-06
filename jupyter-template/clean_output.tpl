@@ -34,11 +34,11 @@ p {font-size:14px;}
 </style>
 
 <script>
-$(document).ready(function(){
-  $(".output_wrapper").click(function(){
-      $(this).prev('.input_hidden').slideToggle();
-  });
-})
+//$(document).ready(function(){
+//  $(".output_wrapper").click(function(){
+//      $(this).prev('.input_hidden').slideToggle();
+//  });
+//})
 </script>
 {%- endblock header -%}
 
