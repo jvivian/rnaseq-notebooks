@@ -1,0 +1,16 @@
+INFO:main:started ipypublish v0.6.5 at Fri Feb  9 21:36:03 2018
+INFO:main:logging to: html/Narrative.nbpub.log
+INFO:main:running for ipynb(s) at: Narrative.ipynb
+INFO:main:with conversion: html_ipypublish_main
+INFO:nbmerge:Reading notebook
+INFO:main:getting output format from exporter plugin
+INFO:nbexport:running nbconvert
+INFO:split_outputs:splitting outputs into separate cells
+INFO:latex_doc_links:resolving external file paths in ipub metadata to: Narrative.ipynb
+INFO:latex_doc_html:processing notebook for html output in ipub metadata to: Narrative.ipynb
+INFO:latextags_to_html:converting latex tags to html
+INFO:latextags_to_html:reading bibliopath: /home/ubuntu/rnaseq-notebooks/2-Narratives/Narrative/rnaseq_cancer.bib
+INFO:latex_doc_captions:extracting caption cells
+INFO:main:outputting converted file to: html/Narrative.html
+INFO:main:dumping external files to: html/Narrative_files
+INFO:main:process finished successfully
