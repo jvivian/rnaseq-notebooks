@@ -12152,28 +12152,28 @@ div#notebook {
  background-color: #ffffff;
  min-height: 0px;
  box-shadow: none;
- width: 75%;
+ width: 80%;
  margin-right: auto;
  margin-left: auto;
 }
 div#ipython-main-app.container {
- width: 75%;
+ width: 80%;
  margin-right: auto;
  margin-left: auto;
  margin-right: auto;
  margin-left: auto;
 }
 .container {
- width: 75%;
+ width: 80%;
  margin-right: auto;
  margin-left: auto;
 }
 div#menubar-container {
  width: 100%;
- width: 75%;
+ width: 80%;
 }
 div#header-container {
- width: 75%;
+ width: 80%;
 }
 .notebook_app #header,
 .edit_app #header {
@@ -12247,7 +12247,7 @@ p.navbar-text.indicator_area {
  background-color: rgba(180,180,180,.14);
  border-color: #d4d4d4;
  line-height: 1.5em;
- transition: 200ms ease;
+ transition: 80ms ease;
 }
 .navbar-default .navbar-nav > .open > a,
 .navbar-default .navbar-nav > .open > a:hover,
@@ -12256,7 +12256,6 @@ p.navbar-text.indicator_area {
  background-color: #dedede;
  border-color: #dedede;
  line-height: 1.5em;
- transition: 200ms ease;
 }
 .navbar-nav > li > .dropdown-menu {
  margin-top: 0px;
@@ -12373,7 +12372,7 @@ div.notification_widget.info,
  background: transparent;
  background-color: transparent;
  margin-bottom: 0px !important;
- margin-top: 11px !important;
+ margin-top: 8px !important;
  vertical-align: middle !important;
 }
 #modal_indicator {
@@ -12455,9 +12454,6 @@ div.notification_widget.info,
   opacity: 0.8;
  }
 }
-i#kernel_indicator_icon {
- vertical-align: sub;
-}
 div.notification_widget.info,
 .notification_widget.info,
 .notification_widget:active:hover,
@@ -12515,7 +12511,7 @@ i.fa.fa-icon {
  box-shadow: none;
  padding: 0px;
  text-align: left;
- border: 2px solid #dedede;
+ border: none;
  background-color: #dedede;
  background: #dedede;
  line-height: 1;
@@ -12526,7 +12522,7 @@ i.fa.fa-icon {
  box-shadow: none;
  padding: 0px;
  text-align: left;
- border: 2px solid #dedede;
+ border: none;
  background-color: #dedede;
  box-shadow: none;
  line-height: 1;
@@ -12534,7 +12530,6 @@ i.fa.fa-icon {
 .dropdown-menu > li > a {
  font-family: sans-serif;
  font-size: 12.0pt;
- line-height: 1.1;
  display: block;
  padding: 10px 20px 9px 10px;
  color: #303030;
@@ -12556,7 +12551,8 @@ i.fa.fa-icon {
  background-color: rgba(180,180,180,.30);
 }
 .dropdown-submenu > .dropdown-menu {
- top: 0px;
+ display: none;
+ top: 2px !important;
  left: 100%;
  margin-top: -2px;
  margin-left: 0px;
@@ -12573,13 +12569,13 @@ i.fa.fa-icon {
  padding: none;
  display: block;
  clear: both;
- line-height: 1.1;
  white-space: nowrap;
 }
 .dropdown-submenu > a:after {
  color: #303030;
  margin-right: -16px;
  margin-top: 0px;
+ display: inline-block;
 }
 .dropdown-submenu:hover > a:after,
 .dropdown-submenu:active > a:after,
@@ -12587,6 +12583,7 @@ i.fa.fa-icon {
 .dropdown-submenu:visited > a:after {
  color: #ff7823;
  margin-right: -16px;
+ display: inline-block !important;
 }
 div.kse-dropdown > .dropdown-menu,
 .kse-dropdown > .dropdown-menu {
@@ -13047,6 +13044,9 @@ div.form-control,
  border-color: #dedede;
  margin-bottom: 0px;
 }
+.form-group .input-group {
+ float: left;
+}
 input,
 button,
 select,
@@ -13199,19 +13199,11 @@ div.CodeMirror-sizer {
  padding-bottom: 0px;
  margin-top: 0px;
 }
-div.cell.selected:before {
+div.cell.selected:before,
+.edit_mode div.cell.selected:before,
+div.cell.selected:before,
+div.cell.selected.jupyter-soft-selected:before {
  background: #ededed;
- border: none;
- border-radius: 3px;
- position: absolute;
- display: block;
- top: 0px;
- left: 0px;
- width: 0px;
- height: 100%;
-}
-.edit_mode div.cell.selected:before {
- background: #ffffff;
  border: none;
  border-radius: 3px;
  position: absolute;
@@ -13235,16 +13227,10 @@ div.cell.code_cell.selected .input {
  border-left: 5px solid #ffd5bb !important;
  border-radius: 3px;
 }
-div.cell.selected:before,
-div.cell.selected.jupyter-soft-selected:before {
- position: absolute;
- display: block;
- top: -1px;
- left: -1px;
- width: 5px;
- height: calc(102%);
- content: '';
- background: transparent !important;
+.edit_mode div.cell.selected:before {
+ height: 100%;
+ border-left: 5px solid #ffd5bb !important;
+ border-radius: 3px;
 }
 div.cell.jupyter-soft-selected,
 div.cell.selected.jupyter-soft-selected {
@@ -13258,18 +13244,6 @@ div.cell.selected.jupyter-soft-selected {
 }
 div.cell.selected.jupyter-soft-selected .input {
  border-left: 5px solid #ededed !important;
-}
-div.cell.selected.jupyter-soft-selected:before,
-.edit_mode div.cell.selected:before .input {
- background: #ffd5bb !important;
- border: 2px solid #ffd5bb !important;
- border-radius: 6px !important;
- position: absolute !important;
- display: block !important;
- top: 0px !important;
- left: 0px !important;
- width: 6px !important;
- height: 100% !important;
 }
 div.cell.selected.jupyter-soft-selected {
  border-left-color: #ff7823;
@@ -13289,17 +13263,6 @@ div.cell.text_cell.selected.jupyter-soft-selected .prompt {
 }
 div.cell.text_cell.selected.jupyter-soft-selected .input_prompt {
  border-left: none !important;
-}
-div.cell.text_cell.selected.jupyter-soft-selected:before {
- background: #f2f2f2 !important;
- border: 2px solid #f2f2f2 !important;
- border-radius: 6px !important;
- position: absolute !important;
- display: block !important;
- top: 0px !important;
- left: 0px !important;
- width: 6px !important;
- height: 100% !important;
 }
 div.cell.text_cell.jupyter-soft-selected,
 div.cell.text_cell.selected.jupyter-soft-selected {
@@ -13323,8 +13286,8 @@ div.prompt,
  padding-left: 0px;
  padding-right: 1px;
  text-align: right !important;
- min-width: 12.5ex !important;
- width: 12.5ex !important;
+ min-width: 13.5ex !important;
+ width: 13.5ex !important;
 }
 div.prompt.input_prompt {
  font-size: 9pt !important;
@@ -13334,8 +13297,8 @@ div.prompt.input_prompt {
  border-bottom-left-radius: 0px;
  border-bottom-right-radius: 0px;
  padding-right: 3px;
- min-width: 12.5ex;
- width: 12.5ex !important;
+ min-width: 13.5ex;
+ width: 13.5ex !important;
 }
 div.cell.code_cell .input_prompt {
  border-right: 2px solid rgba(240,147,43,.50);
@@ -13414,8 +13377,8 @@ div.prompt.output_prompt {
  border-top-right-radius: 0px;
  border-top-left-radius: 0px;
  border-bottom-right-radius: 0px;
- min-width: 12.5ex !important;
- width: 12.5ex !important;
+ min-width: 13.5ex !important;
+ width: 13.5ex !important;
  border-right: 2px solid transparent;
 }
 div.out_prompt_overlay.prompt {
@@ -13427,8 +13390,8 @@ div.out_prompt_overlay.prompt {
  border-top-right-radius: 0px;
  border-top-left-radius: 0px;
  border-bottom-right-radius: 0px;
- min-width: 12.5ex !important;
- width: 12.5ex !important;
+ min-width: 13.5ex !important;
+ width: 13.5ex !important;
  border-right: 2px solid transparent;
  color: transparent;
 }
@@ -13441,8 +13404,8 @@ div.out_prompt_overlay.prompt:hover {
  -moz-border-radius: 2px;
  border-top-right-radius: 0px;
  border-top-left-radius: 0px;
- min-width: 12.5ex !important;
- width: 12.5ex !important;
+ min-width: 13.5ex !important;
+ width: 13.5ex !important;
  border-right: 2px solid #f7f7f7 !important;
 }
 div.cell.code_cell .output_prompt {
@@ -13531,30 +13494,6 @@ div.edit_mode div.text_cell.unrendered {
  background-color: #ffffff;
  border-radius: 0px;
 }
-div.cell.text_cell.selected:before {
- background: #f2f2f2;
- border: 2px solid #f2f2f2;
- border-top-left-radius: 2px;
- border-bottom-left-radius: 2px;
- position: absolute;
- display: block;
- top: 0px;
- left: 0px;
- width: 5px;
- height: 100%;
-}
-.edit_mode div.cell.text_cell.selected:before {
- background: #f2f2f2;
- border: 2px solid #f2f2f2;
- border-top-left-radius: 2px;
- border-bottom-left-radius: 2px;
- position: absolute;
- display: block;
- top: 0px;
- left: 0px;
- width: 5px;
- height: 100%;
-}
 div.cell.text_cell .prompt {
  border-right: 0;
 }
@@ -13564,8 +13503,8 @@ div.cell.text_cell.rendered .prompt {
  font-weight: normal;
  color: #828892 !important;
  text-align: right !important;
- min-width: 12.5ex !important;
- width: 12.5ex !important;
+ min-width: 13.5ex !important;
+ width: 13.5ex !important;
  background-color: #ffffff;
  border-right: 2px solid transparent;
  border-left: 5px solid #ffffff;
@@ -13576,8 +13515,8 @@ div.cell.text_cell.unrendered .prompt {
  font-weight: normal;
  color: #828892 !important;
  text-align: right !important;
- min-width: 12.5ex !important;
- width: 12.5ex !important;
+ min-width: 13.5ex !important;
+ width: 13.5ex !important;
  border-right: 2px solid transparent;
  border-left: 5px solid #ffffff;
 }
@@ -13713,36 +13652,39 @@ div.rendered_html h5 {
  font-size: 200%;
  text-align: center;
  font-style: normal;
- font-weight: lighter;
+ font-weight: normal;
 }
 .rendered_html h2,
 .text_cell_render h2 {
- text-align: left;
+ color: #126dce;
  font-size: 170%;
- color: #3f3d46;
+ text-align: center;
  font-style: normal;
- font-weight: lighter;
+ font-weight: normal;
 }
 .rendered_html h3,
 .text_cell_render h3 {
+ color: #126dce;
  font-size: 140%;
- color: #3f3d46;
+ text-align: center;
  font-style: normal;
- font-weight: lighter;
+ font-weight: normal;
 }
 .rendered_html h4,
 .text_cell_render h4 {
+ color: #126dce;
  font-size: 110%;
- color: #3f3d46;
+ text-align: center;
  font-style: normal;
- font-weight: lighter;
+ font-weight: normal;
 }
 .rendered_html h5,
 .text_cell_render h5 {
+ color: #126dce;
  font-size: 100%;
- color: #2f2f2f;
+ text-align: center;
  font-style: normal;
- font-weight: lighter;
+ font-weight: normal;
 }
 hr {
  margin-top: 8px;
@@ -13928,7 +13870,7 @@ div.cell.text_cell a.anchor-link:link {
 }
 div.cell.text_cell a.anchor-link:link:hover {
  font-size: inherit;
- color: #828892;
+ color: #de6d25;
 }
 .navbar-text {
  margin-top: 4px;
@@ -14043,13 +13985,13 @@ span.rendered_html code {
  padding-right: 0px;
 }
 .nbext-filter-menu {
- max-height: 50vh;
+ max-height: 55vh !important;
  overflow-y: auto;
  outline: none;
- border: 2px solid #dedede;
+ border: none;
 }
 .nbext-filter-menu:hover {
- border: 2px solid #dedede;
+ border: none;
 }
 .alert-warning {
  background-color: #f4f4f4;
@@ -14212,6 +14154,40 @@ div.collapsible_headings_toggle .fa-caret-right:before {
  -o-transform: inherit !important;
  transform: inherit !important;
  padding-right: 0px !important;
+}
+#toc-wrapper {
+ z-index: 90;
+ position: fixed !important;
+ display: flex;
+ flex-direction: column;
+ overflow: hidden;
+ padding: 10px;
+ border-style: solid;
+ border-width: thin;
+ border-right-width: medium !important;
+ background-color: #ffffff !important;
+}
+#toc-wrapper.ui-draggable.ui-resizable.sidebar-wrapper {
+ border-color: rgba(180,180,180,.14) !important;
+}
+#toc a,
+#navigate_menu a,
+.toc {
+ color: #303030 !important;
+ font-size: 11pt !important;
+}
+#toc li > span:hover {
+ background-color: #d4d4d4 !important;
+}
+#toc a:hover,
+#navigate_menu a:hover,
+.toc {
+ color: #1c1c1c !important;
+ font-size: 11pt !important;
+}
+#toc-wrapper .toc-item-num {
+ color: #ff7823 !important;
+ font-size: 11pt !important;
 }
 input.raw_input {
  font-family: monospace, monospace;
@@ -14388,6 +14364,15 @@ body > div.modal.cmd-palette.in > div {
  background-color: #009e07;
  border-color: #009e07;
  border-radius: 0px;
+}
+.jupyter-dashboard-menu-item.selected::before {
+ font-family: 'FontAwesome' !important;
+ content: '\f00c' !important;
+ position: absolute !important;
+ color: #ff7823 !important;
+ left: 0px !important;
+ top: 13px !important;
+ font-size: 12px !important;
 }
 .shortcut_key,
 span.shortcut_key {
@@ -14915,9 +14900,7 @@ body {
 div#notebook {
   overflow: visible;
   border-top: none;
-}
-
-@media print {
+}@media print {
   div.cell {
     display: block;
     page-break-inside: avoid;
@@ -14938,7 +14921,7 @@ div#notebook {
 
 <!-- Loading mathjax macro -->
 <!-- Load mathjax -->
-    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
     <!-- MathJax configuration -->
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -14994,8 +14977,7 @@ p {font-size:14px;}
   <div tabindex="-1" id="notebook" class="border-box-sizing">
     <div class="container" id="notebook-container">
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15046,15 +15028,17 @@ p {font-size:14px;}
 
 
 <div class="output_area">
+
 <div class="prompt"></div>
 
 
 
 
-<div id="094ff23b-afb2-4c91-8630-f226ab58e02c"></div>
+
+<div id="0d226653-150a-4fff-8b29-3cc784f2180e"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#094ff23b-afb2-4c91-8630-f226ab58e02c');
+var element = $('#0d226653-150a-4fff-8b29-3cc784f2180e');
 
 (function(root) {
   function now() {
@@ -15591,7 +15575,9 @@ var element = $('#094ff23b-afb2-4c91-8630-f226ab58e02c');
 </div>
 
 <div class="output_area">
+
 <div class="prompt"></div>
+
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -16139,7 +16125,9 @@ h.sample_counts()
 
 
 <div class="output_area">
+
 <div class="prompt output_prompt">Out[6]:</div>
+
 
 
 <div class="output_html rendered_html output_subarea output_execute_result">
@@ -16184,8 +16172,7 @@ h.sample_counts()
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -16212,14 +16199,22 @@ h.sample_counts()
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Differential-Expression-Gene-Concordance-(PearsonR)">Differential Expression Gene Concordance (PearsonR)<a class="anchor-link" href="#Differential-Expression-Gene-Concordance-(PearsonR)">&#182;</a></h1>
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input_hidden">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="o">%%</span><span class="k">opts</span> HeatMap [width=450 height=400]
-(de_gtex + de_tcga).relabel(&#39;Differential Expression Gene Concordance (PearsonR)&#39;)
+de_gtex + de_tcga
 </pre></div>
 
 </div>
@@ -16233,21 +16228,23 @@ h.sample_counts()
 
 
 <div class="output_area">
-<div class="prompt output_prompt">Out[9]:</div>
+
+<div class="prompt output_prompt">Out[14]:</div>
+
 
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div style='display: table; margin: 0 auto;'>
 
 <div class="bk-root">
-    <div class="bk-plotdiv" id="0791cd64-68f2-4eb1-b2b6-fe1470bb0285"></div>
+    <div class="bk-plotdiv" id="9d6753dc-6020-4c68-8c91-1195baee2100"></div>
 </div>
 <script type="text/javascript">
   (function(root) {
   function embed_document(root) {
     
-  var docs_json = {"b42e0aac-ebff-4a90-80f8-f95a107e0db8":{"roots":{"references":[{"attributes":{},"id":"d631a792-a016-480a-857c-642549745174","type":"CategoricalTickFormatter"},{"attributes":{"source":{"id":"0bfec381-0324-4141-9f1c-c2f7a9b703bb","type":"ColumnDataSource"}},"id":"6267ec21-6ac7-442b-bb68-04e1db73cdc7","type":"CDSView"},{"attributes":{"dimension":1,"grid_line_color":{"value":null},"plot":{"id":"d56f329d-e267-431f-a996-b7e0779fe0b7","subtype":"Figure","type":"Plot"},"ticker":{"id":"df73defa-9fcd-4377-bbde-19a3de04df3b","type":"CategoricalTicker"}},"id":"1b4b2ddf-e4ef-43a6-9ffe-5f70cc9825db","type":"Grid"},{"attributes":{},"id":"444cc0c3-8081-45db-aa2a-a7af9ba5e918","type":"CategoricalTicker"},{"attributes":{},"id":"1da01340-e6fe-4e24-8745-85716e6bd731","type":"CategoricalTicker"},{"attributes":{"overlay":{"id":"d6eca2e1-6ffa-46bb-8c71-8d69a71bef12","type":"BoxAnnotation"}},"id":"77575589-02a9-4197-bc73-8c7a11f2a817","type":"BoxZoomTool"},{"attributes":{"plot":null,"text":"TCGA","text_color":{"value":"black"},"text_font_size":{"value":"12pt"}},"id":"29cada95-24cd-4ddc-a08c-8d14a9ff35da","type":"Title"},{"attributes":{"children":[{"id":"2f49ca3f-b2c1-40d3-80fe-3ef1fc7105d1","type":"ToolbarBox"},{"id":"2113078c-d1ca-4d86-97fc-94827ab2b04c","type":"Column"}]},"id":"ad3f0f00-159a-4bdb-b72f-596efa2d7efe","type":"Column"},{"attributes":{"callback":null,"column_names":["Tissue_hyphen_minus_Tumor_over_Normal","zvalues","PearsonR","Tissue_hyphen_minus_Normal"],"data":{"PearsonR":["1","0.74","0.6","0.48","0.7","0.74","0.64","0.73","0.76","0.82","1","0.66","0.5","0.73","0.82","0.77","0.77","0.87","0.57","0.54","1","0.49","0.5","0.63","0.6","0.6","0.5","0.37","0.36","0.4","1","0.36","0.39","0.38","0.38","0.34","0.69","0.63","0.51","0.41","1","0.62","0.55","0.64","0.64","0.71","0.7","0.57","0.4","0.63","1","0.61","0.65","0.71","0.66","0.69","0.59","0.47","0.59","0.7","1","0.66","0.62","0.73","0.68","0.61","0.49","0.63","0.7","0.63","1","0.68","0.79","0.83","0.56","0.44","0.66","0.75","0.62","0.72","1"],"Tissue_hyphen_minus_Normal":["Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA","Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA","Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA","Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA","Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA","Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA","Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA","Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA","Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA"],"Tissue_hyphen_minus_Tumor_over_Normal":["Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Colon","Colon","Colon","Colon","Colon","Colon","Colon","Colon","Colon","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus"],"zvalues":{"__ndarray__":"AAAAAAAA8D+uR+F6FK7nPzMzMzMzM+M/uB6F61G43j9mZmZmZmbmP65H4XoUruc/exSuR+F65D9cj8L1KFznP1K4HoXrUeg/PQrXo3A96j8AAAAAAADwPx+F61G4HuU/AAAAAAAA4D9cj8L1KFznPz0K16NwPeo/pHA9Ctej6D+kcD0K16PoP9ejcD0K1+s/PQrXo3A94j9I4XoUrkfhPwAAAAAAAPA/XI/C9Shc3z8AAAAAAADgPylcj8L1KOQ/MzMzMzMz4z8zMzMzMzPjPwAAAAAAAOA/rkfhehSu1z8K16NwPQrXP5qZmZmZmdk/AAAAAAAA8D8K16NwPQrXP/YoXI/C9dg/UrgehetR2D9SuB6F61HYP8P1KFyPwtU/FK5H4XoU5j8pXI/C9SjkP1K4HoXrUeA/PQrXo3A92j8AAAAAAADwP9ejcD0K1+M/mpmZmZmZ4T97FK5H4XrkP3sUrkfheuQ/uB6F61G45j9mZmZmZmbmPz0K16NwPeI/mpmZmZmZ2T8pXI/C9SjkPwAAAAAAAPA/hetRuB6F4z/NzMzMzMzkP7gehetRuOY/H4XrUbge5T8UrkfhehTmP+F6FK5H4eI/FK5H4XoU3j/hehSuR+HiP2ZmZmZmZuY/AAAAAAAA8D8fhetRuB7lP9ejcD0K1+M/XI/C9Shc5z/D9Shcj8LlP4XrUbgeheM/XI/C9Shc3z8pXI/C9SjkP2ZmZmZmZuY/KVyPwvUo5D8AAAAAAADwP8P1KFyPwuU/SOF6FK5H6T+PwvUoXI/qP+xRuB6F6+E/KVyPwvUo3D8fhetRuB7lPwAAAAAAAOg/16NwPQrX4z8K16NwPQrnPwAAAAAAAPA/","dtype":"float64","shape":[81]}}},"id":"0bfec381-0324-4141-9f1c-c2f7a9b703bb","type":"ColumnDataSource"},{"attributes":{"data_source":{"id":"0bfec381-0324-4141-9f1c-c2f7a9b703bb","type":"ColumnDataSource"},"glyph":{"id":"21d9bf64-111c-42ed-83e2-02a729ac6914","type":"Rect"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"3949cd24-438d-4ea2-8049-9fa091b3cc12","type":"Rect"},"selection_glyph":null,"view":{"id":"6267ec21-6ac7-442b-bb68-04e1db73cdc7","type":"CDSView"}},"id":"17b63a6f-32b5-46a0-a242-749f9a977e0e","type":"GlyphRenderer"},{"attributes":{"fill_alpha":{"value":0.1},"fill_color":{"field":"zvalues","transform":{"id":"821ff6cd-07ab-4ab3-be57-1cc512d028d3","type":"LinearColorMapper"}},"height":{"units":"data","value":1},"line_alpha":{"value":0},"line_color":{"value":"#1f77b4"},"width":{"units":"data","value":1},"x":{"field":"Tissue_hyphen_minus_Tumor_over_Normal"},"y":{"field":"Tissue_hyphen_minus_Normal"}},"id":"3949cd24-438d-4ea2-8049-9fa091b3cc12","type":"Rect"},{"attributes":{},"id":"138b695e-39ab-4d2d-b7b2-dbe572db0946","type":"ResetTool"},{"attributes":{"below":[{"id":"8a826225-6b65-4aa3-8f53-c71bf0753f7a","type":"CategoricalAxis"}],"left":[{"id":"c6eb0246-b204-41fe-9fb9-eef1fa14ae56","type":"CategoricalAxis"}],"min_border_bottom":10,"min_border_left":10,"min_border_right":10,"min_border_top":10,"plot_height":400,"plot_width":450,"renderers":[{"id":"8a826225-6b65-4aa3-8f53-c71bf0753f7a","type":"CategoricalAxis"},{"id":"5d587e98-77d5-4f99-a762-58d3eaaf21fc","type":"Grid"},{"id":"c6eb0246-b204-41fe-9fb9-eef1fa14ae56","type":"CategoricalAxis"},{"id":"1b4b2ddf-e4ef-43a6-9ffe-5f70cc9825db","type":"Grid"},{"id":"d6eca2e1-6ffa-46bb-8c71-8d69a71bef12","type":"BoxAnnotation"},{"id":"17b63a6f-32b5-46a0-a242-749f9a977e0e","type":"GlyphRenderer"},{"id":"fdd41a22-8829-4238-a30a-773c8da60db8","type":"ColorBar"}],"right":[{"id":"fdd41a22-8829-4238-a30a-773c8da60db8","type":"ColorBar"}],"title":{"id":"29cada95-24cd-4ddc-a08c-8d14a9ff35da","type":"Title"},"toolbar":{"id":"d42f9727-84cb-495f-a43e-c4c8cd942a27","type":"Toolbar"},"toolbar_location":null,"x_range":{"id":"450dbca3-ad78-483a-9836-36eb9f48677c","type":"FactorRange"},"x_scale":{"id":"407deb9a-311a-47cd-a2a9-96a90cb2b9dc","type":"CategoricalScale"},"y_range":{"id":"ba3d41c4-a9f4-43c9-bdff-086da90e4a3a","type":"FactorRange"},"y_scale":{"id":"d25d118e-5031-4b5a-b3d6-42d3e0312dde","type":"CategoricalScale"}},"id":"d56f329d-e267-431f-a996-b7e0779fe0b7","subtype":"Figure","type":"Plot"},{"attributes":{},"id":"2bb104b2-223b-42f4-b11b-f2e5f64f7f3f","type":"BasicTicker"},{"attributes":{"plot":null,"text":"GTEx","text_color":{"value":"black"},"text_font_size":{"value":"12pt"}},"id":"1eb559b5-91c9-449c-af3f-cd70116a537b","type":"Title"},{"attributes":{},"id":"f03458e4-426e-4265-b0ee-2fac7a6a8fee","type":"BasicTicker"},{"attributes":{"axis_label":"Tissue-Normal","bounds":"auto","formatter":{"id":"39ee0b98-40f5-4fba-bc2a-1521bbd10402","type":"CategoricalTickFormatter"},"major_label_orientation":"horizontal","plot":{"id":"d56f329d-e267-431f-a996-b7e0779fe0b7","subtype":"Figure","type":"Plot"},"ticker":{"id":"df73defa-9fcd-4377-bbde-19a3de04df3b","type":"CategoricalTicker"}},"id":"c6eb0246-b204-41fe-9fb9-eef1fa14ae56","type":"CategoricalAxis"},{"attributes":{},"id":"39ee0b98-40f5-4fba-bc2a-1521bbd10402","type":"CategoricalTickFormatter"},{"attributes":{"axis_label":"Tissue-Tumor/Normal","bounds":"auto","formatter":{"id":"d631a792-a016-480a-857c-642549745174","type":"CategoricalTickFormatter"},"major_label_orientation":0.7853981633974483,"plot":{"id":"6c68b0eb-6eea-44e7-b1ae-fe3c9332aed0","subtype":"Figure","type":"Plot"},"ticker":{"id":"ad4f478a-581b-4696-b282-129be851fd60","type":"CategoricalTicker"}},"id":"04a85758-148e-4b17-9251-a8bb63d443c1","type":"CategoricalAxis"},{"attributes":{"callback":null,"column_names":["Tissue_hyphen_minus_Tumor_over_Normal","zvalues","PearsonR","Tissue_hyphen_minus_Normal"],"data":{"PearsonR":["0.73","0.27","0.4","0.34","0.4","0.43","0.41","0.42","0.53","0.65","0.51","0.53","0.37","0.53","0.65","0.63","0.6","0.71","0.38","0.31","0.76","0.33","0.3","0.43","0.39","0.41","0.4","0.21","0.12","0.21","0.65","0.18","0.19","0.18","0.19","0.16","0.41","0.19","0.32","0.27","0.66","0.32","0.32","0.35","0.41","0.39","0.18","0.28","0.2","0.3","0.44","0.32","0.3","0.44","0.45","0.26","0.42","0.32","0.38","0.49","0.63","0.48","0.47","0.45","0.28","0.4","0.32","0.3","0.4","0.38","0.7","0.44","0.59","0.32","0.44","0.33","0.42","0.53","0.45","0.52","0.78"],"Tissue_hyphen_minus_Normal":["Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx","Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx","Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx","Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx","Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx","Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx","Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx","Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx","Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx"],"Tissue_hyphen_minus_Tumor_over_Normal":["Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Colon","Colon","Colon","Colon","Colon","Colon","Colon","Colon","Colon","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus"],"zvalues":{"__ndarray__":"XI/C9Shc5z9I4XoUrkfRP5qZmZmZmdk/w/UoXI/C1T+amZmZmZnZP4XrUbgehds/PQrXo3A92j/hehSuR+HaP/YoXI/C9eA/zczMzMzM5D9SuB6F61HgP/YoXI/C9eA/rkfhehSu1z/2KFyPwvXgP83MzMzMzOQ/KVyPwvUo5D8zMzMzMzPjP7gehetRuOY/UrgehetR2D/Xo3A9CtfTP1K4HoXrUeg/H4XrUbge1T8zMzMzMzPTP4XrUbgehds/9ihcj8L12D89CtejcD3aP5qZmZmZmdk/4XoUrkfhyj+4HoXrUbi+P+F6FK5H4co/zczMzMzM5D8K16NwPQrHP1K4HoXrUcg/CtejcD0Kxz9SuB6F61HIP3sUrkfhesQ/PQrXo3A92j9SuB6F61HIP3sUrkfhetQ/SOF6FK5H0T8fhetRuB7lP3sUrkfhetQ/exSuR+F61D9mZmZmZmbWPz0K16NwPdo/9ihcj8L12D8K16NwPQrHP+xRuB6F69E/mpmZmZmZyT8zMzMzMzPTPylcj8L1KNw/exSuR+F61D8zMzMzMzPTPylcj8L1KNw/zczMzMzM3D+kcD0K16PQP+F6FK5H4do/exSuR+F61D9SuB6F61HYP1yPwvUoXN8/KVyPwvUo5D+4HoXrUbjePxSuR+F6FN4/zczMzMzM3D/sUbgehevRP5qZmZmZmdk/exSuR+F61D8zMzMzMzPTP5qZmZmZmdk/UrgehetR2D9mZmZmZmbmPylcj8L1KNw/4XoUrkfh4j97FK5H4XrUPylcj8L1KNw/H4XrUbge1T/hehSuR+HaP/YoXI/C9eA/zczMzMzM3D+kcD0K16PgP/YoXI/C9eg/","dtype":"float64","shape":[81]}}},"id":"15b27e5e-afb8-4c77-a629-8af1e02f8264","type":"ColumnDataSource"},{"attributes":{},"id":"484b4e99-3078-47d8-a3f6-d72ac24e549d","type":"WheelZoomTool"},{"attributes":{"text":"<span style='font-size: 16pt'><b>Differential Expression Gene Concordance (PearsonR)</b></font>"},"id":"1cad39bb-76f1-4dd2-ad95-f05a5332c009","type":"Div"},{"attributes":{"tools":[{"id":"c3ed1484-31cf-4cb8-8ea3-dc4558a3b7ed","type":"HoverTool"},{"id":"36cf1f84-55f7-459e-b6e7-4d34103fd45e","type":"SaveTool"},{"id":"91921571-7e30-422b-94e0-7c06ae3641b2","type":"PanTool"},{"id":"484b4e99-3078-47d8-a3f6-d72ac24e549d","type":"WheelZoomTool"},{"id":"424e2a8c-09b9-460f-bcf3-cd574d63844f","type":"BoxZoomTool"},{"id":"a017795a-28a6-4ecc-849b-2cf13221b86f","type":"ResetTool"},{"id":"4c9cb4fa-fc6f-4f7a-92d1-4593e27577e1","type":"HoverTool"},{"id":"f08489ca-6510-49d3-9d57-c80a882ff1a6","type":"SaveTool"},{"id":"2900a6fb-935c-4859-b1a1-8931bdfbe453","type":"PanTool"},{"id":"185e986c-754d-4168-9877-8cb94e926ec9","type":"WheelZoomTool"},{"id":"77575589-02a9-4197-bc73-8c7a11f2a817","type":"BoxZoomTool"},{"id":"138b695e-39ab-4d2d-b7b2-dbe572db0946","type":"ResetTool"}]},"id":"191c19b8-2e27-4e61-a31e-66a97ba51738","type":"ProxyToolbar"},{"attributes":{},"id":"2900a6fb-935c-4859-b1a1-8931bdfbe453","type":"PanTool"},{"attributes":{"dimension":1,"grid_line_color":{"value":null},"plot":{"id":"6c68b0eb-6eea-44e7-b1ae-fe3c9332aed0","subtype":"Figure","type":"Plot"},"ticker":{"id":"444cc0c3-8081-45db-aa2a-a7af9ba5e918","type":"CategoricalTicker"}},"id":"9bd54949-09ab-4b36-a8b1-df3e01a83ab1","type":"Grid"},{"attributes":{},"id":"c66bc299-8618-4209-9835-765e15e97eaf","type":"CategoricalScale"},{"attributes":{"grid_line_color":{"value":null},"plot":{"id":"6c68b0eb-6eea-44e7-b1ae-fe3c9332aed0","subtype":"Figure","type":"Plot"},"ticker":{"id":"ad4f478a-581b-4696-b282-129be851fd60","type":"CategoricalTicker"}},"id":"8c9ea0a9-7f73-493a-9320-730b80637d01","type":"Grid"},{"attributes":{"callback":null,"factors":["Breast","Colon","Kidney","Liver","Lung","Prostate","Stomach","Thyroid","Uterus"]},"id":"450dbca3-ad78-483a-9836-36eb9f48677c","type":"FactorRange"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_scroll":"auto","active_tap":"auto","tools":[{"id":"c3ed1484-31cf-4cb8-8ea3-dc4558a3b7ed","type":"HoverTool"},{"id":"36cf1f84-55f7-459e-b6e7-4d34103fd45e","type":"SaveTool"},{"id":"91921571-7e30-422b-94e0-7c06ae3641b2","type":"PanTool"},{"id":"484b4e99-3078-47d8-a3f6-d72ac24e549d","type":"WheelZoomTool"},{"id":"424e2a8c-09b9-460f-bcf3-cd574d63844f","type":"BoxZoomTool"},{"id":"a017795a-28a6-4ecc-849b-2cf13221b86f","type":"ResetTool"}]},"id":"37b26bfb-7023-4a35-a78b-54636f52b391","type":"Toolbar"},{"attributes":{},"id":"91921571-7e30-422b-94e0-7c06ae3641b2","type":"PanTool"},{"attributes":{},"id":"f08489ca-6510-49d3-9d57-c80a882ff1a6","type":"SaveTool"},{"attributes":{"fill_color":{"field":"zvalues","transform":{"id":"fcbb3c66-b25c-4346-a91c-2b36e590437d","type":"LinearColorMapper"}},"height":{"units":"data","value":1},"line_alpha":{"value":0},"line_color":{"value":"#1f77b4"},"width":{"units":"data","value":1},"x":{"field":"Tissue_hyphen_minus_Tumor_over_Normal"},"y":{"field":"Tissue_hyphen_minus_Normal"}},"id":"b0cc7b27-c8aa-4373-a451-7912251a1769","type":"Rect"},{"attributes":{},"id":"df73defa-9fcd-4377-bbde-19a3de04df3b","type":"CategoricalTicker"},{"attributes":{},"id":"d25d118e-5031-4b5a-b3d6-42d3e0312dde","type":"CategoricalScale"},{"attributes":{"axis_label":"Tissue-Tumor/Normal","bounds":"auto","formatter":{"id":"d949e49f-c2cb-48b3-8894-063e5ef3b822","type":"CategoricalTickFormatter"},"major_label_orientation":0.7853981633974483,"plot":{"id":"d56f329d-e267-431f-a996-b7e0779fe0b7","subtype":"Figure","type":"Plot"},"ticker":{"id":"1da01340-e6fe-4e24-8745-85716e6bd731","type":"CategoricalTicker"}},"id":"8a826225-6b65-4aa3-8f53-c71bf0753f7a","type":"CategoricalAxis"},{"attributes":{"grid_line_color":{"value":null},"plot":{"id":"d56f329d-e267-431f-a996-b7e0779fe0b7","subtype":"Figure","type":"Plot"},"ticker":{"id":"1da01340-e6fe-4e24-8745-85716e6bd731","type":"CategoricalTicker"}},"id":"5d587e98-77d5-4f99-a762-58d3eaaf21fc","type":"Grid"},{"attributes":{"fill_color":{"field":"zvalues","transform":{"id":"821ff6cd-07ab-4ab3-be57-1cc512d028d3","type":"LinearColorMapper"}},"height":{"units":"data","value":1},"line_alpha":{"value":0},"line_color":{"value":"#1f77b4"},"width":{"units":"data","value":1},"x":{"field":"Tissue_hyphen_minus_Tumor_over_Normal"},"y":{"field":"Tissue_hyphen_minus_Normal"}},"id":"21d9bf64-111c-42ed-83e2-02a729ac6914","type":"Rect"},{"attributes":{"callback":null,"renderers":[{"id":"11859764-bdbf-4f52-ad40-600b615008be","type":"GlyphRenderer"}],"tooltips":[["Tissue-Tumor/Normal","@{Tissue_hyphen_minus_Tumor_over_Normal}"],["Tissue-Normal","@{Tissue_hyphen_minus_Normal}"],["PearsonR","@{PearsonR}"]]},"id":"c3ed1484-31cf-4cb8-8ea3-dc4558a3b7ed","type":"HoverTool"},{"attributes":{"data_source":{"id":"15b27e5e-afb8-4c77-a629-8af1e02f8264","type":"ColumnDataSource"},"glyph":{"id":"b0cc7b27-c8aa-4373-a451-7912251a1769","type":"Rect"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"1b2f5163-6dfb-4b71-b113-a69f02b053b5","type":"Rect"},"selection_glyph":null,"view":{"id":"612ea81c-b737-405f-bc85-474beb1fdf9c","type":"CDSView"}},"id":"11859764-bdbf-4f52-ad40-600b615008be","type":"GlyphRenderer"},{"attributes":{"source":{"id":"15b27e5e-afb8-4c77-a629-8af1e02f8264","type":"ColumnDataSource"}},"id":"612ea81c-b737-405f-bc85-474beb1fdf9c","type":"CDSView"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_scroll":"auto","active_tap":"auto","tools":[{"id":"4c9cb4fa-fc6f-4f7a-92d1-4593e27577e1","type":"HoverTool"},{"id":"f08489ca-6510-49d3-9d57-c80a882ff1a6","type":"SaveTool"},{"id":"2900a6fb-935c-4859-b1a1-8931bdfbe453","type":"PanTool"},{"id":"185e986c-754d-4168-9877-8cb94e926ec9","type":"WheelZoomTool"},{"id":"77575589-02a9-4197-bc73-8c7a11f2a817","type":"BoxZoomTool"},{"id":"138b695e-39ab-4d2d-b7b2-dbe572db0946","type":"ResetTool"}]},"id":"d42f9727-84cb-495f-a43e-c4c8cd942a27","type":"Toolbar"},{"attributes":{"overlay":{"id":"dfaee224-4f49-46dc-84ce-08a940eea78e","type":"BoxAnnotation"}},"id":"424e2a8c-09b9-460f-bcf3-cd574d63844f","type":"BoxZoomTool"},{"attributes":{"below":[{"id":"04a85758-148e-4b17-9251-a8bb63d443c1","type":"CategoricalAxis"}],"left":[{"id":"847c244e-b035-4d8e-9794-a5caf3696376","type":"CategoricalAxis"}],"min_border_bottom":10,"min_border_left":10,"min_border_right":10,"min_border_top":10,"plot_height":400,"plot_width":450,"renderers":[{"id":"04a85758-148e-4b17-9251-a8bb63d443c1","type":"CategoricalAxis"},{"id":"8c9ea0a9-7f73-493a-9320-730b80637d01","type":"Grid"},{"id":"847c244e-b035-4d8e-9794-a5caf3696376","type":"CategoricalAxis"},{"id":"9bd54949-09ab-4b36-a8b1-df3e01a83ab1","type":"Grid"},{"id":"dfaee224-4f49-46dc-84ce-08a940eea78e","type":"BoxAnnotation"},{"id":"11859764-bdbf-4f52-ad40-600b615008be","type":"GlyphRenderer"},{"id":"53ff7fea-b921-4a97-9f44-26a212dd1885","type":"ColorBar"}],"right":[{"id":"53ff7fea-b921-4a97-9f44-26a212dd1885","type":"ColorBar"}],"title":{"id":"1eb559b5-91c9-449c-af3f-cd70116a537b","type":"Title"},"toolbar":{"id":"37b26bfb-7023-4a35-a78b-54636f52b391","type":"Toolbar"},"toolbar_location":null,"x_range":{"id":"440da4fe-06ad-4bcf-bddc-053bab6a35d7","type":"FactorRange"},"x_scale":{"id":"8005e73b-7122-44e9-91d4-7e8157158d5c","type":"CategoricalScale"},"y_range":{"id":"e04fdf6b-4746-4464-a8c9-344f4344e26d","type":"FactorRange"},"y_scale":{"id":"c66bc299-8618-4209-9835-765e15e97eaf","type":"CategoricalScale"}},"id":"6c68b0eb-6eea-44e7-b1ae-fe3c9332aed0","subtype":"Figure","type":"Plot"},{"attributes":{"bar_line_color":{"value":"black"},"color_mapper":{"id":"821ff6cd-07ab-4ab3-be57-1cc512d028d3","type":"LinearColorMapper"},"formatter":{"id":"e550c0f0-d0d5-45e8-9330-ac945c10d8bf","type":"BasicTickFormatter"},"label_standoff":8,"location":[0,0],"major_tick_line_color":{"value":"black"},"plot":{"id":"d56f329d-e267-431f-a996-b7e0779fe0b7","subtype":"Figure","type":"Plot"},"ticker":{"id":"2bb104b2-223b-42f4-b11b-f2e5f64f7f3f","type":"BasicTicker"}},"id":"fdd41a22-8829-4238-a30a-773c8da60db8","type":"ColorBar"},{"attributes":{"children":[{"id":"f2ab5135-cbe8-400f-88cf-e5f1433b902b","type":"WidgetBox"},{"id":"ad3f0f00-159a-4bdb-b72f-596efa2d7efe","type":"Column"}]},"id":"c0f29a24-c1b0-4daf-a093-dc25840bb2c3","type":"Column"},{"attributes":{"children":[{"id":"6c68b0eb-6eea-44e7-b1ae-fe3c9332aed0","subtype":"Figure","type":"Plot"},{"id":"d56f329d-e267-431f-a996-b7e0779fe0b7","subtype":"Figure","type":"Plot"}]},"id":"e257ea90-7e7e-4c48-809b-4efe025f43a1","type":"Row"},{"attributes":{"children":[{"id":"e257ea90-7e7e-4c48-809b-4efe025f43a1","type":"Row"}]},"id":"2113078c-d1ca-4d86-97fc-94827ab2b04c","type":"Column"},{"attributes":{"callback":null,"factors":["Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA"]},"id":"ba3d41c4-a9f4-43c9-bdff-086da90e4a3a","type":"FactorRange"},{"attributes":{"high":0.78,"low":0.12,"nan_color":"white","palette":["#313695","#313896","#323a97","#333d98","#343f99","#34429b","#35449c","#36479d","#37499e","#384c9f","#384ea1","#3951a2","#3a53a3","#3b56a4","#3b58a6","#3c5ba7","#3d5da8","#3e60a9","#3f62aa","#3f64ac","#4067ad","#4169ae","#426caf","#436eb0","#4371b2","#4473b3","#4576b4","#4778b5","#497ab6","#4b7cb7","#4d7eb9","#4f81ba","#5083bb","#5285bc","#5487bd","#5689be","#588cbf","#5a8ec1","#5c90c2","#5d92c3","#5f94c4","#6197c5","#6399c6","#659bc7","#679dc9","#689fca","#6aa2cb","#6ca4cc","#6ea6cd","#70a8ce","#72aacf","#74add1","#76aed1","#78b0d2","#7ab2d3","#7cb3d4","#7eb5d5","#80b7d6","#83b9d7","#85bad8","#87bcd9","#89beda","#8bbfdb","#8dc1dc","#90c3dd","#92c5de","#94c6df","#96c8e0","#98cae1","#9acce1","#9ccde2","#9fcfe3","#a1d1e4","#a3d2e5","#a5d4e6","#a7d6e7","#a9d8e8","#acd9e9","#aedae9","#b0dbea","#b2dceb","#b4ddeb","#b6deec","#b8dfec","#bae0ed","#bce1ed","#bee2ee","#c0e3ef","#c2e4ef","#c4e5f0","#c7e6f0","#c9e7f1","#cbe8f2","#cde9f2","#cfeaf3","#d1ebf3","#d3ecf4","#d5edf5","#d7eef5","#d9eff6","#dbf0f6","#ddf1f7","#e0f3f8","#e1f3f5","#e2f3f3","#e3f4f1","#e4f4ef","#e6f5ec","#e7f5ea","#e8f6e8","#e9f6e6","#eaf7e3","#ecf7e1","#edf8df","#eef8dd","#eff9da","#f1f9d8","#f2fad6","#f3fad4","#f4fbd2","#f5fbcf","#f7fbcd","#f8fccb","#f9fcc9","#fafdc6","#fbfdc4","#fdfec2","#fefec0","#fefebe","#fefdbc","#fefbba","#fefab8","#fef9b6","#fef8b4","#fef7b3","#fef5b1","#fef4af","#fef3ad","#fef2ab","#fef1a9","#feefa7","#feeea6","#feeda4","#feeca2","#feeaa0","#fee99e","#fee89c","#fee79b","#fee699","#fee497","#fee395","#fee293","#fee191","#fee090","#fdde8e","#fddc8c","#fdda8a","#fdd888","#fdd686","#fdd484","#fdd283","#fdd081","#fdce7f","#fdcc7d","#fdca7b","#fdc879","#fdc678","#fdc476","#fdc274","#fdc072","#fdbe70","#fdbc6e","#fdba6c","#fdb86b","#fdb669","#fdb467","#fdb265","#fdb063","#fdae61","#fcac60","#fcaa5f","#fca75e","#fba55c","#fba25b","#fb9f5a","#fa9d59","#fa9a58","#fa9857","#f99555","#f99354","#f89053","#f88e52","#f88b51","#f7894f","#f7864e","#f7834d","#f6814c","#f67e4b","#f67c4a","#f57948","#f57747","#f57446","#f47245","#f46f44","#f46d43","#f26a41","#f16840","#f0653f","#ef633e","#ee613d","#ed5e3c","#ec5c3b","#ea593a","#e95739","#e85538","#e75236","#e65035","#e54d34","#e44b33","#e24932","#e14631","#e04430","#df412f","#de3f2e","#dd3d2d","#dc3a2b","#da382a","#d93529","#d83328","#d73127","#d62f26","#d42d26","#d22b26","#d02926","#ce2726","#cc2526","#ca2326","#c82126","#c62026","#c41e26","#c21c26","#c01a26","#be1826","#bc1626","#ba1426","#b81226","#b61026","#b40f26","#b20d26","#b00b26","#ae0926","#ac0726","#aa0526","#a80326","#a60126","#a50026"]},"id":"fcbb3c66-b25c-4346-a91c-2b36e590437d","type":"LinearColorMapper"},{"attributes":{},"id":"36cf1f84-55f7-459e-b6e7-4d34103fd45e","type":"SaveTool"},{"attributes":{"bottom_units":"screen","fill_alpha":{"value":0.5},"fill_color":{"value":"lightgrey"},"left_units":"screen","level":"overlay","line_alpha":{"value":1.0},"line_color":{"value":"black"},"line_dash":[4,4],"line_width":{"value":2},"plot":null,"render_mode":"css","right_units":"screen","top_units":"screen"},"id":"dfaee224-4f49-46dc-84ce-08a940eea78e","type":"BoxAnnotation"},{"attributes":{},"id":"8005e73b-7122-44e9-91d4-7e8157158d5c","type":"CategoricalScale"},{"attributes":{"fill_alpha":{"value":0.1},"fill_color":{"field":"zvalues","transform":{"id":"fcbb3c66-b25c-4346-a91c-2b36e590437d","type":"LinearColorMapper"}},"height":{"units":"data","value":1},"line_alpha":{"value":0},"line_color":{"value":"#1f77b4"},"width":{"units":"data","value":1},"x":{"field":"Tissue_hyphen_minus_Tumor_over_Normal"},"y":{"field":"Tissue_hyphen_minus_Normal"}},"id":"1b2f5163-6dfb-4b71-b113-a69f02b053b5","type":"Rect"},{"attributes":{},"id":"d949e49f-c2cb-48b3-8894-063e5ef3b822","type":"CategoricalTickFormatter"},{"attributes":{},"id":"e550c0f0-d0d5-45e8-9330-ac945c10d8bf","type":"BasicTickFormatter"},{"attributes":{"bar_line_color":{"value":"black"},"color_mapper":{"id":"fcbb3c66-b25c-4346-a91c-2b36e590437d","type":"LinearColorMapper"},"formatter":{"id":"48d53dfa-2b93-48d6-b9d5-7ee286a371c8","type":"BasicTickFormatter"},"label_standoff":8,"location":[0,0],"major_tick_line_color":{"value":"black"},"plot":{"id":"6c68b0eb-6eea-44e7-b1ae-fe3c9332aed0","subtype":"Figure","type":"Plot"},"ticker":{"id":"f03458e4-426e-4265-b0ee-2fac7a6a8fee","type":"BasicTicker"}},"id":"53ff7fea-b921-4a97-9f44-26a212dd1885","type":"ColorBar"},{"attributes":{"children":[{"id":"1cad39bb-76f1-4dd2-ad95-f05a5332c009","type":"Div"}]},"id":"f2ab5135-cbe8-400f-88cf-e5f1433b902b","type":"WidgetBox"},{"attributes":{},"id":"3ee9ffdc-b58b-4a8d-b39d-18396b445fbf","type":"CategoricalTickFormatter"},{"attributes":{"callback":null,"factors":["Breast","Colon","Kidney","Liver","Lung","Prostate","Stomach","Thyroid","Uterus"]},"id":"440da4fe-06ad-4bcf-bddc-053bab6a35d7","type":"FactorRange"},{"attributes":{"callback":null,"renderers":[{"id":"17b63a6f-32b5-46a0-a242-749f9a977e0e","type":"GlyphRenderer"}],"tooltips":[["Tissue-Tumor/Normal","@{Tissue_hyphen_minus_Tumor_over_Normal}"],["Tissue-Normal","@{Tissue_hyphen_minus_Normal}"],["PearsonR","@{PearsonR}"]]},"id":"4c9cb4fa-fc6f-4f7a-92d1-4593e27577e1","type":"HoverTool"},{"attributes":{},"id":"a017795a-28a6-4ecc-849b-2cf13221b86f","type":"ResetTool"},{"attributes":{"axis_label":"Tissue-Normal","bounds":"auto","formatter":{"id":"3ee9ffdc-b58b-4a8d-b39d-18396b445fbf","type":"CategoricalTickFormatter"},"major_label_orientation":"horizontal","plot":{"id":"6c68b0eb-6eea-44e7-b1ae-fe3c9332aed0","subtype":"Figure","type":"Plot"},"ticker":{"id":"444cc0c3-8081-45db-aa2a-a7af9ba5e918","type":"CategoricalTicker"}},"id":"847c244e-b035-4d8e-9794-a5caf3696376","type":"CategoricalAxis"},{"attributes":{"callback":null,"factors":["Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx"]},"id":"e04fdf6b-4746-4464-a8c9-344f4344e26d","type":"FactorRange"},{"attributes":{},"id":"ad4f478a-581b-4696-b282-129be851fd60","type":"CategoricalTicker"},{"attributes":{},"id":"407deb9a-311a-47cd-a2a9-96a90cb2b9dc","type":"CategoricalScale"},{"attributes":{},"id":"48d53dfa-2b93-48d6-b9d5-7ee286a371c8","type":"BasicTickFormatter"},{"attributes":{"bottom_units":"screen","fill_alpha":{"value":0.5},"fill_color":{"value":"lightgrey"},"left_units":"screen","level":"overlay","line_alpha":{"value":1.0},"line_color":{"value":"black"},"line_dash":[4,4],"line_width":{"value":2},"plot":null,"render_mode":"css","right_units":"screen","top_units":"screen"},"id":"d6eca2e1-6ffa-46bb-8c71-8d69a71bef12","type":"BoxAnnotation"},{"attributes":{},"id":"185e986c-754d-4168-9877-8cb94e926ec9","type":"WheelZoomTool"},{"attributes":{"high":1.0,"low":0.34,"nan_color":"white","palette":["#313695","#313896","#323a97","#333d98","#343f99","#34429b","#35449c","#36479d","#37499e","#384c9f","#384ea1","#3951a2","#3a53a3","#3b56a4","#3b58a6","#3c5ba7","#3d5da8","#3e60a9","#3f62aa","#3f64ac","#4067ad","#4169ae","#426caf","#436eb0","#4371b2","#4473b3","#4576b4","#4778b5","#497ab6","#4b7cb7","#4d7eb9","#4f81ba","#5083bb","#5285bc","#5487bd","#5689be","#588cbf","#5a8ec1","#5c90c2","#5d92c3","#5f94c4","#6197c5","#6399c6","#659bc7","#679dc9","#689fca","#6aa2cb","#6ca4cc","#6ea6cd","#70a8ce","#72aacf","#74add1","#76aed1","#78b0d2","#7ab2d3","#7cb3d4","#7eb5d5","#80b7d6","#83b9d7","#85bad8","#87bcd9","#89beda","#8bbfdb","#8dc1dc","#90c3dd","#92c5de","#94c6df","#96c8e0","#98cae1","#9acce1","#9ccde2","#9fcfe3","#a1d1e4","#a3d2e5","#a5d4e6","#a7d6e7","#a9d8e8","#acd9e9","#aedae9","#b0dbea","#b2dceb","#b4ddeb","#b6deec","#b8dfec","#bae0ed","#bce1ed","#bee2ee","#c0e3ef","#c2e4ef","#c4e5f0","#c7e6f0","#c9e7f1","#cbe8f2","#cde9f2","#cfeaf3","#d1ebf3","#d3ecf4","#d5edf5","#d7eef5","#d9eff6","#dbf0f6","#ddf1f7","#e0f3f8","#e1f3f5","#e2f3f3","#e3f4f1","#e4f4ef","#e6f5ec","#e7f5ea","#e8f6e8","#e9f6e6","#eaf7e3","#ecf7e1","#edf8df","#eef8dd","#eff9da","#f1f9d8","#f2fad6","#f3fad4","#f4fbd2","#f5fbcf","#f7fbcd","#f8fccb","#f9fcc9","#fafdc6","#fbfdc4","#fdfec2","#fefec0","#fefebe","#fefdbc","#fefbba","#fefab8","#fef9b6","#fef8b4","#fef7b3","#fef5b1","#fef4af","#fef3ad","#fef2ab","#fef1a9","#feefa7","#feeea6","#feeda4","#feeca2","#feeaa0","#fee99e","#fee89c","#fee79b","#fee699","#fee497","#fee395","#fee293","#fee191","#fee090","#fdde8e","#fddc8c","#fdda8a","#fdd888","#fdd686","#fdd484","#fdd283","#fdd081","#fdce7f","#fdcc7d","#fdca7b","#fdc879","#fdc678","#fdc476","#fdc274","#fdc072","#fdbe70","#fdbc6e","#fdba6c","#fdb86b","#fdb669","#fdb467","#fdb265","#fdb063","#fdae61","#fcac60","#fcaa5f","#fca75e","#fba55c","#fba25b","#fb9f5a","#fa9d59","#fa9a58","#fa9857","#f99555","#f99354","#f89053","#f88e52","#f88b51","#f7894f","#f7864e","#f7834d","#f6814c","#f67e4b","#f67c4a","#f57948","#f57747","#f57446","#f47245","#f46f44","#f46d43","#f26a41","#f16840","#f0653f","#ef633e","#ee613d","#ed5e3c","#ec5c3b","#ea593a","#e95739","#e85538","#e75236","#e65035","#e54d34","#e44b33","#e24932","#e14631","#e04430","#df412f","#de3f2e","#dd3d2d","#dc3a2b","#da382a","#d93529","#d83328","#d73127","#d62f26","#d42d26","#d22b26","#d02926","#ce2726","#cc2526","#ca2326","#c82126","#c62026","#c41e26","#c21c26","#c01a26","#be1826","#bc1626","#ba1426","#b81226","#b61026","#b40f26","#b20d26","#b00b26","#ae0926","#ac0726","#aa0526","#a80326","#a60126","#a50026"]},"id":"821ff6cd-07ab-4ab3-be57-1cc512d028d3","type":"LinearColorMapper"},{"attributes":{"toolbar":{"id":"191c19b8-2e27-4e61-a31e-66a97ba51738","type":"ProxyToolbar"},"toolbar_location":"above"},"id":"2f49ca3f-b2c1-40d3-80fe-3ef1fc7105d1","type":"ToolbarBox"}],"root_ids":["c0f29a24-c1b0-4daf-a093-dc25840bb2c3"]},"title":"Bokeh Application","version":"0.12.14"}};
-  var render_items = [{"docid":"b42e0aac-ebff-4a90-80f8-f95a107e0db8","elementid":"0791cd64-68f2-4eb1-b2b6-fe1470bb0285","modelid":"c0f29a24-c1b0-4daf-a093-dc25840bb2c3"}];
+  var docs_json = {"47deeb8e-f1d3-4da9-a2e8-ed033b7e654d":{"roots":{"references":[{"attributes":{"children":[{"id":"fbc716cd-960a-468d-ad4e-930e90c0af86","subtype":"Figure","type":"Plot"},{"id":"d01a0a8b-2049-4635-8315-a92261014261","subtype":"Figure","type":"Plot"}]},"id":"ebf487b9-9e8d-4b72-ad7e-2866c0411c9b","type":"Row"},{"attributes":{"grid_line_color":{"value":null},"plot":{"id":"d01a0a8b-2049-4635-8315-a92261014261","subtype":"Figure","type":"Plot"},"ticker":{"id":"000e0fc2-7762-4b82-aefc-67ec932ef003","type":"CategoricalTicker"}},"id":"ce984e68-16e7-42c3-bcb8-2f5e396cf2e0","type":"Grid"},{"attributes":{},"id":"ceeadd88-e93d-4a31-8920-371ede2be657","type":"CategoricalScale"},{"attributes":{},"id":"370ce048-132f-415b-920b-2e81cad6c11c","type":"CategoricalTickFormatter"},{"attributes":{},"id":"e79fba0f-fec8-4a37-99b6-2de3904b016b","type":"CategoricalTicker"},{"attributes":{},"id":"b699060d-5c9e-42f9-985e-1cd1224b29a5","type":"CategoricalScale"},{"attributes":{"source":{"id":"b248a728-0198-453d-9250-84a8c0f917a0","type":"ColumnDataSource"}},"id":"02eba652-9483-49f3-8f74-21c7cb78faef","type":"CDSView"},{"attributes":{},"id":"f8958452-e515-4252-a280-780bbf055eeb","type":"SaveTool"},{"attributes":{"callback":null,"column_names":["Tissue_hyphen_minus_Tumor_over_Normal","zvalues","PearsonR","Tissue_hyphen_minus_Normal"],"data":{"PearsonR":["1","0.74","0.6","0.48","0.7","0.74","0.64","0.73","0.76","0.82","1","0.66","0.5","0.73","0.82","0.77","0.77","0.87","0.57","0.54","1","0.49","0.5","0.63","0.6","0.6","0.5","0.37","0.36","0.4","1","0.36","0.39","0.38","0.38","0.34","0.69","0.63","0.51","0.41","1","0.62","0.55","0.64","0.64","0.71","0.7","0.57","0.4","0.63","1","0.61","0.65","0.71","0.66","0.69","0.59","0.47","0.59","0.7","1","0.66","0.62","0.73","0.68","0.61","0.49","0.63","0.7","0.63","1","0.68","0.79","0.83","0.56","0.44","0.66","0.75","0.62","0.72","1"],"Tissue_hyphen_minus_Normal":["Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA","Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA","Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA","Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA","Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA","Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA","Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA","Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA","Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA"],"Tissue_hyphen_minus_Tumor_over_Normal":["Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Colon","Colon","Colon","Colon","Colon","Colon","Colon","Colon","Colon","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus"],"zvalues":{"__ndarray__":"AAAAAAAA8D+uR+F6FK7nPzMzMzMzM+M/uB6F61G43j9mZmZmZmbmP65H4XoUruc/exSuR+F65D9cj8L1KFznP1K4HoXrUeg/PQrXo3A96j8AAAAAAADwPx+F61G4HuU/AAAAAAAA4D9cj8L1KFznPz0K16NwPeo/pHA9Ctej6D+kcD0K16PoP9ejcD0K1+s/PQrXo3A94j9I4XoUrkfhPwAAAAAAAPA/XI/C9Shc3z8AAAAAAADgPylcj8L1KOQ/MzMzMzMz4z8zMzMzMzPjPwAAAAAAAOA/rkfhehSu1z8K16NwPQrXP5qZmZmZmdk/AAAAAAAA8D8K16NwPQrXP/YoXI/C9dg/UrgehetR2D9SuB6F61HYP8P1KFyPwtU/FK5H4XoU5j8pXI/C9SjkP1K4HoXrUeA/PQrXo3A92j8AAAAAAADwP9ejcD0K1+M/mpmZmZmZ4T97FK5H4XrkP3sUrkfheuQ/uB6F61G45j9mZmZmZmbmPz0K16NwPeI/mpmZmZmZ2T8pXI/C9SjkPwAAAAAAAPA/hetRuB6F4z/NzMzMzMzkP7gehetRuOY/H4XrUbge5T8UrkfhehTmP+F6FK5H4eI/FK5H4XoU3j/hehSuR+HiP2ZmZmZmZuY/AAAAAAAA8D8fhetRuB7lP9ejcD0K1+M/XI/C9Shc5z/D9Shcj8LlP4XrUbgeheM/XI/C9Shc3z8pXI/C9SjkP2ZmZmZmZuY/KVyPwvUo5D8AAAAAAADwP8P1KFyPwuU/SOF6FK5H6T+PwvUoXI/qP+xRuB6F6+E/KVyPwvUo3D8fhetRuB7lPwAAAAAAAOg/16NwPQrX4z8K16NwPQrnPwAAAAAAAPA/","dtype":"float64","shape":[81]}}},"id":"b248a728-0198-453d-9250-84a8c0f917a0","type":"ColumnDataSource"},{"attributes":{},"id":"32470748-f305-48c0-ab1f-a73c22de4730","type":"WheelZoomTool"},{"attributes":{"high":0.78,"low":0.12,"nan_color":"white","palette":["#313695","#313896","#323a97","#333d98","#343f99","#34429b","#35449c","#36479d","#37499e","#384c9f","#384ea1","#3951a2","#3a53a3","#3b56a4","#3b58a6","#3c5ba7","#3d5da8","#3e60a9","#3f62aa","#3f64ac","#4067ad","#4169ae","#426caf","#436eb0","#4371b2","#4473b3","#4576b4","#4778b5","#497ab6","#4b7cb7","#4d7eb9","#4f81ba","#5083bb","#5285bc","#5487bd","#5689be","#588cbf","#5a8ec1","#5c90c2","#5d92c3","#5f94c4","#6197c5","#6399c6","#659bc7","#679dc9","#689fca","#6aa2cb","#6ca4cc","#6ea6cd","#70a8ce","#72aacf","#74add1","#76aed1","#78b0d2","#7ab2d3","#7cb3d4","#7eb5d5","#80b7d6","#83b9d7","#85bad8","#87bcd9","#89beda","#8bbfdb","#8dc1dc","#90c3dd","#92c5de","#94c6df","#96c8e0","#98cae1","#9acce1","#9ccde2","#9fcfe3","#a1d1e4","#a3d2e5","#a5d4e6","#a7d6e7","#a9d8e8","#acd9e9","#aedae9","#b0dbea","#b2dceb","#b4ddeb","#b6deec","#b8dfec","#bae0ed","#bce1ed","#bee2ee","#c0e3ef","#c2e4ef","#c4e5f0","#c7e6f0","#c9e7f1","#cbe8f2","#cde9f2","#cfeaf3","#d1ebf3","#d3ecf4","#d5edf5","#d7eef5","#d9eff6","#dbf0f6","#ddf1f7","#e0f3f8","#e1f3f5","#e2f3f3","#e3f4f1","#e4f4ef","#e6f5ec","#e7f5ea","#e8f6e8","#e9f6e6","#eaf7e3","#ecf7e1","#edf8df","#eef8dd","#eff9da","#f1f9d8","#f2fad6","#f3fad4","#f4fbd2","#f5fbcf","#f7fbcd","#f8fccb","#f9fcc9","#fafdc6","#fbfdc4","#fdfec2","#fefec0","#fefebe","#fefdbc","#fefbba","#fefab8","#fef9b6","#fef8b4","#fef7b3","#fef5b1","#fef4af","#fef3ad","#fef2ab","#fef1a9","#feefa7","#feeea6","#feeda4","#feeca2","#feeaa0","#fee99e","#fee89c","#fee79b","#fee699","#fee497","#fee395","#fee293","#fee191","#fee090","#fdde8e","#fddc8c","#fdda8a","#fdd888","#fdd686","#fdd484","#fdd283","#fdd081","#fdce7f","#fdcc7d","#fdca7b","#fdc879","#fdc678","#fdc476","#fdc274","#fdc072","#fdbe70","#fdbc6e","#fdba6c","#fdb86b","#fdb669","#fdb467","#fdb265","#fdb063","#fdae61","#fcac60","#fcaa5f","#fca75e","#fba55c","#fba25b","#fb9f5a","#fa9d59","#fa9a58","#fa9857","#f99555","#f99354","#f89053","#f88e52","#f88b51","#f7894f","#f7864e","#f7834d","#f6814c","#f67e4b","#f67c4a","#f57948","#f57747","#f57446","#f47245","#f46f44","#f46d43","#f26a41","#f16840","#f0653f","#ef633e","#ee613d","#ed5e3c","#ec5c3b","#ea593a","#e95739","#e85538","#e75236","#e65035","#e54d34","#e44b33","#e24932","#e14631","#e04430","#df412f","#de3f2e","#dd3d2d","#dc3a2b","#da382a","#d93529","#d83328","#d73127","#d62f26","#d42d26","#d22b26","#d02926","#ce2726","#cc2526","#ca2326","#c82126","#c62026","#c41e26","#c21c26","#c01a26","#be1826","#bc1626","#ba1426","#b81226","#b61026","#b40f26","#b20d26","#b00b26","#ae0926","#ac0726","#aa0526","#a80326","#a60126","#a50026"]},"id":"31ebdfba-ac2b-4cab-be2a-d68d8e369160","type":"LinearColorMapper"},{"attributes":{},"id":"f99debfe-40ce-4572-a093-342755b16dbc","type":"CategoricalScale"},{"attributes":{"tools":[{"id":"790d0669-5977-4753-baae-6622ff31f4e4","type":"HoverTool"},{"id":"c272865c-7cf9-4bda-b4fb-bb174e4108ab","type":"SaveTool"},{"id":"c72839ad-95e5-4839-9731-f8654134c7f6","type":"PanTool"},{"id":"32470748-f305-48c0-ab1f-a73c22de4730","type":"WheelZoomTool"},{"id":"d294f51e-4f2d-497a-b6e4-5997651f5af9","type":"BoxZoomTool"},{"id":"4e92b66e-b098-48f0-9ce0-96da7bebf467","type":"ResetTool"},{"id":"8596535f-c6e0-4fd6-9180-75a1904504fe","type":"HoverTool"},{"id":"f8958452-e515-4252-a280-780bbf055eeb","type":"SaveTool"},{"id":"5cf44179-3e8d-407b-8112-2a4dde37688a","type":"PanTool"},{"id":"4e1e3f5d-a7c2-4e4f-a1f3-8ea3f8c15c2e","type":"WheelZoomTool"},{"id":"8c40c7e3-0700-41e4-a042-5c0e4a1354ac","type":"BoxZoomTool"},{"id":"c5c8f9ad-be6b-41de-8daa-cd69d0a740b5","type":"ResetTool"}]},"id":"055056fa-5c25-4ec5-b3f6-3dfe5a095844","type":"ProxyToolbar"},{"attributes":{"below":[{"id":"4e043ac1-eb98-46f4-9907-f737c616d31d","type":"CategoricalAxis"}],"left":[{"id":"5d0cd741-6b7e-402e-9dcd-8264058f5b61","type":"CategoricalAxis"}],"min_border_bottom":10,"min_border_left":10,"min_border_right":10,"min_border_top":10,"plot_height":400,"plot_width":450,"renderers":[{"id":"4e043ac1-eb98-46f4-9907-f737c616d31d","type":"CategoricalAxis"},{"id":"6e36018f-6efd-4485-85ac-31eac0ca420b","type":"Grid"},{"id":"5d0cd741-6b7e-402e-9dcd-8264058f5b61","type":"CategoricalAxis"},{"id":"d206ba02-dfd3-4dbf-afe8-5ff9b921a0f5","type":"Grid"},{"id":"a8f7e9a9-d4d4-4fa1-be67-4a599a941409","type":"BoxAnnotation"},{"id":"f5add14f-6ad7-49d4-9707-1a2117a3e4c3","type":"GlyphRenderer"},{"id":"f8f135ad-01b9-4543-b899-198356fbd348","type":"ColorBar"}],"right":[{"id":"f8f135ad-01b9-4543-b899-198356fbd348","type":"ColorBar"}],"title":{"id":"8a64cde9-7c93-41ed-9bd1-68e1c767699d","type":"Title"},"toolbar":{"id":"4ff0f485-5a05-44ae-afe8-f205851c6d03","type":"Toolbar"},"toolbar_location":null,"x_range":{"id":"27f9131f-0341-4906-acb0-8667b8a9acf1","type":"FactorRange"},"x_scale":{"id":"ceeadd88-e93d-4a31-8920-371ede2be657","type":"CategoricalScale"},"y_range":{"id":"31eb0c2f-ceb0-4b40-b30a-d4336d4aedb4","type":"FactorRange"},"y_scale":{"id":"f99debfe-40ce-4572-a093-342755b16dbc","type":"CategoricalScale"}},"id":"fbc716cd-960a-468d-ad4e-930e90c0af86","subtype":"Figure","type":"Plot"},{"attributes":{},"id":"b1784058-f4a3-4bb2-b5bc-1e72e3e73aea","type":"CategoricalTickFormatter"},{"attributes":{"callback":null,"factors":["Breast","Colon","Kidney","Liver","Lung","Prostate","Stomach","Thyroid","Uterus"]},"id":"5b594444-da51-485a-a413-630c736c6a05","type":"FactorRange"},{"attributes":{"overlay":{"id":"d977a95f-b705-46ca-b42e-2fab2375b147","type":"BoxAnnotation"}},"id":"8c40c7e3-0700-41e4-a042-5c0e4a1354ac","type":"BoxZoomTool"},{"attributes":{},"id":"5531e09d-189c-4caf-ae0d-5d93bcd27abb","type":"CategoricalTickFormatter"},{"attributes":{"callback":null,"renderers":[{"id":"7c5adf6e-5f83-45a1-9b30-d5f832681e7c","type":"GlyphRenderer"}],"tooltips":[["Tissue-Tumor/Normal","@{Tissue_hyphen_minus_Tumor_over_Normal}"],["Tissue-Normal","@{Tissue_hyphen_minus_Normal}"],["PearsonR","@{PearsonR}"]]},"id":"8596535f-c6e0-4fd6-9180-75a1904504fe","type":"HoverTool"},{"attributes":{},"id":"feaf3fbe-b4d5-4850-b131-78790812176f","type":"BasicTicker"},{"attributes":{"callback":null,"factors":["Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx"]},"id":"31eb0c2f-ceb0-4b40-b30a-d4336d4aedb4","type":"FactorRange"},{"attributes":{"high":1.0,"low":0.34,"nan_color":"white","palette":["#313695","#313896","#323a97","#333d98","#343f99","#34429b","#35449c","#36479d","#37499e","#384c9f","#384ea1","#3951a2","#3a53a3","#3b56a4","#3b58a6","#3c5ba7","#3d5da8","#3e60a9","#3f62aa","#3f64ac","#4067ad","#4169ae","#426caf","#436eb0","#4371b2","#4473b3","#4576b4","#4778b5","#497ab6","#4b7cb7","#4d7eb9","#4f81ba","#5083bb","#5285bc","#5487bd","#5689be","#588cbf","#5a8ec1","#5c90c2","#5d92c3","#5f94c4","#6197c5","#6399c6","#659bc7","#679dc9","#689fca","#6aa2cb","#6ca4cc","#6ea6cd","#70a8ce","#72aacf","#74add1","#76aed1","#78b0d2","#7ab2d3","#7cb3d4","#7eb5d5","#80b7d6","#83b9d7","#85bad8","#87bcd9","#89beda","#8bbfdb","#8dc1dc","#90c3dd","#92c5de","#94c6df","#96c8e0","#98cae1","#9acce1","#9ccde2","#9fcfe3","#a1d1e4","#a3d2e5","#a5d4e6","#a7d6e7","#a9d8e8","#acd9e9","#aedae9","#b0dbea","#b2dceb","#b4ddeb","#b6deec","#b8dfec","#bae0ed","#bce1ed","#bee2ee","#c0e3ef","#c2e4ef","#c4e5f0","#c7e6f0","#c9e7f1","#cbe8f2","#cde9f2","#cfeaf3","#d1ebf3","#d3ecf4","#d5edf5","#d7eef5","#d9eff6","#dbf0f6","#ddf1f7","#e0f3f8","#e1f3f5","#e2f3f3","#e3f4f1","#e4f4ef","#e6f5ec","#e7f5ea","#e8f6e8","#e9f6e6","#eaf7e3","#ecf7e1","#edf8df","#eef8dd","#eff9da","#f1f9d8","#f2fad6","#f3fad4","#f4fbd2","#f5fbcf","#f7fbcd","#f8fccb","#f9fcc9","#fafdc6","#fbfdc4","#fdfec2","#fefec0","#fefebe","#fefdbc","#fefbba","#fefab8","#fef9b6","#fef8b4","#fef7b3","#fef5b1","#fef4af","#fef3ad","#fef2ab","#fef1a9","#feefa7","#feeea6","#feeda4","#feeca2","#feeaa0","#fee99e","#fee89c","#fee79b","#fee699","#fee497","#fee395","#fee293","#fee191","#fee090","#fdde8e","#fddc8c","#fdda8a","#fdd888","#fdd686","#fdd484","#fdd283","#fdd081","#fdce7f","#fdcc7d","#fdca7b","#fdc879","#fdc678","#fdc476","#fdc274","#fdc072","#fdbe70","#fdbc6e","#fdba6c","#fdb86b","#fdb669","#fdb467","#fdb265","#fdb063","#fdae61","#fcac60","#fcaa5f","#fca75e","#fba55c","#fba25b","#fb9f5a","#fa9d59","#fa9a58","#fa9857","#f99555","#f99354","#f89053","#f88e52","#f88b51","#f7894f","#f7864e","#f7834d","#f6814c","#f67e4b","#f67c4a","#f57948","#f57747","#f57446","#f47245","#f46f44","#f46d43","#f26a41","#f16840","#f0653f","#ef633e","#ee613d","#ed5e3c","#ec5c3b","#ea593a","#e95739","#e85538","#e75236","#e65035","#e54d34","#e44b33","#e24932","#e14631","#e04430","#df412f","#de3f2e","#dd3d2d","#dc3a2b","#da382a","#d93529","#d83328","#d73127","#d62f26","#d42d26","#d22b26","#d02926","#ce2726","#cc2526","#ca2326","#c82126","#c62026","#c41e26","#c21c26","#c01a26","#be1826","#bc1626","#ba1426","#b81226","#b61026","#b40f26","#b20d26","#b00b26","#ae0926","#ac0726","#aa0526","#a80326","#a60126","#a50026"]},"id":"9825738f-f4b8-430c-897d-54ff6901afea","type":"LinearColorMapper"},{"attributes":{"data_source":{"id":"d2922357-598b-4915-a084-a7f348dbc350","type":"ColumnDataSource"},"glyph":{"id":"3000b960-0476-4074-b548-9dfb97324552","type":"Rect"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"da82e74f-df4d-4750-ba3e-c6c428a0e732","type":"Rect"},"selection_glyph":null,"view":{"id":"03e1b316-293d-4aca-9916-443aa18ed979","type":"CDSView"}},"id":"f5add14f-6ad7-49d4-9707-1a2117a3e4c3","type":"GlyphRenderer"},{"attributes":{"callback":null,"renderers":[{"id":"f5add14f-6ad7-49d4-9707-1a2117a3e4c3","type":"GlyphRenderer"}],"tooltips":[["Tissue-Tumor/Normal","@{Tissue_hyphen_minus_Tumor_over_Normal}"],["Tissue-Normal","@{Tissue_hyphen_minus_Normal}"],["PearsonR","@{PearsonR}"]]},"id":"790d0669-5977-4753-baae-6622ff31f4e4","type":"HoverTool"},{"attributes":{"fill_color":{"field":"zvalues","transform":{"id":"31ebdfba-ac2b-4cab-be2a-d68d8e369160","type":"LinearColorMapper"}},"height":{"units":"data","value":1},"line_alpha":{"value":0},"line_color":{"value":"#1f77b4"},"width":{"units":"data","value":1},"x":{"field":"Tissue_hyphen_minus_Tumor_over_Normal"},"y":{"field":"Tissue_hyphen_minus_Normal"}},"id":"3000b960-0476-4074-b548-9dfb97324552","type":"Rect"},{"attributes":{},"id":"4e1e3f5d-a7c2-4e4f-a1f3-8ea3f8c15c2e","type":"WheelZoomTool"},{"attributes":{"children":[{"id":"ebc602d1-23ab-415f-8602-fa50d04856aa","type":"ToolbarBox"},{"id":"675136c7-dc53-4cc2-bfeb-f6966f98b7ca","type":"Column"}]},"id":"6e10e172-e28d-4edd-bc99-aba997e2aeaa","type":"Column"},{"attributes":{"callback":null,"factors":["Breast-TCGA","Colon-TCGA","Kidney-TCGA","Liver-TCGA","Lung-TCGA","Prostate-TCGA","Stomach-TCGA","Thyroid-TCGA","Uterus-TCGA"]},"id":"80b8a755-0e90-43ff-9486-ac4ed3b365eb","type":"FactorRange"},{"attributes":{"overlay":{"id":"a8f7e9a9-d4d4-4fa1-be67-4a599a941409","type":"BoxAnnotation"}},"id":"d294f51e-4f2d-497a-b6e4-5997651f5af9","type":"BoxZoomTool"},{"attributes":{},"id":"5cf44179-3e8d-407b-8112-2a4dde37688a","type":"PanTool"},{"attributes":{"callback":null,"factors":["Breast","Colon","Kidney","Liver","Lung","Prostate","Stomach","Thyroid","Uterus"]},"id":"27f9131f-0341-4906-acb0-8667b8a9acf1","type":"FactorRange"},{"attributes":{"bar_line_color":{"value":"black"},"color_mapper":{"id":"31ebdfba-ac2b-4cab-be2a-d68d8e369160","type":"LinearColorMapper"},"formatter":{"id":"18c0fe18-4637-4c8c-80ac-4a44131ec7f8","type":"BasicTickFormatter"},"label_standoff":8,"location":[0,0],"major_tick_line_color":{"value":"black"},"plot":{"id":"fbc716cd-960a-468d-ad4e-930e90c0af86","subtype":"Figure","type":"Plot"},"ticker":{"id":"469afd79-9a48-4820-af11-269b19029218","type":"BasicTicker"}},"id":"f8f135ad-01b9-4543-b899-198356fbd348","type":"ColorBar"},{"attributes":{},"id":"0b8025dc-bd1f-46be-aef6-7222dace47be","type":"CategoricalTickFormatter"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_scroll":"auto","active_tap":"auto","tools":[{"id":"8596535f-c6e0-4fd6-9180-75a1904504fe","type":"HoverTool"},{"id":"f8958452-e515-4252-a280-780bbf055eeb","type":"SaveTool"},{"id":"5cf44179-3e8d-407b-8112-2a4dde37688a","type":"PanTool"},{"id":"4e1e3f5d-a7c2-4e4f-a1f3-8ea3f8c15c2e","type":"WheelZoomTool"},{"id":"8c40c7e3-0700-41e4-a042-5c0e4a1354ac","type":"BoxZoomTool"},{"id":"c5c8f9ad-be6b-41de-8daa-cd69d0a740b5","type":"ResetTool"}]},"id":"ebdc031e-a493-4cd3-8b8c-7e13971516ef","type":"Toolbar"},{"attributes":{"source":{"id":"d2922357-598b-4915-a084-a7f348dbc350","type":"ColumnDataSource"}},"id":"03e1b316-293d-4aca-9916-443aa18ed979","type":"CDSView"},{"attributes":{},"id":"c5c8f9ad-be6b-41de-8daa-cd69d0a740b5","type":"ResetTool"},{"attributes":{"plot":null,"text":"GTEx","text_color":{"value":"black"},"text_font_size":{"value":"12pt"}},"id":"8a64cde9-7c93-41ed-9bd1-68e1c767699d","type":"Title"},{"attributes":{"grid_line_color":{"value":null},"plot":{"id":"fbc716cd-960a-468d-ad4e-930e90c0af86","subtype":"Figure","type":"Plot"},"ticker":{"id":"ffe08cc3-8d48-40bd-998c-483e7dbb9426","type":"CategoricalTicker"}},"id":"6e36018f-6efd-4485-85ac-31eac0ca420b","type":"Grid"},{"attributes":{"data_source":{"id":"b248a728-0198-453d-9250-84a8c0f917a0","type":"ColumnDataSource"},"glyph":{"id":"43eac729-0433-4bf8-b1f9-cd9fee05686e","type":"Rect"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"3ac99bb2-2ec6-4543-a9ef-6b64b62afe33","type":"Rect"},"selection_glyph":null,"view":{"id":"02eba652-9483-49f3-8f74-21c7cb78faef","type":"CDSView"}},"id":"7c5adf6e-5f83-45a1-9b30-d5f832681e7c","type":"GlyphRenderer"},{"attributes":{"axis_label":"Tissue-Tumor/Normal","bounds":"auto","formatter":{"id":"370ce048-132f-415b-920b-2e81cad6c11c","type":"CategoricalTickFormatter"},"major_label_orientation":0.7853981633974483,"plot":{"id":"fbc716cd-960a-468d-ad4e-930e90c0af86","subtype":"Figure","type":"Plot"},"ticker":{"id":"ffe08cc3-8d48-40bd-998c-483e7dbb9426","type":"CategoricalTicker"}},"id":"4e043ac1-eb98-46f4-9907-f737c616d31d","type":"CategoricalAxis"},{"attributes":{},"id":"000e0fc2-7762-4b82-aefc-67ec932ef003","type":"CategoricalTicker"},{"attributes":{"axis_label":"Tissue-Normal","bounds":"auto","formatter":{"id":"b1784058-f4a3-4bb2-b5bc-1e72e3e73aea","type":"CategoricalTickFormatter"},"major_label_orientation":"horizontal","plot":{"id":"fbc716cd-960a-468d-ad4e-930e90c0af86","subtype":"Figure","type":"Plot"},"ticker":{"id":"306dd690-a595-411b-841f-0154a20e6b8f","type":"CategoricalTicker"}},"id":"5d0cd741-6b7e-402e-9dcd-8264058f5b61","type":"CategoricalAxis"},{"attributes":{"axis_label":"Tissue-Tumor/Normal","bounds":"auto","formatter":{"id":"5531e09d-189c-4caf-ae0d-5d93bcd27abb","type":"CategoricalTickFormatter"},"major_label_orientation":0.7853981633974483,"plot":{"id":"d01a0a8b-2049-4635-8315-a92261014261","subtype":"Figure","type":"Plot"},"ticker":{"id":"000e0fc2-7762-4b82-aefc-67ec932ef003","type":"CategoricalTicker"}},"id":"7eb7f207-169c-49aa-adb9-4a226f14e229","type":"CategoricalAxis"},{"attributes":{},"id":"4e92b66e-b098-48f0-9ce0-96da7bebf467","type":"ResetTool"},{"attributes":{},"id":"5bd87f78-c7b3-4b28-8d51-11135db0934c","type":"CategoricalScale"},{"attributes":{"toolbar":{"id":"055056fa-5c25-4ec5-b3f6-3dfe5a095844","type":"ProxyToolbar"},"toolbar_location":"above"},"id":"ebc602d1-23ab-415f-8602-fa50d04856aa","type":"ToolbarBox"},{"attributes":{"fill_alpha":{"value":0.1},"fill_color":{"field":"zvalues","transform":{"id":"9825738f-f4b8-430c-897d-54ff6901afea","type":"LinearColorMapper"}},"height":{"units":"data","value":1},"line_alpha":{"value":0},"line_color":{"value":"#1f77b4"},"width":{"units":"data","value":1},"x":{"field":"Tissue_hyphen_minus_Tumor_over_Normal"},"y":{"field":"Tissue_hyphen_minus_Normal"}},"id":"3ac99bb2-2ec6-4543-a9ef-6b64b62afe33","type":"Rect"},{"attributes":{},"id":"18c0fe18-4637-4c8c-80ac-4a44131ec7f8","type":"BasicTickFormatter"},{"attributes":{"axis_label":"Tissue-Normal","bounds":"auto","formatter":{"id":"0b8025dc-bd1f-46be-aef6-7222dace47be","type":"CategoricalTickFormatter"},"major_label_orientation":"horizontal","plot":{"id":"d01a0a8b-2049-4635-8315-a92261014261","subtype":"Figure","type":"Plot"},"ticker":{"id":"e79fba0f-fec8-4a37-99b6-2de3904b016b","type":"CategoricalTicker"}},"id":"275771fc-bd7b-4de1-99ad-8670a1df3af5","type":"CategoricalAxis"},{"attributes":{"below":[{"id":"7eb7f207-169c-49aa-adb9-4a226f14e229","type":"CategoricalAxis"}],"left":[{"id":"275771fc-bd7b-4de1-99ad-8670a1df3af5","type":"CategoricalAxis"}],"min_border_bottom":10,"min_border_left":10,"min_border_right":10,"min_border_top":10,"plot_height":400,"plot_width":450,"renderers":[{"id":"7eb7f207-169c-49aa-adb9-4a226f14e229","type":"CategoricalAxis"},{"id":"ce984e68-16e7-42c3-bcb8-2f5e396cf2e0","type":"Grid"},{"id":"275771fc-bd7b-4de1-99ad-8670a1df3af5","type":"CategoricalAxis"},{"id":"9011d3c9-03b9-46af-a80a-69ece22becff","type":"Grid"},{"id":"d977a95f-b705-46ca-b42e-2fab2375b147","type":"BoxAnnotation"},{"id":"7c5adf6e-5f83-45a1-9b30-d5f832681e7c","type":"GlyphRenderer"},{"id":"ef1dcb26-b323-484c-b7c3-d490b7a61ad6","type":"ColorBar"}],"right":[{"id":"ef1dcb26-b323-484c-b7c3-d490b7a61ad6","type":"ColorBar"}],"title":{"id":"3d288355-ee59-47ae-b8bc-10ce9ddda632","type":"Title"},"toolbar":{"id":"ebdc031e-a493-4cd3-8b8c-7e13971516ef","type":"Toolbar"},"toolbar_location":null,"x_range":{"id":"5b594444-da51-485a-a413-630c736c6a05","type":"FactorRange"},"x_scale":{"id":"b699060d-5c9e-42f9-985e-1cd1224b29a5","type":"CategoricalScale"},"y_range":{"id":"80b8a755-0e90-43ff-9486-ac4ed3b365eb","type":"FactorRange"},"y_scale":{"id":"5bd87f78-c7b3-4b28-8d51-11135db0934c","type":"CategoricalScale"}},"id":"d01a0a8b-2049-4635-8315-a92261014261","subtype":"Figure","type":"Plot"},{"attributes":{"fill_alpha":{"value":0.1},"fill_color":{"field":"zvalues","transform":{"id":"31ebdfba-ac2b-4cab-be2a-d68d8e369160","type":"LinearColorMapper"}},"height":{"units":"data","value":1},"line_alpha":{"value":0},"line_color":{"value":"#1f77b4"},"width":{"units":"data","value":1},"x":{"field":"Tissue_hyphen_minus_Tumor_over_Normal"},"y":{"field":"Tissue_hyphen_minus_Normal"}},"id":"da82e74f-df4d-4750-ba3e-c6c428a0e732","type":"Rect"},{"attributes":{},"id":"ffe08cc3-8d48-40bd-998c-483e7dbb9426","type":"CategoricalTicker"},{"attributes":{"plot":null,"text":"TCGA","text_color":{"value":"black"},"text_font_size":{"value":"12pt"}},"id":"3d288355-ee59-47ae-b8bc-10ce9ddda632","type":"Title"},{"attributes":{"bottom_units":"screen","fill_alpha":{"value":0.5},"fill_color":{"value":"lightgrey"},"left_units":"screen","level":"overlay","line_alpha":{"value":1.0},"line_color":{"value":"black"},"line_dash":[4,4],"line_width":{"value":2},"plot":null,"render_mode":"css","right_units":"screen","top_units":"screen"},"id":"a8f7e9a9-d4d4-4fa1-be67-4a599a941409","type":"BoxAnnotation"},{"attributes":{"children":[{"id":"ebf487b9-9e8d-4b72-ad7e-2866c0411c9b","type":"Row"}]},"id":"675136c7-dc53-4cc2-bfeb-f6966f98b7ca","type":"Column"},{"attributes":{"bar_line_color":{"value":"black"},"color_mapper":{"id":"9825738f-f4b8-430c-897d-54ff6901afea","type":"LinearColorMapper"},"formatter":{"id":"c5ac101a-c01b-46b1-a1d6-59b7acadfc89","type":"BasicTickFormatter"},"label_standoff":8,"location":[0,0],"major_tick_line_color":{"value":"black"},"plot":{"id":"d01a0a8b-2049-4635-8315-a92261014261","subtype":"Figure","type":"Plot"},"ticker":{"id":"feaf3fbe-b4d5-4850-b131-78790812176f","type":"BasicTicker"}},"id":"ef1dcb26-b323-484c-b7c3-d490b7a61ad6","type":"ColorBar"},{"attributes":{},"id":"306dd690-a595-411b-841f-0154a20e6b8f","type":"CategoricalTicker"},{"attributes":{"bottom_units":"screen","fill_alpha":{"value":0.5},"fill_color":{"value":"lightgrey"},"left_units":"screen","level":"overlay","line_alpha":{"value":1.0},"line_color":{"value":"black"},"line_dash":[4,4],"line_width":{"value":2},"plot":null,"render_mode":"css","right_units":"screen","top_units":"screen"},"id":"d977a95f-b705-46ca-b42e-2fab2375b147","type":"BoxAnnotation"},{"attributes":{"dimension":1,"grid_line_color":{"value":null},"plot":{"id":"fbc716cd-960a-468d-ad4e-930e90c0af86","subtype":"Figure","type":"Plot"},"ticker":{"id":"306dd690-a595-411b-841f-0154a20e6b8f","type":"CategoricalTicker"}},"id":"d206ba02-dfd3-4dbf-afe8-5ff9b921a0f5","type":"Grid"},{"attributes":{},"id":"c5ac101a-c01b-46b1-a1d6-59b7acadfc89","type":"BasicTickFormatter"},{"attributes":{},"id":"c272865c-7cf9-4bda-b4fb-bb174e4108ab","type":"SaveTool"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_scroll":"auto","active_tap":"auto","tools":[{"id":"790d0669-5977-4753-baae-6622ff31f4e4","type":"HoverTool"},{"id":"c272865c-7cf9-4bda-b4fb-bb174e4108ab","type":"SaveTool"},{"id":"c72839ad-95e5-4839-9731-f8654134c7f6","type":"PanTool"},{"id":"32470748-f305-48c0-ab1f-a73c22de4730","type":"WheelZoomTool"},{"id":"d294f51e-4f2d-497a-b6e4-5997651f5af9","type":"BoxZoomTool"},{"id":"4e92b66e-b098-48f0-9ce0-96da7bebf467","type":"ResetTool"}]},"id":"4ff0f485-5a05-44ae-afe8-f205851c6d03","type":"Toolbar"},{"attributes":{"dimension":1,"grid_line_color":{"value":null},"plot":{"id":"d01a0a8b-2049-4635-8315-a92261014261","subtype":"Figure","type":"Plot"},"ticker":{"id":"e79fba0f-fec8-4a37-99b6-2de3904b016b","type":"CategoricalTicker"}},"id":"9011d3c9-03b9-46af-a80a-69ece22becff","type":"Grid"},{"attributes":{},"id":"c72839ad-95e5-4839-9731-f8654134c7f6","type":"PanTool"},{"attributes":{"fill_color":{"field":"zvalues","transform":{"id":"9825738f-f4b8-430c-897d-54ff6901afea","type":"LinearColorMapper"}},"height":{"units":"data","value":1},"line_alpha":{"value":0},"line_color":{"value":"#1f77b4"},"width":{"units":"data","value":1},"x":{"field":"Tissue_hyphen_minus_Tumor_over_Normal"},"y":{"field":"Tissue_hyphen_minus_Normal"}},"id":"43eac729-0433-4bf8-b1f9-cd9fee05686e","type":"Rect"},{"attributes":{},"id":"469afd79-9a48-4820-af11-269b19029218","type":"BasicTicker"},{"attributes":{"callback":null,"column_names":["Tissue_hyphen_minus_Tumor_over_Normal","zvalues","PearsonR","Tissue_hyphen_minus_Normal"],"data":{"PearsonR":["0.73","0.27","0.4","0.34","0.4","0.43","0.41","0.42","0.53","0.65","0.51","0.53","0.37","0.53","0.65","0.63","0.6","0.71","0.38","0.31","0.76","0.33","0.3","0.43","0.39","0.41","0.4","0.21","0.12","0.21","0.65","0.18","0.19","0.18","0.19","0.16","0.41","0.19","0.32","0.27","0.66","0.32","0.32","0.35","0.41","0.39","0.18","0.28","0.2","0.3","0.44","0.32","0.3","0.44","0.45","0.26","0.42","0.32","0.38","0.49","0.63","0.48","0.47","0.45","0.28","0.4","0.32","0.3","0.4","0.38","0.7","0.44","0.59","0.32","0.44","0.33","0.42","0.53","0.45","0.52","0.78"],"Tissue_hyphen_minus_Normal":["Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx","Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx","Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx","Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx","Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx","Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx","Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx","Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx","Breast-GTEx","Colon-GTEx","Kidney-GTEx","Liver-GTEx","Lung-GTEx","Prostate-GTEx","Stomach-GTEx","Thyroid-GTEx","Uterus-GTEx"],"Tissue_hyphen_minus_Tumor_over_Normal":["Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Breast","Colon","Colon","Colon","Colon","Colon","Colon","Colon","Colon","Colon","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Kidney","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Liver","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Lung","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Prostate","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Stomach","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Thyroid","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus","Uterus"],"zvalues":{"__ndarray__":"XI/C9Shc5z9I4XoUrkfRP5qZmZmZmdk/w/UoXI/C1T+amZmZmZnZP4XrUbgehds/PQrXo3A92j/hehSuR+HaP/YoXI/C9eA/zczMzMzM5D9SuB6F61HgP/YoXI/C9eA/rkfhehSu1z/2KFyPwvXgP83MzMzMzOQ/KVyPwvUo5D8zMzMzMzPjP7gehetRuOY/UrgehetR2D/Xo3A9CtfTP1K4HoXrUeg/H4XrUbge1T8zMzMzMzPTP4XrUbgehds/9ihcj8L12D89CtejcD3aP5qZmZmZmdk/4XoUrkfhyj+4HoXrUbi+P+F6FK5H4co/zczMzMzM5D8K16NwPQrHP1K4HoXrUcg/CtejcD0Kxz9SuB6F61HIP3sUrkfhesQ/PQrXo3A92j9SuB6F61HIP3sUrkfhetQ/SOF6FK5H0T8fhetRuB7lP3sUrkfhetQ/exSuR+F61D9mZmZmZmbWPz0K16NwPdo/9ihcj8L12D8K16NwPQrHP+xRuB6F69E/mpmZmZmZyT8zMzMzMzPTPylcj8L1KNw/exSuR+F61D8zMzMzMzPTPylcj8L1KNw/zczMzMzM3D+kcD0K16PQP+F6FK5H4do/exSuR+F61D9SuB6F61HYP1yPwvUoXN8/KVyPwvUo5D+4HoXrUbjePxSuR+F6FN4/zczMzMzM3D/sUbgehevRP5qZmZmZmdk/exSuR+F61D8zMzMzMzPTP5qZmZmZmdk/UrgehetR2D9mZmZmZmbmPylcj8L1KNw/4XoUrkfh4j97FK5H4XrUPylcj8L1KNw/H4XrUbge1T/hehSuR+HaP/YoXI/C9eA/zczMzMzM3D+kcD0K16PgP/YoXI/C9eg/","dtype":"float64","shape":[81]}}},"id":"d2922357-598b-4915-a084-a7f348dbc350","type":"ColumnDataSource"}],"root_ids":["6e10e172-e28d-4edd-bc99-aba997e2aeaa"]},"title":"Bokeh Application","version":"0.12.14"}};
+  var render_items = [{"docid":"47deeb8e-f1d3-4da9-a2e8-ed033b7e654d","elementid":"9d6753dc-6020-4c68-8c91-1195baee2100","modelid":"6e10e172-e28d-4edd-bc99-aba997e2aeaa"}];
   root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
 
   }
@@ -16278,8 +16275,7 @@ h.sample_counts()
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">

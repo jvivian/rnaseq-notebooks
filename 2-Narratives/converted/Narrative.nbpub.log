@@ -1,5 +1,0 @@
-INFO:main:started ipypublish v0.6.5 at Tue Feb  6 17:38:38 2018
-INFO:main:logging to: /home/ubuntu/rnaseq-notebooks/2-Narratives/converted/Narrative.nbpub.log
-INFO:main:running for ipynb(s) at: Narrative.ipynb
-INFO:main:with conversion: latex_ipypublish_all
-ERROR:nbmerge:the notebook path does not exist: Narrative.ipynb

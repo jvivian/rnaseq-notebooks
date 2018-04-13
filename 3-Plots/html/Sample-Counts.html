@@ -12152,28 +12152,28 @@ div#notebook {
  background-color: #ffffff;
  min-height: 0px;
  box-shadow: none;
- width: 75%;
+ width: 80%;
  margin-right: auto;
  margin-left: auto;
 }
 div#ipython-main-app.container {
- width: 75%;
+ width: 80%;
  margin-right: auto;
  margin-left: auto;
  margin-right: auto;
  margin-left: auto;
 }
 .container {
- width: 75%;
+ width: 80%;
  margin-right: auto;
  margin-left: auto;
 }
 div#menubar-container {
  width: 100%;
- width: 75%;
+ width: 80%;
 }
 div#header-container {
- width: 75%;
+ width: 80%;
 }
 .notebook_app #header,
 .edit_app #header {
@@ -12247,7 +12247,7 @@ p.navbar-text.indicator_area {
  background-color: rgba(180,180,180,.14);
  border-color: #d4d4d4;
  line-height: 1.5em;
- transition: 200ms ease;
+ transition: 80ms ease;
 }
 .navbar-default .navbar-nav > .open > a,
 .navbar-default .navbar-nav > .open > a:hover,
@@ -12256,7 +12256,6 @@ p.navbar-text.indicator_area {
  background-color: #dedede;
  border-color: #dedede;
  line-height: 1.5em;
- transition: 200ms ease;
 }
 .navbar-nav > li > .dropdown-menu {
  margin-top: 0px;
@@ -12373,7 +12372,7 @@ div.notification_widget.info,
  background: transparent;
  background-color: transparent;
  margin-bottom: 0px !important;
- margin-top: 11px !important;
+ margin-top: 8px !important;
  vertical-align: middle !important;
 }
 #modal_indicator {
@@ -12455,9 +12454,6 @@ div.notification_widget.info,
   opacity: 0.8;
  }
 }
-i#kernel_indicator_icon {
- vertical-align: sub;
-}
 div.notification_widget.info,
 .notification_widget.info,
 .notification_widget:active:hover,
@@ -12515,7 +12511,7 @@ i.fa.fa-icon {
  box-shadow: none;
  padding: 0px;
  text-align: left;
- border: 2px solid #dedede;
+ border: none;
  background-color: #dedede;
  background: #dedede;
  line-height: 1;
@@ -12526,7 +12522,7 @@ i.fa.fa-icon {
  box-shadow: none;
  padding: 0px;
  text-align: left;
- border: 2px solid #dedede;
+ border: none;
  background-color: #dedede;
  box-shadow: none;
  line-height: 1;
@@ -12534,7 +12530,6 @@ i.fa.fa-icon {
 .dropdown-menu > li > a {
  font-family: sans-serif;
  font-size: 12.0pt;
- line-height: 1.1;
  display: block;
  padding: 10px 20px 9px 10px;
  color: #303030;
@@ -12556,7 +12551,8 @@ i.fa.fa-icon {
  background-color: rgba(180,180,180,.30);
 }
 .dropdown-submenu > .dropdown-menu {
- top: 0px;
+ display: none;
+ top: 2px !important;
  left: 100%;
  margin-top: -2px;
  margin-left: 0px;
@@ -12573,13 +12569,13 @@ i.fa.fa-icon {
  padding: none;
  display: block;
  clear: both;
- line-height: 1.1;
  white-space: nowrap;
 }
 .dropdown-submenu > a:after {
  color: #303030;
  margin-right: -16px;
  margin-top: 0px;
+ display: inline-block;
 }
 .dropdown-submenu:hover > a:after,
 .dropdown-submenu:active > a:after,
@@ -12587,6 +12583,7 @@ i.fa.fa-icon {
 .dropdown-submenu:visited > a:after {
  color: #ff7823;
  margin-right: -16px;
+ display: inline-block !important;
 }
 div.kse-dropdown > .dropdown-menu,
 .kse-dropdown > .dropdown-menu {
@@ -13047,6 +13044,9 @@ div.form-control,
  border-color: #dedede;
  margin-bottom: 0px;
 }
+.form-group .input-group {
+ float: left;
+}
 input,
 button,
 select,
@@ -13199,19 +13199,11 @@ div.CodeMirror-sizer {
  padding-bottom: 0px;
  margin-top: 0px;
 }
-div.cell.selected:before {
+div.cell.selected:before,
+.edit_mode div.cell.selected:before,
+div.cell.selected:before,
+div.cell.selected.jupyter-soft-selected:before {
  background: #ededed;
- border: none;
- border-radius: 3px;
- position: absolute;
- display: block;
- top: 0px;
- left: 0px;
- width: 0px;
- height: 100%;
-}
-.edit_mode div.cell.selected:before {
- background: #ffffff;
  border: none;
  border-radius: 3px;
  position: absolute;
@@ -13235,16 +13227,10 @@ div.cell.code_cell.selected .input {
  border-left: 5px solid #ffd5bb !important;
  border-radius: 3px;
 }
-div.cell.selected:before,
-div.cell.selected.jupyter-soft-selected:before {
- position: absolute;
- display: block;
- top: -1px;
- left: -1px;
- width: 5px;
- height: calc(102%);
- content: '';
- background: transparent !important;
+.edit_mode div.cell.selected:before {
+ height: 100%;
+ border-left: 5px solid #ffd5bb !important;
+ border-radius: 3px;
 }
 div.cell.jupyter-soft-selected,
 div.cell.selected.jupyter-soft-selected {
@@ -13258,18 +13244,6 @@ div.cell.selected.jupyter-soft-selected {
 }
 div.cell.selected.jupyter-soft-selected .input {
  border-left: 5px solid #ededed !important;
-}
-div.cell.selected.jupyter-soft-selected:before,
-.edit_mode div.cell.selected:before .input {
- background: #ffd5bb !important;
- border: 2px solid #ffd5bb !important;
- border-radius: 6px !important;
- position: absolute !important;
- display: block !important;
- top: 0px !important;
- left: 0px !important;
- width: 6px !important;
- height: 100% !important;
 }
 div.cell.selected.jupyter-soft-selected {
  border-left-color: #ff7823;
@@ -13289,17 +13263,6 @@ div.cell.text_cell.selected.jupyter-soft-selected .prompt {
 }
 div.cell.text_cell.selected.jupyter-soft-selected .input_prompt {
  border-left: none !important;
-}
-div.cell.text_cell.selected.jupyter-soft-selected:before {
- background: #f2f2f2 !important;
- border: 2px solid #f2f2f2 !important;
- border-radius: 6px !important;
- position: absolute !important;
- display: block !important;
- top: 0px !important;
- left: 0px !important;
- width: 6px !important;
- height: 100% !important;
 }
 div.cell.text_cell.jupyter-soft-selected,
 div.cell.text_cell.selected.jupyter-soft-selected {
@@ -13323,8 +13286,8 @@ div.prompt,
  padding-left: 0px;
  padding-right: 1px;
  text-align: right !important;
- min-width: 12.5ex !important;
- width: 12.5ex !important;
+ min-width: 13.5ex !important;
+ width: 13.5ex !important;
 }
 div.prompt.input_prompt {
  font-size: 9pt !important;
@@ -13334,8 +13297,8 @@ div.prompt.input_prompt {
  border-bottom-left-radius: 0px;
  border-bottom-right-radius: 0px;
  padding-right: 3px;
- min-width: 12.5ex;
- width: 12.5ex !important;
+ min-width: 13.5ex;
+ width: 13.5ex !important;
 }
 div.cell.code_cell .input_prompt {
  border-right: 2px solid rgba(240,147,43,.50);
@@ -13414,8 +13377,8 @@ div.prompt.output_prompt {
  border-top-right-radius: 0px;
  border-top-left-radius: 0px;
  border-bottom-right-radius: 0px;
- min-width: 12.5ex !important;
- width: 12.5ex !important;
+ min-width: 13.5ex !important;
+ width: 13.5ex !important;
  border-right: 2px solid transparent;
 }
 div.out_prompt_overlay.prompt {
@@ -13427,8 +13390,8 @@ div.out_prompt_overlay.prompt {
  border-top-right-radius: 0px;
  border-top-left-radius: 0px;
  border-bottom-right-radius: 0px;
- min-width: 12.5ex !important;
- width: 12.5ex !important;
+ min-width: 13.5ex !important;
+ width: 13.5ex !important;
  border-right: 2px solid transparent;
  color: transparent;
 }
@@ -13441,8 +13404,8 @@ div.out_prompt_overlay.prompt:hover {
  -moz-border-radius: 2px;
  border-top-right-radius: 0px;
  border-top-left-radius: 0px;
- min-width: 12.5ex !important;
- width: 12.5ex !important;
+ min-width: 13.5ex !important;
+ width: 13.5ex !important;
  border-right: 2px solid #f7f7f7 !important;
 }
 div.cell.code_cell .output_prompt {
@@ -13531,30 +13494,6 @@ div.edit_mode div.text_cell.unrendered {
  background-color: #ffffff;
  border-radius: 0px;
 }
-div.cell.text_cell.selected:before {
- background: #f2f2f2;
- border: 2px solid #f2f2f2;
- border-top-left-radius: 2px;
- border-bottom-left-radius: 2px;
- position: absolute;
- display: block;
- top: 0px;
- left: 0px;
- width: 5px;
- height: 100%;
-}
-.edit_mode div.cell.text_cell.selected:before {
- background: #f2f2f2;
- border: 2px solid #f2f2f2;
- border-top-left-radius: 2px;
- border-bottom-left-radius: 2px;
- position: absolute;
- display: block;
- top: 0px;
- left: 0px;
- width: 5px;
- height: 100%;
-}
 div.cell.text_cell .prompt {
  border-right: 0;
 }
@@ -13564,8 +13503,8 @@ div.cell.text_cell.rendered .prompt {
  font-weight: normal;
  color: #828892 !important;
  text-align: right !important;
- min-width: 12.5ex !important;
- width: 12.5ex !important;
+ min-width: 13.5ex !important;
+ width: 13.5ex !important;
  background-color: #ffffff;
  border-right: 2px solid transparent;
  border-left: 5px solid #ffffff;
@@ -13576,8 +13515,8 @@ div.cell.text_cell.unrendered .prompt {
  font-weight: normal;
  color: #828892 !important;
  text-align: right !important;
- min-width: 12.5ex !important;
- width: 12.5ex !important;
+ min-width: 13.5ex !important;
+ width: 13.5ex !important;
  border-right: 2px solid transparent;
  border-left: 5px solid #ffffff;
 }
@@ -13713,36 +13652,39 @@ div.rendered_html h5 {
  font-size: 200%;
  text-align: center;
  font-style: normal;
- font-weight: lighter;
+ font-weight: normal;
 }
 .rendered_html h2,
 .text_cell_render h2 {
- text-align: left;
+ color: #126dce;
  font-size: 170%;
- color: #3f3d46;
+ text-align: center;
  font-style: normal;
- font-weight: lighter;
+ font-weight: normal;
 }
 .rendered_html h3,
 .text_cell_render h3 {
+ color: #126dce;
  font-size: 140%;
- color: #3f3d46;
+ text-align: center;
  font-style: normal;
- font-weight: lighter;
+ font-weight: normal;
 }
 .rendered_html h4,
 .text_cell_render h4 {
+ color: #126dce;
  font-size: 110%;
- color: #3f3d46;
+ text-align: center;
  font-style: normal;
- font-weight: lighter;
+ font-weight: normal;
 }
 .rendered_html h5,
 .text_cell_render h5 {
+ color: #126dce;
  font-size: 100%;
- color: #2f2f2f;
+ text-align: center;
  font-style: normal;
- font-weight: lighter;
+ font-weight: normal;
 }
 hr {
  margin-top: 8px;
@@ -13928,7 +13870,7 @@ div.cell.text_cell a.anchor-link:link {
 }
 div.cell.text_cell a.anchor-link:link:hover {
  font-size: inherit;
- color: #828892;
+ color: #de6d25;
 }
 .navbar-text {
  margin-top: 4px;
@@ -14043,13 +13985,13 @@ span.rendered_html code {
  padding-right: 0px;
 }
 .nbext-filter-menu {
- max-height: 50vh;
+ max-height: 55vh !important;
  overflow-y: auto;
  outline: none;
- border: 2px solid #dedede;
+ border: none;
 }
 .nbext-filter-menu:hover {
- border: 2px solid #dedede;
+ border: none;
 }
 .alert-warning {
  background-color: #f4f4f4;
@@ -14212,6 +14154,40 @@ div.collapsible_headings_toggle .fa-caret-right:before {
  -o-transform: inherit !important;
  transform: inherit !important;
  padding-right: 0px !important;
+}
+#toc-wrapper {
+ z-index: 90;
+ position: fixed !important;
+ display: flex;
+ flex-direction: column;
+ overflow: hidden;
+ padding: 10px;
+ border-style: solid;
+ border-width: thin;
+ border-right-width: medium !important;
+ background-color: #ffffff !important;
+}
+#toc-wrapper.ui-draggable.ui-resizable.sidebar-wrapper {
+ border-color: rgba(180,180,180,.14) !important;
+}
+#toc a,
+#navigate_menu a,
+.toc {
+ color: #303030 !important;
+ font-size: 11pt !important;
+}
+#toc li > span:hover {
+ background-color: #d4d4d4 !important;
+}
+#toc a:hover,
+#navigate_menu a:hover,
+.toc {
+ color: #1c1c1c !important;
+ font-size: 11pt !important;
+}
+#toc-wrapper .toc-item-num {
+ color: #ff7823 !important;
+ font-size: 11pt !important;
 }
 input.raw_input {
  font-family: monospace, monospace;
@@ -14388,6 +14364,15 @@ body > div.modal.cmd-palette.in > div {
  background-color: #009e07;
  border-color: #009e07;
  border-radius: 0px;
+}
+.jupyter-dashboard-menu-item.selected::before {
+ font-family: 'FontAwesome' !important;
+ content: '\f00c' !important;
+ position: absolute !important;
+ color: #ff7823 !important;
+ left: 0px !important;
+ top: 13px !important;
+ font-size: 12px !important;
 }
 .shortcut_key,
 span.shortcut_key {
@@ -14915,9 +14900,7 @@ body {
 div#notebook {
   overflow: visible;
   border-top: none;
-}
-
-@media print {
+}@media print {
   div.cell {
     display: block;
     page-break-inside: avoid;
@@ -14938,7 +14921,7 @@ div#notebook {
 
 <!-- Loading mathjax macro -->
 <!-- Load mathjax -->
-    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
     <!-- MathJax configuration -->
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -14994,8 +14977,7 @@ p {font-size:14px;}
   <div tabindex="-1" id="notebook" class="border-box-sizing">
     <div class="container" id="notebook-container">
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15046,15 +15028,17 @@ p {font-size:14px;}
 
 
 <div class="output_area">
+
 <div class="prompt"></div>
 
 
 
 
-<div id="7ec2ed0d-e1dd-4121-9c87-553122ffcd78"></div>
+
+<div id="e87c280d-fe19-4891-a98b-bb418fa408a7"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#7ec2ed0d-e1dd-4121-9c87-553122ffcd78');
+var element = $('#e87c280d-fe19-4891-a98b-bb418fa408a7');
 
 (function(root) {
   function now() {
@@ -15591,7 +15575,9 @@ var element = $('#7ec2ed0d-e1dd-4121-9c87-553122ffcd78');
 </div>
 
 <div class="output_area">
+
 <div class="prompt"></div>
+
 
 
 <div class="output_html rendered_html output_subarea ">
@@ -16139,7 +16125,9 @@ h.sample_counts(include_gtex=False).relabel(&#39;TCGA Sample Counts&#39;)
 
 
 <div class="output_area">
+
 <div class="prompt output_prompt">Out[51]:</div>
+
 
 
 <div class="output_html rendered_html output_subarea output_execute_result">
@@ -16205,7 +16193,9 @@ h.sample_counts().relabel(&#39;TCGA and GTEx Sample Counts&#39;)
 
 
 <div class="output_area">
+
 <div class="prompt output_prompt">Out[52]:</div>
+
 
 
 <div class="output_html rendered_html output_subarea output_execute_result">
