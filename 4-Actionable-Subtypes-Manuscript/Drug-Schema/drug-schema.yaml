@@ -1,0 +1,84 @@
+# Drug Schema
+
+# Name
+Drug: Example
+Alternative_names:
+  - Examplumab
+
+# Tissue targets
+Tissues:
+  - Kidney
+  - Lung
+
+Drug_type: Monoclonal Antibody
+Class: PDGF Family
+Target_class: RTK
+Mechanism_of_action: ERBB1-Inhibition
+
+# Papersa
+Papers:
+  - Rosenburg et al. 2016
+  - Camidge et al. 2015
+
+# Pharmocology:
+Pharmocology:
+  Example drug works by binding to the flux capacitor
+  ligand site located within the DOC complex.
+
+# Biomarkers
+Biomarkers:
+  # Responsive Biomarkers
+  - Responsive:
+
+    # Expression
+    - Overexpression:
+      - Gene: CD274
+    - Underexpression:
+      - Gene:
+
+    # Mutation
+    - Mutation:
+      - Gene: ABL1
+        - SNPs:
+          - T315A
+          - F317C/I/L/V
+          - Y253H
+          - E255K/V
+          - F359C/I/V
+
+    # CNV
+    # TODO: Is this just an integer between -n and n?
+    CNV: +2
+
+    # Biallelic Inactivation
+
+    # Gene Fusion
+    # TODO: Encoded as a list for gene standardization, otherwise you'd get ALK, EML4-ALK, ALK-EML4, ALK/EML4, etc.
+    Fusion:
+      - EML4
+      - ALK
+
+  # Resistant Biomarkers
+  # TODO: Assumption if mutation has no SNPs is that it requires *any* non-synonymous / STOP / indel mutation
+  - Resistant:
+
+    # Expression
+    - Overexpression:
+      - Gene: EGFR
+    - Underexpression:
+      - Gene:
+
+    # Mutation
+    - Mutation:
+      - Gene: KRAS
+        - SNPs:
+      - Gene: BRAF
+        - SNPs:
+          - V600E
+      - Gene: NRAS
+        - SNPs:
+
+Notes: >
+  Examplumab is targeted to about 30%
+  of patients who suffer from the primary
+  disease Examplumab is intended for.
