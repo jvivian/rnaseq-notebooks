@@ -10,6 +10,10 @@ Tissues:
   - Kidney
   - Lung
 
+Types:
+  - Renal Cell Carcinoma
+  - Squamous Lung Cell Carcinoma
+
 Drug_type: Monoclonal Antibody
 Class: PDGF Family
 Target_class: RTK
@@ -24,7 +28,6 @@ Papers:
 Pharmocology:
   Example drug works by binding to the flux capacitor
   ligand site located within the DOC complex.
-
 
 # Biomarkers is a list of dictionaries
 Biomarkers:
