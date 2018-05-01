@@ -25,58 +25,49 @@ Pharmocology:
   Example drug works by binding to the flux capacitor
   ligand site located within the DOC complex.
 
-# Biomarkers
+
+# Biomarkers is a list of dictionaries
 Biomarkers:
-  # Responsive Biomarkers
-  - Responsive:
 
-    # Expression
-    - Overexpression:
-      - Gene: CD274
-    - Underexpression:
-      - Gene:
+  # Full biomarker layout annotated
+  - Type: Responsive        # Allowed values: Responsive / Resistant
+    Potential: True         # Allowed values: True / False. Empty defaults to False which is most common
+    Overexpression: CD274   # Gene name
+    Underexpression:        # Gene name
+    Mutation:
+      - Gene:   # Gene name
+        SNPs:   # List of SNPs associated with this biomarker mutation
+        Exons:  # List of exons associated with this biomarker mutation
+    CNV:        # Copy number variation [-2, -1, 0, 1, 2]
+    Fusion:     # Fusion [Gene1, Gene2] or use * for wildcard: [Gene1, *]
+    Biallelic_inactivation:   # Gene name
+    Group: A    # Group if required along with other biomarkers
 
-    # Mutation
-    - Mutation:
+  # Abbreviated - only using required fields (might be better to always list all fields?)
+  - Type: Responsive
+    Potential: True
+    Overexpression: KIT
+    Group: A
+
+  # More abbreviated examples unannotated
+  - Type: Responsive
+    Mutation:
       - Gene: ABL1
-        - SNPs:
-          - T315A
-          - F317C/I/L/V
-          - Y253H
-          - E255K/V
-          - F359C/I/V
+        SNPs: [T315A, F317C/I/L/V, Y253H, E255K/V, F359C/I/V, E255K/V]
 
-    # CNV
-    # TODO: Is this just an integer between -n and n?
-    CNV: +2
+  - Type: Responsive
+    Mutation:
+      - Gene: KIT
+      - Exons: [9, 11, 13, 14, 17]
 
-    # Biallelic Inactivation
+  - Type: Resistant
+    CNV:
+      Gene: FAP
+      Value: +2
 
-    # Gene Fusion
-    # TODO: Encoded as a list for gene standardization, otherwise you'd get ALK, EML4-ALK, ALK-EML4, ALK/EML4, etc.
-    Fusion:
-      - EML4
-      - ALK
-
-  # Resistant Biomarkers
-  # TODO: Assumption if mutation has no SNPs is that it requires *any* non-synonymous / STOP / indel mutation
-  - Resistant:
-
-    # Expression
-    - Overexpression:
-      - Gene: EGFR
-    - Underexpression:
-      - Gene:
-
-    # Mutation
-    - Mutation:
-      - Gene: KRAS
-        - SNPs:
-      - Gene: BRAF
-        - SNPs:
-          - V600E
-      - Gene: NRAS
-        - SNPs:
+  - Type: Resistant
+    Potential: True
+    Fusion: [EML4, ALK]
 
 Notes: >
   Examplumab is targeted to about 30%
