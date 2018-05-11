@@ -1,0 +1,666 @@
+!!python/object/apply:collections.defaultdict
+args: [!!python/name:__builtin__.list '']
+dictitems:
+  AP32788:
+  - {Alteration: Exon 20 insertions, Gene: ERBB2, Level: '4', Subtype: Non-Small Cell
+      Lung Cancer}
+  - {Alteration: Exon 20 insertions/deletions, Gene: ERBB2, Level: '4', Subtype: Non-Small
+      Cell Lung Cancer}
+  - {Alteration: S768I, Gene: EGFR, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: Exon 20 insertion, Gene: EGFR, Level: '4', Subtype: Non-Small Cell
+      Lung Cancer}
+  - {Alteration: L861R, Gene: EGFR, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: G719A, Gene: EGFR, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  AZD-4575:
+  - &id004 {Alteration: K650E, Gene: FGFR3, Level: 3A, Subtype: Bladder Cancer}
+  - &id005 {Alteration: S249C, Gene: FGFR3, Level: 3A, Subtype: Bladder Cancer}
+  - &id006 {Alteration: S371C, Gene: FGFR3, Level: 3A, Subtype: Bladder Cancer}
+  - &id007 {Alteration: Y373C, Gene: FGFR3, Level: 3A, Subtype: Bladder Cancer}
+  - &id008 {Alteration: K650R, Gene: FGFR3, Level: 3A, Subtype: Bladder Cancer}
+  - &id009 {Alteration: K650N, Gene: FGFR3, Level: 3A, Subtype: Bladder Cancer}
+  - &id010 {Alteration: K650Q, Gene: FGFR3, Level: 3A, Subtype: Bladder Cancer}
+  - &id011 {Alteration: K650M, Gene: FGFR3, Level: 3A, Subtype: Bladder Cancer}
+  - &id012 {Alteration: K650T, Gene: FGFR3, Level: 3A, Subtype: Bladder Cancer}
+  - &id013 {Alteration: R248C, Gene: FGFR3, Level: 3A, Subtype: Bladder Cancer}
+  - &id014 {Alteration: G370C, Gene: FGFR3, Level: 3A, Subtype: Bladder Cancer}
+  - &id015 {Alteration: G380R, Gene: FGFR3, Level: 3A, Subtype: Bladder Cancer}
+  AZD4547:
+  - &id016 {Alteration: Fusions, Gene: FGFR3, Level: 3A, Subtype: Bladder Cancer}
+  - &id017 {Alteration: Amplification, Gene: FGFR1, Level: 3A, Subtype: Lung Squamous
+      Cell Carcinoma}
+  AZD4575:
+  - &id002 {Alteration: Fusions, Gene: FGFR2, Level: 3A, Subtype: Bladder Cancer}
+  - &id003 {Alteration: Fusions, Gene: FGFR2, Level: 3A, Subtype: Cholangiocarcinoma}
+  AZD5363:
+  - {Alteration: E17K, Gene: AKT1, Level: 3A, Subtype: Endometrial Cancer}
+  - {Alteration: E17K, Gene: AKT1, Level: 3A, Subtype: Breast Cancer}
+  - {Alteration: E17K, Gene: AKT1, Level: 3A, Subtype: Ovarian Cancer}
+  AZD6482 + Alpelisib:
+  - {Alteration: Oncogenic Mutations, Gene: PTEN, Level: '4', Subtype: Breast Cancer}
+  AZD8186:
+  - &id067 {Alteration: Oncogenic Mutations, Gene: PTEN, Level: '4', Subtype: All
+      Tumors}
+  AZD9496:
+  - &id066 {Alteration: Oncogenic Mutations, Gene: ESR1, Level: 3A, Subtype: Breast
+      Cancer}
+  Abemaciclib:
+  - &id077 {Alteration: Amplification, Gene: CDK4, Level: 2A, Subtype: Dedifferentiated
+      Liposarcoma}
+  - &id078 {Alteration: Amplification, Gene: CDK4, Level: 2A, Subtype: Well-Differentiated
+      Liposarcoma}
+  Ado-Trastuzumab Emtansine:
+  - &id072 {Alteration: Amplification, Gene: ERBB2, Level: '1', Subtype: Breast Cancer}
+  Afatinib:
+  - &id047 {Alteration: S768I, Gene: EGFR, Level: '1', Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id048 {Alteration: L833V, Gene: EGFR, Level: '1', Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id049 {Alteration: L858R, Gene: EGFR, Level: '1', Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id050 {Alteration: G719A, Gene: EGFR, Level: '1', Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id051 {Alteration: E709K, Gene: EGFR, Level: '1', Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id052 {Alteration: A750P, Gene: EGFR, Level: '1', Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id053 {Alteration: G719C, Gene: EGFR, Level: '1', Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id054 {Alteration: T790M, Gene: EGFR, Level: R1, Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id055 {Alteration: EGFR-KDD Fusion, Gene: EGFR, Level: '1', Subtype: Non-Small
+      Cell Lung Cancer}
+  - &id056 {Alteration: Exon 20 insertion, Gene: EGFR, Level: R1, Subtype: Non-Small
+      Cell Lung Cancer}
+  - &id057 {Alteration: Exon 19 insertion, Gene: EGFR, Level: '1', Subtype: Non-Small
+      Cell Lung Cancer}
+  - &id058 {Alteration: Exon 19 deletion/insertion, Gene: EGFR, Level: '1', Subtype: Non-Small
+      Cell Lung Cancer}
+  - &id059 {Alteration: Exon 19 deletion, Gene: EGFR, Level: '1', Subtype: Non-Small
+      Cell Lung Cancer}
+  - &id060 {Alteration: L861R, Gene: EGFR, Level: '1', Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id061 {Alteration: A763_Y764insFQEA, Gene: EGFR, Level: '1', Subtype: Non-Small
+      Cell Lung Cancer}
+  - &id062 {Alteration: E709_T710delinsD, Gene: EGFR, Level: '1', Subtype: Non-Small
+      Cell Lung Cancer}
+  - &id063 {Alteration: L747P, Gene: EGFR, Level: '1', Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id064 {Alteration: L861Q, Gene: EGFR, Level: '1', Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id065 {Alteration: G719S, Gene: EGFR, Level: '1', Subtype: Non-Small Cell Lung
+      Cancer}
+  Alectinib:
+  - &id020 {Alteration: Fusions, Gene: ALK, Level: '1', Subtype: Non-Small Cell Lung
+      Cancer}
+  Alpelisib:
+  - &id001 {Alteration: Oncogenic Mutations, Gene: PIK3CA, Level: 3A, Subtype: Breast
+      Cancer}
+  Alpelisib + Fulvestrant:
+  - *id001
+  Avapritinib:
+  - &id033 {Alteration: D816A, Gene: KIT, Level: '4', Subtype: Gastrointestinal Stromal
+      Tumor}
+  - &id034 {Alteration: D816H, Gene: KIT, Level: '4', Subtype: Gastrointestinal Stromal
+      Tumor}
+  - &id035 {Alteration: D816F, Gene: KIT, Level: '4', Subtype: Gastrointestinal Stromal
+      Tumor}
+  - &id036 {Alteration: D816Y, Gene: KIT, Level: '4', Subtype: Gastrointestinal Stromal
+      Tumor}
+  - &id037 {Alteration: D816N, Gene: KIT, Level: '4', Subtype: Gastrointestinal Stromal
+      Tumor}
+  - &id038 {Alteration: D816V, Gene: KIT, Level: '4', Subtype: Gastrointestinal Stromal
+      Tumor}
+  - &id039 {Alteration: D816G, Gene: KIT, Level: '4', Subtype: Gastrointestinal Stromal
+      Tumor}
+  - &id040 {Alteration: D816E, Gene: KIT, Level: '4', Subtype: Gastrointestinal Stromal
+      Tumor}
+  BGJ-398:
+  - *id002
+  - *id003
+  - *id004
+  - *id005
+  - *id006
+  - *id007
+  - *id008
+  - *id009
+  - *id010
+  - *id011
+  - *id012
+  - *id013
+  - *id014
+  - *id015
+  BGJ398:
+  - *id016
+  - *id017
+  BVD-523:
+  - &id071 {Alteration: Oncogenic Mutations, Gene: BRAF, Level: '4', Subtype: All
+      Tumors}
+  BVD523:
+  - &id018 {Alteration: Oncogenic Mutations, Gene: NF1, Level: '4', Subtype: All Tumors}
+  Binimetinib:
+  - &id105 {Alteration: Oncogenic Mutations, Gene: KRAS, Level: '4', Subtype: Non-Small
+      Cell Lung Cancer}
+  - &id019 {Alteration: Oncogenic Mutations, Gene: NRAS, Level: 3A, Subtype: Melanoma}
+  - *id018
+  Binimetinib + Ribociclib:
+  - *id019
+  Brigatinib:
+  - *id020
+  Buparlisib:
+  - *id001
+  Buparlisib + Fulvestrant:
+  - *id001
+  Cabozantinib:
+  - {Alteration: Fusions, Gene: RET, Level: 2A, Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: Amplification, Gene: MET, Level: 2A, Subtype: Renal Cell Carcinoma}
+  - &id021 {Alteration: Y1003N, Gene: MET, Level: 3A, Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id022 {Alteration: D1010H, Gene: MET, Level: 3A, Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id023 {Alteration: X1009_splice, Gene: MET, Level: 3A, Subtype: Non-Small Cell
+      Lung Cancer}
+  - &id024 {Alteration: D1010N, Gene: MET, Level: 3A, Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id025 {Alteration: 963_D1010splice, Gene: MET, Level: 3A, Subtype: Non-Small
+      Cell Lung Cancer}
+  - &id026 {Alteration: X963_splice, Gene: MET, Level: 3A, Subtype: Non-Small Cell
+      Lung Cancer}
+  - &id027 {Alteration: X1008_splice, Gene: MET, Level: 3A, Subtype: Non-Small Cell
+      Lung Cancer}
+  - &id028 {Alteration: D1010Y, Gene: MET, Level: 3A, Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id029 {Alteration: X1006_splice, Gene: MET, Level: 3A, Subtype: Non-Small Cell
+      Lung Cancer}
+  - &id030 {Alteration: 981_1028splice, Gene: MET, Level: 3A, Subtype: Non-Small Cell
+      Lung Cancer}
+  - &id031 {Alteration: X1007_splice, Gene: MET, Level: 3A, Subtype: Non-Small Cell
+      Lung Cancer}
+  Capmatinib:
+  - *id021
+  - *id022
+  - *id023
+  - *id024
+  - *id025
+  - *id026
+  - *id027
+  - *id028
+  - *id029
+  - *id030
+  - *id031
+  Ceritinib:
+  - &id032 {Alteration: Fusions, Gene: ALK, Level: 2A, Subtype: Inflammatory Myofibroblastic
+      Tumor}
+  - *id020
+  Cetuximab:
+  - &id079 {Alteration: Wildtype, Gene: KRAS, Level: '1', Subtype: Colorectal Cancer}
+  - &id080 {Alteration: Oncogenic Mutations, Gene: KRAS, Level: R1, Subtype: Colorectal
+      Cancer}
+  - &id081 {Alteration: Oncogenic Mutations, Gene: NRAS, Level: R1, Subtype: Colorectal
+      Cancer}
+  Cisplatin:
+  - {Alteration: Oncogenic Mutations, Gene: ERCC2, Level: 3A, Subtype: Bladder Cancer}
+  Cobimetinib:
+  - &id106 {Alteration: Fusions, Gene: BRAF, Level: 3A, Subtype: Ovarian Cancer}
+  - &id107 {Alteration: Fusions, Gene: BRAF, Level: 3A, Subtype: Melanoma}
+  - &id108 {Alteration: Oncogenic Mutations, Gene: MAP2K1, Level: 3A, Subtype: Melanoma}
+  - &id109 {Alteration: Oncogenic Mutations, Gene: MAP2K1, Level: 3A, Subtype: Low-Grade
+      Serous Ovarian Cancer}
+  - &id110 {Alteration: Oncogenic Mutations, Gene: MAP2K1, Level: 3A, Subtype: Non-Small
+      Cell Lung Cancer}
+  - &id111 {Alteration: Oncogenic Mutations, Gene: MAP2K1, Level: 3A, Subtype: Histiocytic
+      Disorder}
+  Copanlisib:
+  - *id001
+  Crizotinib:
+  - {Alteration: D1010H, Gene: MET, Level: 2A, Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: 963_D1010splice, Gene: MET, Level: 2A, Subtype: Non-Small Cell Lung
+      Cancer}
+  - {Alteration: X1007_splice, Gene: MET, Level: 2A, Subtype: Non-Small Cell Lung
+      Cancer}
+  - {Alteration: Y1003N, Gene: MET, Level: 2A, Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: 981_1028splice, Gene: MET, Level: 2A, Subtype: Non-Small Cell Lung
+      Cancer}
+  - {Alteration: Amplification, Gene: MET, Level: 2A, Subtype: Non-Small Cell Lung
+      Cancer}
+  - {Alteration: X1006_splice, Gene: MET, Level: 2A, Subtype: Non-Small Cell Lung
+      Cancer}
+  - {Alteration: X963_splice, Gene: MET, Level: 2A, Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: D1010N, Gene: MET, Level: 2A, Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: X1008_splice, Gene: MET, Level: 2A, Subtype: Non-Small Cell Lung
+      Cancer}
+  - {Alteration: D1010Y, Gene: MET, Level: 2A, Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: X1009_splice, Gene: MET, Level: 2A, Subtype: Non-Small Cell Lung
+      Cancer}
+  - *id032
+  - *id020
+  - {Alteration: Fusions, Gene: ROS1, Level: '1', Subtype: Non-Small Cell Lung Cancer}
+  DCC-2618:
+  - *id033
+  - *id034
+  - *id035
+  - *id036
+  - *id037
+  - *id038
+  - *id039
+  - *id040
+  DS-3032b:
+  - &id082 {Alteration: Amplification, Gene: MDM2, Level: 3A, Subtype: Liposarcoma}
+  Dabrafenib:
+  - &id112 {Alteration: V600M, Gene: BRAF, Level: 2A, Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id113 {Alteration: V600G, Gene: BRAF, Level: 2A, Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id041 {Alteration: V600M, Gene: BRAF, Level: '1', Subtype: Melanoma}
+  - &id042 {Alteration: V600K, Gene: BRAF, Level: '1', Subtype: Melanoma}
+  - &id114 {Alteration: V600E, Gene: BRAF, Level: 2A, Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id043 {Alteration: V600G, Gene: BRAF, Level: '1', Subtype: Melanoma}
+  - &id115 {Alteration: V600D, Gene: BRAF, Level: 2A, Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id116 {Alteration: V600R, Gene: BRAF, Level: 2A, Subtype: Non-Small Cell Lung
+      Cancer}
+  - &id044 {Alteration: V600R, Gene: BRAF, Level: '1', Subtype: Melanoma}
+  - &id045 {Alteration: V600D, Gene: BRAF, Level: '1', Subtype: Melanoma}
+  - &id046 {Alteration: V600E, Gene: BRAF, Level: '1', Subtype: Melanoma}
+  - &id117 {Alteration: V600K, Gene: BRAF, Level: 2A, Subtype: Non-Small Cell Lung
+      Cancer}
+  Dabrafenib + Lapatinib:
+  - {Alteration: V600K, Gene: BRAF, Level: '4', Subtype: Thyroid Cancer}
+  - {Alteration: V600E, Gene: BRAF, Level: '4', Subtype: Thyroid Cancer}
+  Dabrafenib + Trametinib:
+  - {Alteration: V600D, Gene: BRAF, Level: '1', Subtype: Non-Small Cell Lung Cancer}
+  - *id041
+  - *id042
+  - *id043
+  - {Alteration: V600K, Gene: BRAF, Level: '1', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: V600G, Gene: BRAF, Level: '1', Subtype: Non-Small Cell Lung Cancer}
+  - *id044
+  - *id045
+  - {Alteration: V600E, Gene: BRAF, Level: '1', Subtype: Non-Small Cell Lung Cancer}
+  - *id046
+  - {Alteration: V600R, Gene: BRAF, Level: '1', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: V600M, Gene: BRAF, Level: '1', Subtype: Non-Small Cell Lung Cancer}
+  Dasatinib:
+  - &id068 {Alteration: BCR-ABL1 Fusion, Gene: ABL1, Level: '1', Subtype: Acute Lymphoid
+      Leukemia}
+  - &id069 {Alteration: BCR-ABL1 Fusion, Gene: ABL1, Level: '1', Subtype: Chronic
+      Myelogenous Leukemia}
+  - {Alteration: D842V, Gene: PDGFRA, Level: 2A, Subtype: Gastrointestinal Stromal
+      Tumor}
+  Debio1347:
+  - *id002
+  - *id003
+  - *id004
+  - *id005
+  - *id006
+  - *id007
+  - *id016
+  - *id008
+  - *id009
+  - *id010
+  - *id011
+  - *id012
+  - *id013
+  - *id014
+  - *id015
+  - *id017
+  Enasidenib:
+  - {Alteration: R140Q, Gene: IDH2, Level: '1', Subtype: Acute Myeloid Leukemia}
+  - {Alteration: R172S, Gene: IDH2, Level: '1', Subtype: Acute Myeloid Leukemia}
+  - {Alteration: R172M, Gene: IDH2, Level: '1', Subtype: Acute Myeloid Leukemia}
+  - {Alteration: R172K, Gene: IDH2, Level: '1', Subtype: Acute Myeloid Leukemia}
+  - {Alteration: R172G, Gene: IDH2, Level: '1', Subtype: Acute Myeloid Leukemia}
+  Entrectinib:
+  - &id073 {Alteration: Fusions, Gene: NTRK3, Level: 3A, Subtype: All Solid Tumors}
+  - &id074 {Alteration: Fusions, Gene: NTRK2, Level: 3A, Subtype: All Solid Tumors}
+  - &id075 {Alteration: Fusions, Gene: NTRK1, Level: 3A, Subtype: All Solid Tumors}
+  Erlotinib:
+  - *id047
+  - *id048
+  - *id049
+  - *id050
+  - *id051
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  Everolimus:
+  - {Alteration: Oncogenic Mutations, Gene: TSC1, Level: 2A, Subtype: CNS Cancer}
+  - {Alteration: Oncogenic Mutations, Gene: TSC1, Level: 2A, Subtype: Renal Cell Carcinoma}
+  - {Alteration: Oncogenic Mutations, Gene: TSC2, Level: 2A, Subtype: CNS Cancer}
+  - &id100 {Alteration: S2215F, Gene: MTOR, Level: '4', Subtype: Renal Clear Cell
+      Carcinoma}
+  - &id101 {Alteration: L2230V, Gene: MTOR, Level: '4', Subtype: Renal Clear Cell
+      Carcinoma}
+  - &id102 {Alteration: F1888L, Gene: MTOR, Level: '4', Subtype: Renal Clear Cell
+      Carcinoma}
+  - &id103 {Alteration: T1977K, Gene: MTOR, Level: '4', Subtype: Renal Clear Cell
+      Carcinoma}
+  - {Alteration: E2014K, Gene: MTOR, Level: 3A, Subtype: Bladder Cancer}
+  - &id104 {Alteration: C1483F, Gene: MTOR, Level: '4', Subtype: Renal Clear Cell
+      Carcinoma}
+  Fulvestrant:
+  - *id066
+  GDC-0077:
+  - *id001
+  GDC-0994:
+  - &id070 {Alteration: Oncogenic Mutations, Gene: KRAS, Level: '4', Subtype: All
+      Tumors}
+  GSK2636771:
+  - *id067
+  Gefitinib:
+  - *id047
+  - *id048
+  - *id049
+  - *id050
+  - *id051
+  - *id052
+  - *id053
+  - *id054
+  - *id055
+  - *id056
+  - *id057
+  - *id058
+  - *id059
+  - *id060
+  - *id061
+  - *id062
+  - *id063
+  - *id064
+  - *id065
+  Imatinib:
+  - *id068
+  - *id069
+  - {Alteration: D816H, Gene: KIT, Level: 2A, Subtype: Melanoma}
+  - {Alteration: D816F, Gene: KIT, Level: 2A, Subtype: Melanoma}
+  - {Alteration: D816G, Gene: KIT, Level: 2A, Subtype: Melanoma}
+  - {Alteration: V654A, Gene: KIT, Level: 2A, Subtype: Melanoma}
+  - {Alteration: D816A, Gene: KIT, Level: 2A, Subtype: Melanoma}
+  - {Alteration: Oncogenic Mutations, Gene: KIT, Level: 2A, Subtype: Melanoma}
+  - {Alteration: T670I, Gene: KIT, Level: 2A, Subtype: Melanoma}
+  - &id083 {Alteration: Oncogenic Mutations, Gene: KIT, Level: '1', Subtype: Gastrointestinal
+      Stromal Tumor}
+  - {Alteration: D816Y, Gene: KIT, Level: 2A, Subtype: Melanoma}
+  - {Alteration: Exon 17 mutations, Gene: KIT, Level: 2A, Subtype: Melanoma}
+  - {Alteration: D816V, Gene: KIT, Level: 2A, Subtype: Melanoma}
+  - {Alteration: D816N, Gene: KIT, Level: 2A, Subtype: Melanoma}
+  - {Alteration: D816E, Gene: KIT, Level: 2A, Subtype: Melanoma}
+  - {Alteration: Fusions, Gene: PDGFRB, Level: '1', Subtype: Myelodysplasia}
+  - {Alteration: Fusions, Gene: PDGFRB, Level: '1', Subtype: Dermatofibrosarcoma Protuberans}
+  - {Alteration: Fusions, Gene: PDGFRB, Level: '1', Subtype: Myeloproliferative Neoplasm}
+  - &id076 {Alteration: Oncogenic Mutations, Gene: PDGFRB, Level: '4', Subtype: All
+      Tumors}
+  - {Alteration: FIP1L1-PDGFRA Fusion, Gene: PDGFRA, Level: '1', Subtype: Leukemia}
+  - {Alteration: Fusions, Gene: PDGFRA, Level: '1', Subtype: Myeloproliferative Neoplasm}
+  - {Alteration: Fusions, Gene: PDGFRA, Level: '1', Subtype: Myelodysplasia}
+  - {Alteration: Oncogenic Mutations, Gene: PDGFRA, Level: 2A, Subtype: Gastrointestinal
+      Stromal Tumor}
+  - {Alteration: D842V, Gene: PDGFRA, Level: R1, Subtype: Gastrointestinal Stromal
+      Tumor}
+  Ivosidenib:
+  - {Alteration: R132Q, Gene: IDH1, Level: 3A, Subtype: Acute Myeloid Leukemia}
+  - {Alteration: R132S, Gene: IDH1, Level: 3A, Subtype: Acute Myeloid Leukemia}
+  - {Alteration: R132H, Gene: IDH1, Level: 3A, Subtype: Acute Myeloid Leukemia}
+  - {Alteration: R132G, Gene: IDH1, Level: 3A, Subtype: Acute Myeloid Leukemia}
+  - {Alteration: R132C, Gene: IDH1, Level: 3A, Subtype: Acute Myeloid Leukemia}
+  JNJ-42756493:
+  - *id002
+  - *id003
+  - *id004
+  - *id005
+  - *id006
+  - *id007
+  - *id016
+  - *id008
+  - *id009
+  - *id010
+  - *id011
+  - *id012
+  - *id013
+  - *id014
+  - *id015
+  - *id017
+  KO-947:
+  - *id070
+  - *id071
+  LOXO-195:
+  - {Alteration: G696A, Gene: NTRK3, Level: '4', Subtype: All Tumors}
+  - {Alteration: G623R, Gene: NTRK3, Level: '4', Subtype: All Tumors}
+  - {Alteration: G595R, Gene: NTRK1, Level: '4', Subtype: All Tumors}
+  - {Alteration: G667C, Gene: NTRK1, Level: '4', Subtype: All Tumors}
+  LTT462:
+  - *id071
+  - *id018
+  LY3214996:
+  - *id070
+  Lapatinib:
+  - *id072
+  Lapatinib + Trastuzumab:
+  - *id072
+  Larotrectinib:
+  - *id073
+  - *id074
+  - *id075
+  Neratinib:
+  - {Alteration: Oncogenic Mutations, Gene: ERBB2, Level: 3A, Subtype: Non-Small Cell
+      Lung Cancer}
+  - {Alteration: Oncogenic Mutations, Gene: ERBB2, Level: 3A, Subtype: Breast Cancer}
+  Nilotinib:
+  - *id069
+  - *id076
+  Niraparib:
+  - &id084 {Alteration: Oncogenic Mutations, Gene: BRCA2, Level: '1', Subtype: Ovarian
+      Cancer}
+  - &id085 {Alteration: Oncogenic Mutations, Gene: BRCA1, Level: '1', Subtype: Ovarian
+      Cancer}
+  Nivolumab:
+  - {Alteration: Microsatellite Instability-High, Gene: Other Biomarkers, Level: '1',
+    Subtype: Colorectal Cancer}
+  Olaparib:
+  - {Alteration: Oncogenic Mutations, Gene: BRCA2, Level: 2A, Subtype: Ovarian Cancer}
+  - {Alteration: Oncogenic Mutations, Gene: BRCA1, Level: 2A, Subtype: Ovarian Cancer}
+  - {Alteration: Truncating Mutations, Gene: ATM, Level: '4', Subtype: Prostate Cancer}
+  - {Alteration: N2875K, Gene: ATM, Level: '4', Subtype: Prostate Cancer}
+  - {Alteration: R3008C, Gene: ATM, Level: '4', Subtype: Prostate Cancer}
+  Osimertinib:
+  - {Alteration: T790M, Gene: EGFR, Level: '1', Subtype: Non-Small Cell Lung Cancer}
+  PF-03084014:
+  - {Alteration: Gain-of-function Mutations, Gene: NOTCH1, Level: '4', Subtype: All
+      Tumors}
+  Palbociclib:
+  - *id077
+  - *id078
+  Panitumumab:
+  - *id079
+  - *id080
+  - *id081
+  Pembrolizumab:
+  - {Alteration: Microsatellite Instability-High, Gene: Other Biomarkers, Level: '1',
+    Subtype: All Solid Tumors}
+  Pertuzumab + Trastuzumab:
+  - *id072
+  Ponatinib:
+  - *id076
+  RG7112:
+  - *id082
+  RTK-Inhibitor + Trametinib:
+  - {Alteration: G466A, Gene: BRAF, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: D594A, Gene: BRAF, Level: '4', Subtype: Colorectal Cancer}
+  - {Alteration: F595L, Gene: BRAF, Level: '4', Subtype: Colorectal Cancer}
+  - {Alteration: G466E, Gene: BRAF, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: G466V, Gene: BRAF, Level: '4', Subtype: Colorectal Cancer}
+  - {Alteration: N581I, Gene: BRAF, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: N581S, Gene: BRAF, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: D594N, Gene: BRAF, Level: '4', Subtype: Colorectal Cancer}
+  - {Alteration: D594G, Gene: BRAF, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: G469E, Gene: BRAF, Level: '4', Subtype: Colorectal Cancer}
+  - {Alteration: S467L, Gene: BRAF, Level: '4', Subtype: Colorectal Cancer}
+  - {Alteration: G596R, Gene: BRAF, Level: '4', Subtype: Colorectal Cancer}
+  - {Alteration: G596D, Gene: BRAF, Level: '4', Subtype: Colorectal Cancer}
+  - {Alteration: D287H, Gene: BRAF, Level: '4', Subtype: Colorectal Cancer}
+  - {Alteration: N581I, Gene: BRAF, Level: '4', Subtype: Colorectal Cancer}
+  - {Alteration: V459L, Gene: BRAF, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: G466E, Gene: BRAF, Level: '4', Subtype: Colorectal Cancer}
+  - {Alteration: G466A, Gene: BRAF, Level: '4', Subtype: Colorectal Cancer}
+  - {Alteration: D594H, Gene: BRAF, Level: '4', Subtype: Colorectal Cancer}
+  - {Alteration: N581S, Gene: BRAF, Level: '4', Subtype: Colorectal Cancer}
+  - {Alteration: D594H, Gene: BRAF, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: F595L, Gene: BRAF, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: D594A, Gene: BRAF, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: G596D, Gene: BRAF, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: D287H, Gene: BRAF, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: G466V, Gene: BRAF, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: V459L, Gene: BRAF, Level: '4', Subtype: Colorectal Cancer}
+  - {Alteration: G469E, Gene: BRAF, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: D594G, Gene: BRAF, Level: '4', Subtype: Colorectal Cancer}
+  - {Alteration: G596R, Gene: BRAF, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: S467L, Gene: BRAF, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  - {Alteration: D594N, Gene: BRAF, Level: '4', Subtype: Non-Small Cell Lung Cancer}
+  Regorafenib:
+  - *id083
+  - &id093 {Alteration: T670I, Gene: KIT, Level: '1', Subtype: Gastrointestinal Stromal
+      Tumor}
+  - {Alteration: Exon 17 mutations, Gene: KIT, Level: '1', Subtype: Gastrointestinal
+      Stromal Tumor}
+  - &id096 {Alteration: V654A, Gene: KIT, Level: '1', Subtype: Gastrointestinal Stromal
+      Tumor}
+  - *id079
+  Rucaparib:
+  - *id084
+  - *id085
+  Ruxolitinib:
+  - {Alteration: PCM1-JAK2 Fusion, Gene: JAK2, Level: 3A, Subtype: Leukemia}
+  Selumetinib + Radioiodine Uptake Therapy:
+  - {Alteration: Oncogenic Mutations, Gene: NRAS, Level: 3A, Subtype: Thyroid Cancer}
+  Serabelisib:
+  - *id001
+  Sonidegib:
+  - &id118 {Alteration: Truncating Mutations, Gene: PTCH1, Level: 3A, Subtype: 'Skin
+      Cancer, Non-Melanoma'}
+  - {Alteration: Truncating Mutations, Gene: PTCH1, Level: 3A, Subtype: Embryonal
+      Tumor}
+  Sorafenib:
+  - &id086 {Alteration: D816G, Gene: KIT, Level: 2A, Subtype: Thymic Tumor}
+  - &id087 {Alteration: D816H, Gene: KIT, Level: 2A, Subtype: Thymic Tumor}
+  - &id088 {Alteration: Oncogenic Mutations, Gene: KIT, Level: 2A, Subtype: Thymic
+      Tumor}
+  - &id089 {Alteration: D816V, Gene: KIT, Level: 2A, Subtype: Thymic Tumor}
+  - &id090 {Alteration: D816A, Gene: KIT, Level: 2A, Subtype: Thymic Tumor}
+  - &id091 {Alteration: T670I, Gene: KIT, Level: 2A, Subtype: Thymic Tumor}
+  - &id092 {Alteration: D816Y, Gene: KIT, Level: 2A, Subtype: Thymic Tumor}
+  - &id094 {Alteration: Exon 17 mutations, Gene: KIT, Level: 2A, Subtype: Thymic Tumor}
+  - &id095 {Alteration: D816F, Gene: KIT, Level: 2A, Subtype: Thymic Tumor}
+  - {Alteration: Exon 17 mutations, Gene: KIT, Level: 2A, Subtype: Gastrointestinal
+      Stromal Tumor}
+  - &id097 {Alteration: D816E, Gene: KIT, Level: 2A, Subtype: Thymic Tumor}
+  - &id098 {Alteration: D816N, Gene: KIT, Level: 2A, Subtype: Thymic Tumor}
+  - &id099 {Alteration: V654A, Gene: KIT, Level: 2A, Subtype: Thymic Tumor}
+  - {Alteration: Oncogenic Mutations, Gene: ARAF, Level: 3A, Subtype: Histiocytosis}
+  - {Alteration: Oncogenic Mutations, Gene: ARAF, Level: 3A, Subtype: Non-Small Cell
+      Lung Cancer}
+  - {Alteration: FLT3 internal tandem duplications, Gene: FLT3, Level: 3A, Subtype: Acute
+      Myeloid Leukemia}
+  Sunitinib:
+  - *id086
+  - *id087
+  - *id088
+  - *id089
+  - *id083
+  - *id090
+  - *id091
+  - *id092
+  - *id093
+  - *id094
+  - *id095
+  - *id096
+  - *id097
+  - *id098
+  - *id099
+  TK216:
+  - {Alteration: Fusions, Gene: EWSR1, Level: '4', Subtype: Soft Tissue Sarcoma}
+  Taselisib:
+  - *id001
+  Taselisib + Fulvestrant:
+  - *id001
+  Tazemetostat:
+  - {Alteration: Oncogenic Mutations, Gene: EZH2, Level: '4', Subtype: Diffuse Large
+      B-Cell Lymphoma}
+  Temsirolimus:
+  - *id100
+  - *id101
+  - *id102
+  - *id103
+  - *id104
+  Tipifarnib:
+  - {Alteration: Oncogenic Mutations, Gene: HRAS, Level: 3A, Subtype: Head and Neck
+      Squamous Cell Carcinoma}
+  Trametinib:
+  - *id105
+  - *id041
+  - *id042
+  - {Alteration: G469R, Gene: BRAF, Level: '4', Subtype: Melanoma}
+  - *id106
+  - {Alteration: L597Q, Gene: BRAF, Level: 3A, Subtype: Melanoma}
+  - {Alteration: L597R, Gene: BRAF, Level: 3A, Subtype: Melanoma}
+  - *id043
+  - *id107
+  - {Alteration: p61BRAF-V600E, Gene: BRAF, Level: '4', Subtype: Melanoma}
+  - {Alteration: L597V, Gene: BRAF, Level: 3A, Subtype: Melanoma}
+  - {Alteration: G464E, Gene: BRAF, Level: '4', Subtype: Melanoma}
+  - {Alteration: G469A, Gene: BRAF, Level: '4', Subtype: Melanoma}
+  - *id044
+  - *id045
+  - *id046
+  - {Alteration: G469V, Gene: BRAF, Level: '4', Subtype: Melanoma}
+  - {Alteration: L597S, Gene: BRAF, Level: 3A, Subtype: Melanoma}
+  - {Alteration: K601E, Gene: BRAF, Level: 3A, Subtype: Melanoma}
+  - {Alteration: G464V, Gene: BRAF, Level: '4', Subtype: Melanoma}
+  - *id018
+  - *id108
+  - *id109
+  - *id110
+  - *id111
+  Trastuzumab:
+  - {Alteration: Amplification, Gene: ERBB2, Level: '1', Subtype: Esophagogastric
+      Cancer}
+  - *id072
+  Vandetanib:
+  - {Alteration: Fusions, Gene: RET, Level: 3A, Subtype: Non-Small Cell Lung Cancer}
+  Vemurafenib:
+  - *id112
+  - *id113
+  - *id041
+  - *id042
+  - *id114
+  - {Alteration: V600M, Gene: BRAF, Level: '1', Subtype: Histiocytosis}
+  - {Alteration: V600R, Gene: BRAF, Level: '1', Subtype: Histiocytosis}
+  - *id043
+  - {Alteration: V600D, Gene: BRAF, Level: '1', Subtype: Histiocytosis}
+  - *id115
+  - {Alteration: V600E, Gene: BRAF, Level: '1', Subtype: Histiocytosis}
+  - *id116
+  - *id044
+  - *id045
+  - *id046
+  - {Alteration: V600K, Gene: BRAF, Level: '1', Subtype: Histiocytosis}
+  - *id117
+  - {Alteration: V600G, Gene: BRAF, Level: '1', Subtype: Histiocytosis}
+  Vemurafenib + Cobimetinib:
+  - *id041
+  - *id042
+  - *id043
+  - *id044
+  - *id045
+  - *id046
+  Vismodegib:
+  - *id118
