@@ -33,6 +33,8 @@ Pharmocology:
 Biomarkers:
 
   # Full biomarker layout annotated
+  # TODO: Determine how to capture Indels
+  # TODO: How to handle something like VHL Inactivation? (Promoter Hypermethylation)
   - Type: Responsive        # Allowed values: Responsive / Resistant
     Potential: True         # Allowed values: True / False. Empty defaults to False which is most common
     Overexpression: CD274   # Gene name
