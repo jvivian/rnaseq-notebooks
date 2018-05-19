@@ -1,0 +1,265 @@
+	Drug	Level	Subtype	Alteration
+0	Pembrolizumab	1	All Solid Tumors	Microsatellite Instability-High
+1	Nivolumab	1	Colorectal Cancer	Microsatellite Instability-High
+2	Tazemetostat	4	Diffuse Large B-Cell Lymphoma	Oncogenic Mutations
+3	Dasatinib, Imatinib	1	Acute Lymphoid Leukemia	BCR-ABL1 Fusion
+4	Nilotinib, Dasatinib, Imatinib	1	Chronic Myelogenous Leukemia	BCR-ABL1 Fusion
+5	Vandetanib	3A	Non-Small Cell Lung Cancer	Fusions
+6	Cabozantinib	2A	Non-Small Cell Lung Cancer	Fusions
+7	LOXO-195	4	All Tumors	G696A
+8	Larotrectinib, Entrectinib	3A	All Solid Tumors	Fusions
+9	LOXO-195	4	All Tumors	G623R
+10	Everolimus	2A	CNS Cancer	Oncogenic Mutations
+11	Everolimus	2A	Renal Cell Carcinoma	Oncogenic Mutations
+12	Imatinib	2A	Melanoma	D816H
+13	Sunitinib, Sorafenib	2A	Thymic Tumor	D816G
+14	Imatinib	2A	Melanoma	D816F
+15	Sunitinib, Sorafenib	2A	Thymic Tumor	D816H
+16	Imatinib	2A	Melanoma	D816G
+17	Imatinib	2A	Melanoma	V654A
+18	Avapritinib, DCC-2618	4	Gastrointestinal Stromal Tumor	D816A
+19	Imatinib	2A	Melanoma	D816A
+20	Sunitinib, Sorafenib	2A	Thymic Tumor	Oncogenic Mutations
+21	Imatinib	2A	Melanoma	Oncogenic Mutations
+22	Sunitinib, Sorafenib	2A	Thymic Tumor	D816V
+23	Avapritinib, DCC-2618	4	Gastrointestinal Stromal Tumor	D816H
+24	Imatinib	2A	Melanoma	T670I
+25	Regorafenib, Imatinib, Sunitinib	1	Gastrointestinal Stromal Tumor	Oncogenic Mutations
+26	Avapritinib, DCC-2618	4	Gastrointestinal Stromal Tumor	D816F
+27	Sunitinib, Sorafenib	2A	Thymic Tumor	D816A
+28	Sunitinib, Sorafenib	2A	Thymic Tumor	T670I
+29	Sunitinib, Sorafenib	2A	Thymic Tumor	D816Y
+30	Regorafenib, Sunitinib	1	Gastrointestinal Stromal Tumor	T670I
+31	Sunitinib, Sorafenib	2A	Thymic Tumor	Exon 17 mutations
+32	Avapritinib, DCC-2618	4	Gastrointestinal Stromal Tumor	D816Y
+33	Imatinib	2A	Melanoma	D816Y
+34	Imatinib	2A	Melanoma	Exon 17 mutations
+35	Sunitinib, Sorafenib	2A	Thymic Tumor	D816F
+36	Avapritinib, DCC-2618	4	Gastrointestinal Stromal Tumor	D816N
+37	Avapritinib, DCC-2618	4	Gastrointestinal Stromal Tumor	D816V
+38	Imatinib	2A	Melanoma	D816V
+39	Avapritinib, DCC-2618	4	Gastrointestinal Stromal Tumor	D816G
+40	Regorafenib	1	Gastrointestinal Stromal Tumor	Exon 17 mutations
+41	Imatinib	2A	Melanoma	D816N
+42	Regorafenib, Sunitinib	1	Gastrointestinal Stromal Tumor	V654A
+43	Sorafenib	2A	Gastrointestinal Stromal Tumor	Exon 17 mutations
+44	Sunitinib, Sorafenib	2A	Thymic Tumor	D816E
+45	Sunitinib, Sorafenib	2A	Thymic Tumor	D816N
+46	Sunitinib, Sorafenib	2A	Thymic Tumor	V654A
+47	Imatinib	2A	Melanoma	D816E
+48	Avapritinib, DCC-2618	4	Gastrointestinal Stromal Tumor	D816E
+49	Larotrectinib, Entrectinib	3A	All Solid Tumors	Fusions
+50	Rucaparib, Niraparib	1	Ovarian Cancer	Oncogenic Mutations
+51	Olaparib	2A	Ovarian Cancer	Oncogenic Mutations
+52	Abemaciclib, Palbociclib	2A	Dedifferentiated Liposarcoma	Amplification
+53	Abemaciclib, Palbociclib	2A	Well-Differentiated Liposarcoma	Amplification
+54	LOXO-195	4	All Tumors	G595R
+55	LOXO-195	4	All Tumors	G667C
+56	Larotrectinib, Entrectinib	3A	All Solid Tumors	Fusions
+57	Sorafenib	3A	Histiocytosis	Oncogenic Mutations
+58	Sorafenib	3A	Non-Small Cell Lung Cancer	Oncogenic Mutations
+59	Everolimus	2A	CNS Cancer	Oncogenic Mutations
+60	AZD5363	3A	Endometrial Cancer	E17K
+61	AZD5363	3A	Breast Cancer	E17K
+62	AZD5363	3A	Ovarian Cancer	E17K
+63	Enasidenib	1	Acute Myeloid Leukemia	R140Q
+64	Enasidenib	1	Acute Myeloid Leukemia	R172S
+65	Enasidenib	1	Acute Myeloid Leukemia	R172M
+66	Enasidenib	1	Acute Myeloid Leukemia	R172K
+67	Enasidenib	1	Acute Myeloid Leukemia	R172G
+68	Buparlisib, Serabelisib, Alpelisib + Fulvestrant, Copanlisib, GDC-0077, Taselisib + Fulvestrant, Alpelisib, Buparlisib + Fulvestrant, Taselisib	3A	Breast Cancer	Oncogenic Mutations
+69	Ivosidenib	3A	Acute Myeloid Leukemia	R132Q
+70	Ivosidenib	3A	Acute Myeloid Leukemia	R132S
+71	Ivosidenib	3A	Acute Myeloid Leukemia	R132H
+72	Ivosidenib	3A	Acute Myeloid Leukemia	R132G
+73	Ivosidenib	3A	Acute Myeloid Leukemia	R132C
+74	DS-3032b, RG7112	3A	Liposarcoma	Amplification
+75	Regorafenib, Panitumumab, Cetuximab	1	Colorectal Cancer	Wildtype
+76	Panitumumab, Cetuximab	R1	Colorectal Cancer	Oncogenic Mutations
+77	Binimetinib, Trametinib	4	Non-Small Cell Lung Cancer	Oncogenic Mutations
+78	LY3214996, KO-947, GDC-0994	4	All Tumors	Oncogenic Mutations
+79	Temsirolimus, Everolimus	4	Renal Clear Cell Carcinoma	S2215F
+80	Temsirolimus, Everolimus	4	Renal Clear Cell Carcinoma	L2230V
+81	Temsirolimus, Everolimus	4	Renal Clear Cell Carcinoma	F1888L
+82	Temsirolimus, Everolimus	4	Renal Clear Cell Carcinoma	T1977K
+83	Everolimus	3A	Bladder Cancer	E2014K
+84	Temsirolimus, Everolimus	4	Renal Clear Cell Carcinoma	C1483F
+85	AZD9496, Fulvestrant	3A	Breast Cancer	Oncogenic Mutations
+86	Binimetinib, Binimetinib + Ribociclib	3A	Melanoma	Oncogenic Mutations
+87	Selumetinib + Radioiodine Uptake Therapy	3A	Thyroid Cancer	Oncogenic Mutations
+88	Panitumumab, Cetuximab	R1	Colorectal Cancer	Oncogenic Mutations
+89	Rucaparib, Niraparib	1	Ovarian Cancer	Oncogenic Mutations
+90	Olaparib	2A	Ovarian Cancer	Oncogenic Mutations
+91	BGJ-398, AZD4575, JNJ-42756493, Debio1347	3A	Bladder Cancer	Fusions
+92	BGJ-398, AZD4575, JNJ-42756493, Debio1347	3A	Cholangiocarcinoma	Fusions
+93	Cisplatin	3A	Bladder Cancer	Oncogenic Mutations
+94	BGJ-398, JNJ-42756493, AZD-4575, Debio1347	3A	Bladder Cancer	K650E
+95	BGJ-398, JNJ-42756493, AZD-4575, Debio1347	3A	Bladder Cancer	S249C
+96	BGJ-398, JNJ-42756493, AZD-4575, Debio1347	3A	Bladder Cancer	S371C
+97	BGJ-398, JNJ-42756493, AZD-4575, Debio1347	3A	Bladder Cancer	Y373C
+98	AZD4547, JNJ-42756493, BGJ398, Debio1347	3A	Bladder Cancer	Fusions
+99	BGJ-398, JNJ-42756493, AZD-4575, Debio1347	3A	Bladder Cancer	K650R
+100	BGJ-398, JNJ-42756493, AZD-4575, Debio1347	3A	Bladder Cancer	K650N
+101	BGJ-398, JNJ-42756493, AZD-4575, Debio1347	3A	Bladder Cancer	K650Q
+102	BGJ-398, JNJ-42756493, AZD-4575, Debio1347	3A	Bladder Cancer	K650M
+103	BGJ-398, JNJ-42756493, AZD-4575, Debio1347	3A	Bladder Cancer	K650T
+104	BGJ-398, JNJ-42756493, AZD-4575, Debio1347	3A	Bladder Cancer	R248C
+105	BGJ-398, JNJ-42756493, AZD-4575, Debio1347	3A	Bladder Cancer	G370C
+106	BGJ-398, JNJ-42756493, AZD-4575, Debio1347	3A	Bladder Cancer	G380R
+107	AZD4547, JNJ-42756493, BGJ398, Debio1347	3A	Lung Squamous Cell Carcinoma	Amplification
+108	PF-03084014	4	All Tumors	Gain-of-function Mutations
+109	Trastuzumab	1	Esophagogastric Cancer	Amplification
+110	Neratinib	3A	Non-Small Cell Lung Cancer	Oncogenic Mutations
+111	Neratinib	3A	Breast Cancer	Oncogenic Mutations
+112	AP32788	4	Non-Small Cell Lung Cancer	Exon 20 insertions
+113	AP32788	4	Non-Small Cell Lung Cancer	Exon 20 insertions/deletions
+114	Lapatinib + Trastuzumab, Pertuzumab + Trastuzumab, Ado-Trastuzumab Emtansine, Lapatinib, Trastuzumab	1	Breast Cancer	Amplification
+115	Dabrafenib + Trametinib	1	Non-Small Cell Lung Cancer	V600D
+116	Vemurafenib, Dabrafenib	2A	Non-Small Cell Lung Cancer	V600M
+117	RTK-Inhibitor + Trametinib	4	Non-Small Cell Lung Cancer	G466A
+118	RTK-Inhibitor + Trametinib	4	Colorectal Cancer	D594A
+119	RTK-Inhibitor + Trametinib	4	Colorectal Cancer	F595L
+120	Vemurafenib, Dabrafenib	2A	Non-Small Cell Lung Cancer	V600G
+121	Dabrafenib + Lapatinib	4	Thyroid Cancer	V600K
+122	Vemurafenib, Dabrafenib, Dabrafenib + Trametinib, Vemurafenib + Cobimetinib, Trametinib	1	Melanoma	V600M
+123	RTK-Inhibitor + Trametinib	4	Non-Small Cell Lung Cancer	G466E
+124	Vemurafenib, Dabrafenib, Dabrafenib + Trametinib, Vemurafenib + Cobimetinib, Trametinib	1	Melanoma	V600K
+125	Vemurafenib, Dabrafenib	2A	Non-Small Cell Lung Cancer	V600E
+126	RTK-Inhibitor + Trametinib	4	Colorectal Cancer	G466V
+127	Dabrafenib + Lapatinib	4	Thyroid Cancer	V600E
+128	RTK-Inhibitor + Trametinib	4	Non-Small Cell Lung Cancer	N581I
+129	Vemurafenib	1	Histiocytosis	V600M
+130	Trametinib	4	Melanoma	G469R
+131	RTK-Inhibitor + Trametinib	4	Non-Small Cell Lung Cancer	N581S
+132	Cobimetinib, Trametinib	3A	Ovarian Cancer	Fusions
+133	Trametinib	3A	Melanoma	L597Q
+134	Trametinib	3A	Melanoma	L597R
+135	Vemurafenib	1	Histiocytosis	V600R
+136	Vemurafenib, Dabrafenib, Dabrafenib + Trametinib, Vemurafenib + Cobimetinib, Trametinib	1	Melanoma	V600G
+137	Vemurafenib	1	Histiocytosis	V600D
+138	Vemurafenib, Dabrafenib	2A	Non-Small Cell Lung Cancer	V600D
+139	Cobimetinib, Trametinib	3A	Melanoma	Fusions
+140	Vemurafenib	1	Histiocytosis	V600E
+141	Trametinib	4	Melanoma	p61BRAF-V600E
+142	RTK-Inhibitor + Trametinib	4	Colorectal Cancer	D594N
+143	RTK-Inhibitor + Trametinib	4	Non-Small Cell Lung Cancer	D594G
+144	RTK-Inhibitor + Trametinib	4	Colorectal Cancer	G469E
+145	Trametinib	3A	Melanoma	L597V
+146	Dabrafenib + Trametinib	1	Non-Small Cell Lung Cancer	V600K
+147	Vemurafenib, Dabrafenib	2A	Non-Small Cell Lung Cancer	V600R
+148	RTK-Inhibitor + Trametinib	4	Colorectal Cancer	S467L
+149	RTK-Inhibitor + Trametinib	4	Colorectal Cancer	G596R
+150	RTK-Inhibitor + Trametinib	4	Colorectal Cancer	G596D
+151	RTK-Inhibitor + Trametinib	4	Colorectal Cancer	D287H
+152	Dabrafenib + Trametinib	1	Non-Small Cell Lung Cancer	V600G
+153	RTK-Inhibitor + Trametinib	4	Colorectal Cancer	N581I
+154	RTK-Inhibitor + Trametinib	4	Non-Small Cell Lung Cancer	V459L
+155	RTK-Inhibitor + Trametinib	4	Colorectal Cancer	G466E
+156	Trametinib	4	Melanoma	G464E
+157	Trametinib	4	Melanoma	G469A
+158	RTK-Inhibitor + Trametinib	4	Colorectal Cancer	G466A
+159	RTK-Inhibitor + Trametinib	4	Colorectal Cancer	D594H
+160	RTK-Inhibitor + Trametinib	4	Colorectal Cancer	N581S
+161	RTK-Inhibitor + Trametinib	4	Non-Small Cell Lung Cancer	D594H
+162	Vemurafenib, Dabrafenib, Dabrafenib + Trametinib, Vemurafenib + Cobimetinib, Trametinib	1	Melanoma	V600R
+163	Vemurafenib, Dabrafenib, Dabrafenib + Trametinib, Vemurafenib + Cobimetinib, Trametinib	1	Melanoma	V600D
+164	Dabrafenib + Trametinib	1	Non-Small Cell Lung Cancer	V600E
+165	RTK-Inhibitor + Trametinib	4	Non-Small Cell Lung Cancer	F595L
+166	RTK-Inhibitor + Trametinib	4	Non-Small Cell Lung Cancer	D594A
+167	RTK-Inhibitor + Trametinib	4	Non-Small Cell Lung Cancer	G596D
+168	Vemurafenib, Dabrafenib, Dabrafenib + Trametinib, Vemurafenib + Cobimetinib, Trametinib	1	Melanoma	V600E
+169	Trametinib	4	Melanoma	G469V
+170	Trametinib	3A	Melanoma	L597S
+171	Trametinib	3A	Melanoma	K601E
+172	RTK-Inhibitor + Trametinib	4	Non-Small Cell Lung Cancer	D287H
+173	RTK-Inhibitor + Trametinib	4	Non-Small Cell Lung Cancer	G466V
+174	LTT462, BVD-523, KO-947	4	All Tumors	Oncogenic Mutations
+175	Vemurafenib	1	Histiocytosis	V600K
+176	RTK-Inhibitor + Trametinib	4	Colorectal Cancer	V459L
+177	RTK-Inhibitor + Trametinib	4	Non-Small Cell Lung Cancer	G469E
+178	RTK-Inhibitor + Trametinib	4	Colorectal Cancer	D594G
+179	Dabrafenib + Trametinib	1	Non-Small Cell Lung Cancer	V600R
+180	Dabrafenib + Trametinib	1	Non-Small Cell Lung Cancer	V600M
+181	RTK-Inhibitor + Trametinib	4	Non-Small Cell Lung Cancer	G596R
+182	RTK-Inhibitor + Trametinib	4	Non-Small Cell Lung Cancer	S467L
+183	Trametinib	4	Melanoma	G464V
+184	RTK-Inhibitor + Trametinib	4	Non-Small Cell Lung Cancer	D594N
+185	Vemurafenib, Dabrafenib	2A	Non-Small Cell Lung Cancer	V600K
+186	Vemurafenib	1	Histiocytosis	V600G
+187	AP32788	4	Non-Small Cell Lung Cancer	S768I
+188	Afatinib, Erlotinib, Gefitinib	1	Non-Small Cell Lung Cancer	S768I
+189	Afatinib, Erlotinib, Gefitinib	1	Non-Small Cell Lung Cancer	L833V
+190	Erlotinib, Afatinib, Gefitinib	1	Non-Small Cell Lung Cancer	L858R
+191	Afatinib, Erlotinib, Gefitinib	1	Non-Small Cell Lung Cancer	G719A
+192	Erlotinib, Afatinib, Gefitinib	1	Non-Small Cell Lung Cancer	E709K
+193	Erlotinib, Afatinib, Gefitinib	1	Non-Small Cell Lung Cancer	A750P
+194	AP32788	4	Non-Small Cell Lung Cancer	Exon 20 insertion
+195	Afatinib, Erlotinib, Gefitinib	1	Non-Small Cell Lung Cancer	G719C
+196	AP32788	4	Non-Small Cell Lung Cancer	L861R
+197	Erlotinib, Afatinib, Gefitinib	R1	Non-Small Cell Lung Cancer	T790M
+198	Osimertinib	1	Non-Small Cell Lung Cancer	T790M
+199	Erlotinib, Afatinib, Gefitinib	1	Non-Small Cell Lung Cancer	EGFR-KDD Fusion
+200	Erlotinib, Afatinib, Gefitinib	R1	Non-Small Cell Lung Cancer	Exon 20 insertion
+201	Afatinib, Erlotinib, Gefitinib	1	Non-Small Cell Lung Cancer	Exon 19 insertion
+202	Erlotinib, Afatinib, Gefitinib	1	Non-Small Cell Lung Cancer	Exon 19 deletion/insertion
+203	Erlotinib, Afatinib, Gefitinib	1	Non-Small Cell Lung Cancer	Exon 19 deletion
+204	Erlotinib, Afatinib, Gefitinib	1	Non-Small Cell Lung Cancer	L861R
+205	Afatinib, Erlotinib, Gefitinib	1	Non-Small Cell Lung Cancer	A763_Y764insFQEA
+206	Erlotinib, Afatinib, Gefitinib	1	Non-Small Cell Lung Cancer	E709_T710delinsD
+207	Afatinib, Erlotinib, Gefitinib	1	Non-Small Cell Lung Cancer	L747P
+208	Erlotinib, Afatinib, Gefitinib	1	Non-Small Cell Lung Cancer	L861Q
+209	Afatinib, Erlotinib, Gefitinib	1	Non-Small Cell Lung Cancer	G719S
+210	AP32788	4	Non-Small Cell Lung Cancer	G719A
+211	Sonidegib, Vismodegib	3A	Skin Cancer, Non-Melanoma	Truncating Mutations
+212	Sonidegib	3A	Embryonal Tumor	Truncating Mutations
+213	Tipifarnib	3A	Head and Neck Squamous Cell Carcinoma	Oncogenic Mutations
+214	LTT462, Binimetinib, BVD523, Trametinib	4	All Tumors	Oncogenic Mutations
+215	Cabozantinib	2A	Renal Cell Carcinoma	Amplification
+216	Cabozantinib, Capmatinib	3A	Non-Small Cell Lung Cancer	Y1003N
+217	Crizotinib	2A	Non-Small Cell Lung Cancer	D1010H
+218	Crizotinib	2A	Non-Small Cell Lung Cancer	963_D1010splice
+219	Crizotinib	2A	Non-Small Cell Lung Cancer	X1007_splice
+220	Cabozantinib, Capmatinib	3A	Non-Small Cell Lung Cancer	D1010H
+221	Crizotinib	2A	Non-Small Cell Lung Cancer	Y1003N
+222	Crizotinib	2A	Non-Small Cell Lung Cancer	981_1028splice
+223	Cabozantinib, Capmatinib	3A	Non-Small Cell Lung Cancer	X1009_splice
+224	Cabozantinib, Capmatinib	3A	Non-Small Cell Lung Cancer	D1010N
+225	Cabozantinib, Capmatinib	3A	Non-Small Cell Lung Cancer	963_D1010splice
+226	Crizotinib	2A	Non-Small Cell Lung Cancer	Amplification
+227	Cabozantinib, Capmatinib	3A	Non-Small Cell Lung Cancer	X963_splice
+228	Crizotinib	2A	Non-Small Cell Lung Cancer	X1006_splice
+229	Cabozantinib, Capmatinib	3A	Non-Small Cell Lung Cancer	X1008_splice
+230	Crizotinib	2A	Non-Small Cell Lung Cancer	X963_splice
+231	Cabozantinib, Capmatinib	3A	Non-Small Cell Lung Cancer	D1010Y
+232	Crizotinib	2A	Non-Small Cell Lung Cancer	D1010N
+233	Crizotinib	2A	Non-Small Cell Lung Cancer	X1008_splice
+234	Cabozantinib, Capmatinib	3A	Non-Small Cell Lung Cancer	X1006_splice
+235	Crizotinib	2A	Non-Small Cell Lung Cancer	D1010Y
+236	Cabozantinib, Capmatinib	3A	Non-Small Cell Lung Cancer	981_1028splice
+237	Cabozantinib, Capmatinib	3A	Non-Small Cell Lung Cancer	X1007_splice
+238	Crizotinib	2A	Non-Small Cell Lung Cancer	X1009_splice
+239	Crizotinib, Ceritinib	2A	Inflammatory Myofibroblastic Tumor	Fusions
+240	Crizotinib, Brigatinib, Alectinib, Ceritinib	1	Non-Small Cell Lung Cancer	Fusions
+241	TK216	4	Soft Tissue Sarcoma	Fusions
+242	Sorafenib	3A	Acute Myeloid Leukemia	FLT3 internal tandem duplications
+243	Ruxolitinib	3A	Leukemia	PCM1-JAK2 Fusion
+244	AZD6482 + Alpelisib	4	Breast Cancer	Oncogenic Mutations
+245	GSK2636771, AZD8186	4	All Tumors	Oncogenic Mutations
+246	Crizotinib	1	Non-Small Cell Lung Cancer	Fusions
+247	Imatinib	1	Myelodysplasia	Fusions
+248	Imatinib	1	Dermatofibrosarcoma Protuberans	Fusions
+249	Imatinib	1	Myeloproliferative Neoplasm	Fusions
+250	Nilotinib, Imatinib, Ponatinib	4	All Tumors	Oncogenic Mutations
+251	Olaparib	4	Prostate Cancer	Truncating Mutations
+252	Olaparib	4	Prostate Cancer	N2875K
+253	Olaparib	4	Prostate Cancer	R3008C
+254	Cobimetinib, Trametinib	3A	Melanoma	Oncogenic Mutations
+255	Cobimetinib, Trametinib	3A	Low-Grade Serous Ovarian Cancer	Oncogenic Mutations
+256	Cobimetinib, Trametinib	3A	Non-Small Cell Lung Cancer	Oncogenic Mutations
+257	Cobimetinib, Trametinib	3A	Histiocytic Disorder	Oncogenic Mutations
+258	Imatinib	1	Leukemia	FIP1L1-PDGFRA Fusion
+259	Imatinib	1	Myeloproliferative Neoplasm	Fusions
+260	Dasatinib	2A	Gastrointestinal Stromal Tumor	D842V
+261	Imatinib	1	Myelodysplasia	Fusions
+262	Imatinib	2A	Gastrointestinal Stromal Tumor	Oncogenic Mutations
+263	Imatinib	R1	Gastrointestinal Stromal Tumor	D842V
